@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApniDukan - Premium Retail Platform</title>
+    <title>ApniDukan - Premium Multi-Vendor Platform</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Google Fonts & FontAwesome -->
@@ -28,25 +28,30 @@
     <!-- TOP NAVIGATION BAR -->
     <nav class="bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100 sticky top-0 z-50 px-4 py-3.5 flex justify-between items-center max-w-md mx-auto rounded-b-2xl">
         <div class="flex items-center gap-3">
-            <div class="bg-gradient-to-tr from-emerald-500 to-green-600 text-white p-2.5 rounded-2xl shadow-lg shadow-emerald-100 active:scale-95 transition-transform">
-                <i class="fa-solid fa-shop text-lg"></i>
+            <!-- Dynamic Store Logo Placeholder -->
+            <div id="storeLogoContainer" class="bg-gradient-to-tr from-emerald-500 to-green-600 text-white w-10 h-10 rounded-xl shadow-lg flex items-center justify-center overflow-hidden active:scale-95 transition-transform">
+                <i id="defaultLogoIcon" class="fa-solid fa-shop text-lg"></i>
+                <img id="storeLiveLogo" class="hidden object-cover h-full w-full">
             </div>
             <div>
-                <span class="text-[9px] text-slate-400 block font-bold uppercase tracking-widest" id="navStoreLocation">Ahmedabad, Live</span>
-                <h1 class="text-md font-extbbold text-slate-800 tracking-tight flex items-center gap-1">
+                <h1 class="text-md font-extrabold text-slate-800 tracking-tight flex items-center gap-1">
                     <span id="navStoreName" class="font-bold">Loading Store...</span>
                 </h1>
+                <!-- Trust Trigger Link -->
+                <button onclick="openInfoModal()" class="text-[10px] text-emerald-600 font-bold flex items-center gap-1 hover:underline">
+                    <i class="fa-solid fa-circle-check"></i> View Store Info & GST
+                </button>
             </div>
         </div>
         
-        <div class="flex items-center gap-2">
-            <select id="langSelector" onchange="changeLanguage()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl p-2 font-medium focus:outline-none focus:border-emerald-500 cursor-pointer transition-colors">
+        <div class="flex items-center gap-1.5">
+            <select id="langSelector" onchange="changeLanguage()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl p-2 font-medium focus:outline-none">
                 <option value="hinglish">Hinglish</option>
                 <option value="english">English</option>
                 <option value="gujarati">ગુજરાતી</option>
             </select>
-            <button onclick="openLoginModal()" id="sellerModeBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 active:scale-95">
-                <i class="fa-solid fa-lock text-emerald-600" id="lockIcon"></i> <span id="loginBtnText" data-key="sellerLogin">Seller Login</span>
+            <button onclick="openLoginModal()" id="sellerModeBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold p-2.5 rounded-xl transition-all active:scale-95">
+                <i class="fa-solid fa-lock text-emerald-600" id="lockIcon"></i>
             </button>
         </div>
     </nav>
@@ -54,64 +59,77 @@
     <!-- ========================================== -->
     <!-- MAIN INTERFACE CONTAINER -->
     <!-- ========================================== -->
-    <div class="max-w-md mx-auto p-4 space-y-6">
+    <div class="max-w-md mx-auto p-4 space-y-5">
 
         <!-- 1. PRO SELLER DASHBOARD -->
         <div id="sellerPanel" class="hidden space-y-5 animate-fadeIn">
             <div class="bg-gradient-to-br from-slate-800 via-slate-900 to-emerald-950 rounded-3xl p-5 text-white shadow-xl flex justify-between items-center relative overflow-hidden">
-                <div class="absolute -right-6 -bottom-6 text-white/5 text-9xl font-black pointer-events-none"><i class="fa-solid fa-circle-check"></i></div>
-                <div class="relative z-10 space-y-0.5">
+                <div class="space-y-0.5">
                     <p class="text-xs text-emerald-400 font-bold tracking-wider uppercase" data-key="welcomeSeller">Welcome Back, Seller!</p>
                     <h3 class="text-lg font-extrabold" data-key="manageStore">Manage Online Store</h3>
                 </div>
-                <button onclick="logoutSeller()" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-xs font-bold px-3 py-2 rounded-xl transition-all active:scale-95">
-                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
-                </button>
+                <div class="flex flex-col gap-2">
+                    <button onclick="logoutSeller()" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition-all">
+                        Logout
+                    </button>
+                    <button onclick="shareStoreLink()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition-all">
+                        <i class="fa-solid fa-share-nodes"></i> Share Link
+                    </button>
+                </div>
             </div>
 
-            <!-- Merchant Store Settings Setup Bundle -->
+            <!-- Merchant Store Settings Setup Bundle (Upgraded with Logo, GST & Maps) -->
             <div class="glass-card rounded-3xl p-5 shadow-xl shadow-slate-100/50 border border-white/60 space-y-4">
                 <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-sliders text-emerald-500 text-base"></i> <span data-key="storeSettings">Store Profile Settings</span>
+                    <i class="fa-solid fa-sliders text-emerald-500"></i> <span data-key="storeSettings">Store Profile Settings</span>
                 </h2>
                 <div class="space-y-3">
-                    <div class="relative">
-                        <i class="fa-solid fa-signature absolute left-3 top-3.5 text-slate-400 text-xs"></i>
-                        <input type="text" id="mDukanName" placeholder="Dukan Ka Naam" class="w-full pl-9 pr-3 py-3 border border-slate-200/80 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all shadow-inner">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="mDukanName" placeholder="Dukan Ka Naam" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white">
+                        <input type="text" id="mWhatsapp" placeholder="WhatsApp Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white">
                     </div>
-                    <div class="relative">
-                        <i class="fa-brands fa-whatsapp absolute left-3 top-3.5 text-slate-400 text-sm"></i>
-                        <input type="text" id="mWhatsapp" placeholder="WhatsApp Number (e.g., 91999...)" class="w-full pl-9 pr-3 py-3 border border-slate-200/80 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all shadow-inner">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="mGst" placeholder="GSTIN Number (Optional)" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white">
+                        <input type="text" id="mMaps" placeholder="Google Maps Location Link" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white">
+                    </div>
+                    <textarea id="mAddress" placeholder="Full Store Address" class="w-full px-3 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white h-16 resize-none"></textarea>
+                    
+                    <!-- Store Logo Picker -->
+                    <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200/60">
+                        <label class="bg-slate-800 hover:bg-black text-white text-[11px] font-bold px-3 py-2 rounded-xl cursor-pointer transition-all">
+                            Upload Logo
+                            <input type="file" id="storeLogoInput" accept="image/*" class="hidden" onchange="processStoreLogo()" />
+                        </label>
+                        <span id="logoFileName" class="text-[10px] text-slate-400 font-semibold">No logo selected</span>
                     </div>
                 </div>
-                <button onclick="saveStoreProfile()" class="w-full bg-slate-800 hover:bg-slate-900 text-white text-xs font-extrabold py-3 rounded-2xl transition-all shadow-md active:scale-[0.99]">Save Profile Configurations</button>
+                <button onclick="saveStoreProfile()" class="w-full bg-slate-800 hover:bg-slate-900 text-white text-xs font-extrabold py-3 rounded-2xl transition-all shadow-md">Save Profile Configurations</button>
             </div>
 
-            <!-- Add Product Form -->
+            <!-- Add Product Form (Upgraded for Multiple Photos) -->
             <div class="glass-card rounded-3xl p-5 shadow-xl shadow-slate-100/50 border border-white/60 space-y-4">
                 <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-square-plus text-emerald-500 text-base"></i> <span data-key="addNewItem">Naya Product Add Karein</span>
+                    <i class="fa-solid fa-square-plus text-emerald-500"></i> <span data-key="addNewItem">Naya Product Add Karein</span>
                 </h2>
                 
-                <div class="flex items-center justify-center w-full">
-                    <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-slate-50/50 hover:bg-emerald-50/20 hover:border-emerald-400 transition-all group">
-                        <div class="flex flex-col items-center justify-center pt-3 pb-3 text-center">
-                            <i class="fa-solid fa-cloud-arrow-up text-xl text-slate-400 group-hover:text-emerald-500 group-hover:scale-110 transition-all mb-1.5"></i>
-                            <p class="text-xs text-slate-600 font-semibold" data-key="clickPhoto">Click Product Photo</p>
-                            <p id="fileName" class="text-[10px] text-emerald-600 font-bold mt-1 bg-emerald-50 px-2 py-0.5 rounded-full hidden"></p>
-                        </div>
-                        <input type="file" id="productImage" accept="image/*" class="hidden" onchange="displayFileName()" />
+                <!-- Multi-image File Upload Selection slot -->
+                <div class="space-y-2">
+                    <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-slate-50/50 hover:bg-emerald-50/10 hover:border-emerald-400 transition-all text-center">
+                        <i class="fa-solid fa-images text-xl text-slate-400 mb-1"></i>
+                        <p class="text-xs text-slate-600 font-semibold">Upload Product Photos (Up to 3)</p>
+                        <input type="file" id="productImagesInput" accept="image/*" multiple class="hidden" onchange="displayMultiFileNames()" />
                     </label>
+                    <p id="multiFileStatus" class="text-[10px] text-emerald-600 font-bold text-center hidden"></p>
                 </div>
 
-                <input type="text" id="pName" placeholder="Product Name" class="w-full px-4 py-3 border border-slate-200/80 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all bg-white shadow-inner">
+                <input type="text" id="pName" placeholder="Product Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white shadow-inner">
                 
                 <div class="grid grid-cols-2 gap-3">
-                    <input type="number" id="pPrice" placeholder="Price (₹)" class="w-full px-4 py-3 border border-slate-200/80 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all bg-white shadow-inner">
-                    <input type="text" id="pUnit" placeholder="Unit (e.g., 1kg, 500ml)" class="w-full px-4 py-3 border border-slate-200/80 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all bg-white shadow-inner">
+                    <input type="number" id="pPrice" placeholder="Price (₹)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white shadow-inner">
+                    <input type="text" id="pUnit" placeholder="Unit (e.g., 1kg, 500ml)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white shadow-inner">
                 </div>
 
-                <select id="pCategory" class="w-full px-4 py-3 border border-slate-200/80 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500 text-slate-600 font-medium shadow-sm cursor-pointer">
+                <select id="pCategory" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500 text-slate-600 font-medium">
                     <option value="Groceries">Groceries / Kirana</option>
                     <option value="Dairy">Dairy & Milk Products</option>
                     <option value="Fruits">Fruits & Vegetables</option>
@@ -119,31 +137,33 @@
                     <option value="Others">Others</option>
                 </select>
                 
-                <button onclick="addProductToFirebase()" id="uploadBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-extrabold py-3.5 rounded-2xl text-xs transition-all shadow-lg shadow-emerald-100 flex items-center justify-center gap-2 active:scale-[0.99]">
+                <button onclick="addProductToFirebase()" id="uploadBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-extrabold py-3.5 rounded-2xl text-xs transition-all shadow-lg shadow-emerald-100 flex items-center justify-center gap-2">
                     <i class="fa-solid fa-paper-plane"></i> <span data-key="liveOnStore">Store Par Live Karein</span>
                 </button>
             </div>
 
-            <!-- Inventory Live Editor Grid Component -->
+            <!-- Inventory Live Editor Component -->
             <div class="glass-card rounded-3xl p-5 shadow-xl shadow-slate-100/50 border border-white/60 space-y-3">
-                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-boxes-stacked text-emerald-500"></i> Live Inventory Items
-                </h2>
-                <div id="sellerInventoryList" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
-                    <!-- Current live store items go here -->
-                </div>
+                <h2 class="text-sm font-extrabold text-slate-800"><i class="fa-solid fa-boxes-stacked text-emerald-500"></i> Live Inventory Items</h2>
+                <div id="sellerInventoryList" class="space-y-2.5 max-h-64 overflow-y-auto pr-1"></div>
             </div>
         </div>
 
         <!-- 2. CUSTOMER VIEW MODULE -->
         <div id="customerPanel" class="space-y-5">
-            <!-- Category Filter Buttons -->
+            <!-- Dynamic Live Filter Search Module -->
+            <div class="relative max-w-md mx-auto">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                <input type="text" id="storeSearchBar" oninput="triggerLocalSearch()" placeholder="Search products in this mart..." class="w-full pl-10 pr-4 py-3 bg-white shadow-sm border border-slate-100 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 transition-all">
+            </div>
+
+            <!-- Category Filter Horizontal Scroll Tabs -->
             <div class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-none snap-x" id="categoryTabs">
-                <button onclick="filterCategory('All')" class="bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-md shadow-emerald-100 transition-all snap-center">All Items</button>
-                <button onclick="filterCategory('Groceries')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm hover:bg-slate-50 transition-all snap-center">Groceries</button>
-                <button onclick="filterCategory('Dairy')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm hover:bg-slate-50 transition-all snap-center">Dairy</button>
-                <button onclick="filterCategory('Fruits')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm hover:bg-slate-50 transition-all snap-center">Fruits</button>
-                <button onclick="filterCategory('Snacks')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm hover:bg-slate-50 transition-all snap-center">Snacks</button>
+                <button onclick="filterCategory('All')" class="bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-md snap-center">All Items</button>
+                <button onclick="filterCategory('Groceries')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm snap-center">Groceries</button>
+                <button onclick="filterCategory('Dairy')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm snap-center">Dairy</button>
+                <button onclick="filterCategory('Fruits')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm snap-center">Fruits</button>
+                <button onclick="filterCategory('Snacks')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm snap-center">Snacks</button>
             </div>
 
             <div class="space-y-3">
@@ -155,53 +175,79 @@
         </div>
     </div>
 
-    <!-- SELLER MASTER SECURITY LOGIN MODAL -->
+    <!-- STORE TRUST INFO DISPLAY POPUP MODAL -->
+    <div id="infoModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-extrabold text-slate-800 flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-building-shield text-emerald-500"></i> Store Verification Details
+                </h3>
+                <button onclick="closeInfoModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <span class="text-slate-400 block font-bold uppercase tracking-wider text-[9px]">Store Name</span>
+                    <p id="infoDukanName" class="font-bold text-slate-800 mt-0.5">-</p>
+                </div>
+                <div>
+                    <span class="text-slate-400 block font-bold uppercase tracking-wider text-[9px]">GSTIN Registration</span>
+                    <p id="infoGst" class="font-mono bg-slate-50 px-2 py-1 rounded-lg text-slate-700 inline-block font-semibold mt-0.5">Not Provided</p>
+                </div>
+                <div>
+                    <span class="text-slate-400 block font-bold uppercase tracking-wider text-[9px]">Official Store Address</span>
+                    <p id="infoAddress" class="text-slate-600 font-medium mt-0.5">Address setup pending by merchant.</p>
+                </div>
+                <div id="mapsActionContainer" class="hidden pt-1">
+                    <a id="infoMapsLink" target="_blank" class="bg-slate-900 text-white font-bold p-2.5 rounded-xl block text-center transition-all hover:bg-black">
+                        <i class="fa-solid fa-location-dot text-emerald-400 mr-1"></i> Navigate via Google Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELLER SECURITY LOGIN MODAL -->
     <div id="loginModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100 animate-scaleUp">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100">
             <div class="flex justify-between items-center">
                 <h3 class="font-extrabold text-md text-slate-800 flex items-center gap-2">
                     <i class="fa-solid fa-shield-halved text-emerald-500"></i> Merchant Access Lock
                 </h3>
-                <button onclick="closeLoginModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-2 rounded-full h-8 w-8 flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeLoginModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="relative">
-                <i class="fa-solid fa-key absolute left-3 top-3.5 text-slate-400 text-xs"></i>
-                <input type="password" id="loginPassword" placeholder="Enter Security Password" class="w-full pl-9 pr-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all shadow-inner bg-slate-50/50">
-            </div>
-            <button onclick="loginSeller()" id="loginSubmitBtn" class="w-full bg-slate-900 hover:bg-black text-white font-extrabold py-3.5 rounded-2xl text-xs transition-all shadow-md active:scale-[0.99]">Verify Password</button>
+            <input type="password" id="loginPassword" placeholder="Enter Security Password" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-emerald-500 bg-slate-50/50">
+            <button onclick="loginSeller()" class="w-full bg-slate-900 text-white font-extrabold py-3 rounded-2xl text-xs shadow-md">Verify Password</button>
         </div>
     </div>
 
     <!-- CLIENT DETAILS CHECKOUT MODAL WINDOW -->
     <div id="checkoutModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100 animate-scaleUp">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100">
             <div class="flex justify-between items-center">
                 <h3 class="font-extrabold text-md text-slate-800 flex items-center gap-2">
                     <i class="fa-solid fa-map-pin text-emerald-500"></i> Enter Delivery Details
                 </h3>
-                <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-2 rounded-full h-8 w-8 flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="space-y-3">
-                <input type="text" id="custName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50 shadow-inner">
-                <input type="text" id="custPhone" placeholder="Mobile Number" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50 shadow-inner">
-                <textarea id="custAddress" placeholder="Pura Address / Delivery Location Details" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50 shadow-inner h-20 resize-none"></textarea>
-                <button onclick="confirmAndRouteWhatsApp()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-extrabold py-3.5 rounded-2xl text-xs tracking-wide shadow-lg shadow-emerald-100 active:scale-[0.99]">Confirm Order via WhatsApp</button>
+                <input type="text" id="custName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50">
+                <input type="text" id="custPhone" placeholder="Mobile Number" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50">
+                <textarea id="custAddress" placeholder="Pura Address / Delivery Location Details" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50 h-20 resize-none"></textarea>
+                <button onclick="confirmAndRouteWhatsApp()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg active:scale-[0.99]">Confirm Order via WhatsApp</button>
             </div>
         </div>
     </div>
 
     <!-- FIXED BOTTOM BAR FOR CUSTOMER CART VIEW -->
-    <div id="customerCartBar" class="fixed bottom-4 left-4 right-4 max-w-sm mx-auto bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 flex justify-between items-center text-white shadow-xl shadow-slate-900/20 z-40 hidden border border-white/10 animate-slideUp">
+    <div id="customerCartBar" class="fixed bottom-4 left-4 right-4 max-w-sm mx-auto bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 flex justify-between items-center text-white shadow-xl z-40 hidden border border-white/10 animate-slideUp">
         <div class="flex items-center gap-3 pl-2">
-            <div class="bg-emerald-500 text-white p-2 rounded-xl">
-                <i class="fa-solid fa-basket-shopping text-sm"></i>
-            </div>
+            <div class="bg-emerald-500 text-white p-2 rounded-xl"><i class="fa-solid fa-basket-shopping text-sm"></i></div>
             <div class="text-xs">
                 <span id="cartCount" class="font-extrabold block text-slate-100">0 Items • ₹0</span>
                 <span class="text-[9px] text-emerald-400 font-bold block uppercase tracking-wider">Ready to bag</span>
             </div>
         </div>
-        <button onclick="openCheckoutModal()" class="bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-slate-900 text-xs font-extrabold px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-md active:scale-95">
+        <button onclick="openCheckoutModal()" class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-900 text-xs font-extrabold px-4 py-2.5 rounded-xl flex items-center gap-1.5 active:scale-95">
             <span data-key="checkoutBtn">Checkout Order</span> <i class="fa-brands fa-whatsapp text-sm"></i>
         </button>
     </div>
@@ -232,6 +278,7 @@
         let cart = [];
         let allProducts = [];
         let merchantConfigNumber = "919999999999"; 
+        let storeLogoBase64 = "";
 
         const langData = {
             hinglish: {
@@ -260,16 +307,73 @@
             });
         }
 
+        const fileToDataUri = (file) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => resolve(event.target.result);
+            reader.onerror = (error) => reject(error);
+            reader.readAsDataURL(file);
+        });
+
+        // 1. MERCHANT LOGO PROCESSING
+        window.processStoreLogo = async function() {
+            const logoInput = document.getElementById('storeLogoInput');
+            if(logoInput.files.length > 0) {
+                storeLogoBase64 = await fileToDataUri(logoInput.files[0]);
+                document.getElementById('logoFileName').innerText = "✓ Logo Attached Ready";
+            }
+        }
+
+        window.displayMultiFileNames = function() {
+            const files = document.getElementById('productImagesInput').files;
+            const statusLabel = document.getElementById('multiFileStatus');
+            if(files.length > 3) {
+                alert("Bhai, maximum 3 photos hi allow hain!");
+                document.getElementById('productImagesInput').value = "";
+                statusLabel.classList.add('hidden');
+                return;
+            }
+            if(files.length > 0) {
+                statusLabel.innerText = `✓ ${files.length} Photos Attached Ready`;
+                statusLabel.classList.remove('hidden');
+            }
+        }
+
+        // 2. LOAD MERCHANT IDENTITY CARD PROFILE DATA
         async function loadMerchantProfile() {
             const profileRef = doc(db, "stores", currentStoreId);
             const profileSnap = await getDoc(profileRef);
+            
             if(profileSnap.exists()) {
                 const data = profileSnap.data();
-                document.getElementById('navStoreName').innerText = data.dukanName ? data.dukanName.toUpperCase() : currentStoreId.toUpperCase();
+                const resolvedName = data.dukanName || currentStoreId;
+                
+                document.getElementById('navStoreName').innerText = resolvedName.toUpperCase();
+                document.getElementById('infoDukanName').innerText = resolvedName;
                 merchantConfigNumber = data.whatsappNumber || "919999999999";
                 
+                // Form setup field presets
                 document.getElementById('mDukanName').value = data.dukanName || "";
                 document.getElementById('mWhatsapp').value = data.whatsappNumber || "";
+                document.getElementById('mGst').value = data.gstNumber || "";
+                document.getElementById('mMaps').value = data.mapsLink || "";
+                document.getElementById('mAddress').value = data.address || "";
+
+                // Trust modal assignments
+                if(data.gstNumber) document.getElementById('infoGst').innerText = data.gstNumber;
+                if(data.address) document.getElementById('infoAddress').innerText = data.address;
+                if(data.mapsLink) {
+                    document.getElementById('infoMapsLink').href = data.mapsLink;
+                    document.getElementById('mapsActionContainer').classList.remove('hidden');
+                }
+
+                // Inject brand identity logo elements dynamically
+                if(data.logo) {
+                    storeLogoBase64 = data.logo;
+                    document.getElementById('defaultLogoIcon').classList.add('hidden');
+                    const img = document.getElementById('storeLiveLogo');
+                    img.src = data.logo;
+                    img.classList.remove('hidden');
+                }
             } else {
                 document.getElementById('navStoreName').innerText = currentStoreId.replace('-', ' ').toUpperCase();
             }
@@ -278,38 +382,28 @@
         window.saveStoreProfile = async function() {
             const dName = document.getElementById('mDukanName').value.trim();
             const wNum = document.getElementById('mWhatsapp').value.trim();
-            if(!dName || !wNum) return alert("Pehle profile fields fill karo!");
+            const gst = document.getElementById('mGst').value.trim();
+            const maps = document.getElementById('mMaps').value.trim();
+            const addr = document.getElementById('mAddress').value.trim();
+
+            if(!dName || !wNum) return alert("Dukan ka naam aur whatsapp number mandatory hai!");
             
             await setDoc(doc(db, "stores", currentStoreId), {
                 dukanName: dName,
-                whatsappNumber: wNum
+                whatsappNumber: wNum,
+                gstNumber: gst,
+                mapsLink: maps,
+                address: addr,
+                logo: storeLogoBase64 || ""
             });
-            alert("Store Profile Configurations Updated!");
+            alert("Store Identity Details Saved!");
             loadMerchantProfile();
         }
-
-        window.displayFileName = function() {
-            const fileInput = document.getElementById('productImage');
-            const fileNameDisplay = document.getElementById('fileName');
-            if(fileInput.files.length > 0) {
-                fileNameDisplay.innerText = "✓ Photo Attached";
-                fileNameDisplay.classList.remove('hidden');
-            }
-        }
-
-        const fileToDataUri = (file) => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = (event) => resolve(event.target.result);
-            reader.onerror = (error) => reject(error);
-            reader.readAsDataURL(file);
-        });
 
         window.loginSeller = function() {
             const pass = document.getElementById('loginPassword').value.trim();
             if(pass === "786786") {
                 document.getElementById('sellerPanel').classList.remove('hidden');
-                document.getElementById('loginBtnText').innerText = "Dashboard Active";
-                document.getElementById('lockIcon').className = "fa-solid fa-unlock text-emerald-600";
                 sessionStorage.setItem("seller_logged_in", "true");
                 closeLoginModal();
             } else {
@@ -320,47 +414,61 @@
         window.logoutSeller = function() {
             sessionStorage.removeItem("seller_logged_in");
             document.getElementById('sellerPanel').classList.add('hidden');
-            document.getElementById('loginBtnText').innerText = "Seller Login";
-            document.getElementById('lockIcon').className = "fa-solid fa-lock text-emerald-600";
         }
 
         if(sessionStorage.getItem("seller_logged_in") === "true") {
             document.getElementById('sellerPanel').classList.remove('hidden');
         }
 
+        window.shareStoreLink = function() {
+            const shareUrl = window.location.href.split('?')[0] + `?store=${currentStoreId}`;
+            navigator.clipboard.writeText(shareUrl);
+            alert("Dukan ka sharing link copy ho gaya hai! WhatsApp par customer ko bhej do.");
+        }
+
+        // 3. MULTI PHOTO PRODUCT ADD INGESTION
         window.addProductToFirebase = async function() {
             const name = document.getElementById('pName').value.trim();
             const price = document.getElementById('pPrice').value.trim();
             const unit = document.getElementById('pUnit').value.trim();
             const cat = document.getElementById('pCategory').value;
-            const fileInput = document.getElementById('productImage');
+            const filesInput = document.getElementById('productImagesInput');
             const uploadBtn = document.getElementById('uploadBtn');
 
-            if(!name || !price || !unit) return alert("All fields mandatory!");
-            uploadBtn.innerText = "Syncing Catalogs...";
+            if(!name || !price || !unit) return alert("Fill mandatory fields!");
+            uploadBtn.innerText = "Processing Catalog Carousel...";
 
-            let base64Img = "https://placehold.co/150?text=Product";
+            let imageArray = [];
+
             try {
-                if(fileInput.files.length > 0) base64Img = await fileToDataUri(fileInput.files[0]);
+                if(filesInput.files.length > 0) {
+                    for(let i=0; i<filesInput.files.length; i++) {
+                        let dataUri = await fileToDataUri(filesInput.files[i]);
+                        imageArray.push(dataUri);
+                    }
+                } else {
+                    imageArray.push("https://placehold.co/150?text=Product");
+                }
+
                 await addDoc(collection(db, "products"), {
                     storeId: currentStoreId,
-                    name, price: parseFloat(price), unit, category: cat, image: base64Img, createdAt: Date.now()
+                    name, price: parseFloat(price), unit, category: cat,
+                    images: imageArray, // Save full structured images index array inside document fields
+                    createdAt: Date.now()
                 });
-                alert("Catalog Asset Updated Successfully!");
+
+                alert("Product multi-photos ke sath live ho gaya!");
                 document.getElementById('pName').value = "";
                 document.getElementById('pPrice').value = "";
                 document.getElementById('pUnit').value = "";
-                fileInput.value = "";
-                fileName.classList.add('hidden');
+                filesInput.value = "";
+                document.getElementById('multiFileStatus').classList.add('hidden');
             } catch (e) { alert("Write rejection caught."); }
             finally { uploadBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Store Par Live Karein'; }
         }
 
         window.deleteProduct = async function(id) {
-            if(confirm("Kya aap sach me is item ko catalog se hatana chahte ho?")) {
-                await deleteDoc(doc(db, "products", id));
-                alert("Item deleted!");
-            }
+            if(confirm("Catalog asset delete karein?")) await deleteDoc(doc(db, "products", id));
         }
 
         function listenToLiveStoreCatalog() {
@@ -370,20 +478,16 @@
 
             onSnapshot(q, (snapshot) => {
                 allProducts = [];
-                container.innerHTML = "";
-                invList.innerHTML = "";
-
                 snapshot.forEach((doc) => {
-                    let pData = doc.data();
-                    pData.id = doc.id; 
+                    let pData = doc.data(); pData.id = doc.id;
                     allProducts.push(pData);
                 });
-
                 renderProducts(allProducts);
                 renderInventoryManager(allProducts);
             });
         }
 
+        // 4. DISPLAY REAL-TIME CAROUSEL MULTI-PHOTOS SYSTEM
         function renderProducts(items) {
             const container = document.getElementById('productsContainer');
             container.innerHTML = "";
@@ -392,10 +496,20 @@
                 return;
             }
             items.forEach((product) => {
+                const imgList = product.images || [product.image || "https://placehold.co/150?text=Product"];
+                
+                // Active generation of inner micro carousel view layout configuration
+                let imagesHtml = '';
+                imgList.forEach((imgUrl, idx) => {
+                    imagesHtml += `<img src="${imgUrl}" class="snap-center object-cover h-full w-full rounded-lg min-w-full inline-block">`;
+                });
+
                 container.innerHTML += `
-                    <div class="bg-white border border-slate-100/80 rounded-2xl p-3.5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-3 relative group">
-                        <div class="bg-slate-50/50 rounded-xl p-1 flex items-center justify-center aspect-square overflow-hidden relative shadow-inner">
-                            <img src="${product.image}" alt="${product.name}" class="object-cover h-full w-full rounded-lg group-hover:scale-105 transition-transform duration-300">
+                    <div class="bg-white border border-slate-100/80 rounded-2xl p-3.5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-3">
+                        <!-- Horizontal Scrollable Inner Product Image Carousel component block -->
+                        <div class="bg-slate-50/50 rounded-xl p-1 flex overflow-x-auto snap-x h-32 scrollbar-none shadow-inner relative">
+                            ${imagesHtml}
+                            ${imgList.length > 1 ? '<span class="absolute bottom-1 right-2 bg-black/40 text-[8px] text-white font-bold px-1.5 py-0.5 rounded-full backdrop-blur-xs"><i class="fa-solid fa-images"></i> Swipe</span>' : ''}
                         </div>
                         <div class="space-y-0.5">
                             <h4 class="font-extrabold text-xs text-slate-800 line-clamp-1 tracking-tight">${product.name}</h4>
@@ -412,21 +526,34 @@
 
         function renderInventoryManager(items) {
             const invList = document.getElementById('sellerInventoryList');
-            if(items.length === 0) { invList.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No active database entries.</p>`; return; }
+            invList.innerHTML = "";
+            if(items.length === 0) { invList.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No inventory entries.</p>`; return; }
             items.forEach(p => {
+                const targetDisplayThumb = p.images ? p.images[0] : (p.image || "https://placehold.co/150?text=Product");
                 invList.innerHTML += `
-                    <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-2xl text-xs border border-slate-100/60 shadow-sm">
+                    <div class="flex items-center justify-between bg-slate-50 p-2 rounded-2xl border border-slate-100">
                         <div class="flex items-center gap-3">
-                            <img src="${p.image}" class="w-9 h-9 object-cover rounded-xl shadow-sm">
+                            <img src="${targetDisplayThumb}" class="w-9 h-9 object-cover rounded-xl shadow-sm">
                             <div>
                                 <span class="font-extrabold text-slate-800 block tracking-tight">${p.name}</span>
                                 <span class="text-slate-400 text-[10px] font-bold">₹${p.price} • ${p.unit}</span>
                             </div>
                         </div>
-                        <button onclick="deleteProduct('${p.id}')" class="text-slate-400 hover:text-red-500 p-2 bg-white rounded-xl shadow-sm transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                        <button onclick="deleteProduct('${p.id}')" class="text-slate-400 hover:text-red-500 p-2 bg-white rounded-xl shadow-sm"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
             });
+        }
+
+        // Live Dynamic Filtering Search Engine Rule
+        window.triggerLocalSearch = function() {
+            const stringKeyword = document.getElementById('storeSearchBar').value.trim().toLowerCase();
+            if(!stringKeyword) {
+                renderProducts(allProducts);
+            } else {
+                const matches = allProducts.filter(p => p.name.toLowerCase().includes(stringKeyword) || p.category.toLowerCase().includes(stringKeyword));
+                renderProducts(matches);
+            }
         }
 
         window.filterCategory = function(cat) {
@@ -493,6 +620,8 @@
         function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
         function openCheckoutModal() { document.getElementById('checkoutModal').classList.remove('hidden'); }
         function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
+        function openInfoModal() { document.getElementById('infoModal').classList.remove('hidden'); }
+        function closeInfoModal() { document.getElementById('infoModal').classList.add('hidden'); }
     </script>
 </body>
 </html>
