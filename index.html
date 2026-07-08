@@ -3,43 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApniDukan Pro - Full Stack Hyperlocal Platform</title>
+    <title>ApniDukan Pro - Premium Hyperlocal Platform</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Tesseract.js Library for Parchi OCR Scanner -->
+    <!-- Tesseract.js for Parchi OCR Scanner -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); 
+            background: radial-gradient(circle at top right, #f0fdf4 0%, #f8fafc 100%);
             min-height: 100vh;
             overflow-x: hidden;
         }
         .scrollbar-none::-webkit-scrollbar { display: none; }
-        .glass-card {
+        .premium-glass {
             background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
-        .slide-in-right {
-            transition: transform 0.3s ease-in-out;
+        .pro-shadow {
+            box-shadow: 0 20px 40px -5px rgba(15, 23, 42, 0.05), 0 10px 20px -5px rgba(15, 23, 42, 0.03);
         }
-        @media print {
-            body * { display: none; }
-            #thermalPrintArea, #thermalPrintArea * { display: block !important; font-family: monospace !important; color: black !important; }
-            #thermalPrintArea { width: 58mm; padding: 2mm; background: white; position: absolute; left: 0; top: 0; }
+        /* Cart Smooth Transition System */
+        #sideCartPanel {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
     </style>
 </head>
 <body class="pb-28">
 
     <!-- TOP NAVIGATION BAR -->
-    <nav class="bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100 sticky top-0 z-50 px-4 py-3.5 flex justify-between items-center max-w-md mx-auto rounded-b-2xl">
+    <nav class="bg-white/90 backdrop-blur-xl shadow-sm border-b border-slate-100/80 sticky top-0 z-50 px-4 py-4 flex justify-between items-center max-w-md mx-auto rounded-b-3xl">
         <div class="flex items-center gap-3">
-            <div id="storeLogoContainer" class="bg-gradient-to-tr from-emerald-500 to-green-600 text-white w-10 h-10 rounded-xl shadow-lg flex items-center justify-center overflow-hidden transition-transform">
+            <div id="storeLogoContainer" class="bg-gradient-to-tr from-emerald-500 via-teal-500 to-green-600 text-white w-11 h-11 rounded-2xl shadow-lg shadow-emerald-100 flex items-center justify-center overflow-hidden transform hover:rotate-3 transition-transform">
                 <i id="defaultLogoIcon" class="fa-solid fa-shop text-lg"></i>
                 <img id="storeLiveLogo" class="hidden object-cover h-full w-full">
             </div>
@@ -47,11 +47,11 @@
                 <h1 class="text-md font-extrabold text-slate-800 tracking-tight flex items-center gap-1">
                     <span id="navStoreName" class="font-bold">Loading Store...</span>
                 </h1>
-                <div class="flex items-center gap-2 mt-0.5">
-                    <button onclick="openInfoModal()" class="text-[10px] text-emerald-600 font-bold flex items-center gap-0.5 hover:underline">
+                <div class="flex items-center gap-2.5 mt-0.5">
+                    <button onclick="openModal('infoModal')" class="text-[10px] text-emerald-600 font-extrabold flex items-center gap-0.5 hover:underline bg-emerald-50 px-2 py-0.5 rounded-full">
                         <i class="fa-solid fa-circle-check"></i> Store Info
                     </button>
-                    <button onclick="openCustomerOrdersModal()" class="text-[10px] text-blue-600 font-bold flex items-center gap-0.5 hover:underline">
+                    <button onclick="openModal('customerOrdersModal')" class="text-[10px] text-blue-600 font-extrabold flex items-center gap-0.5 hover:underline bg-blue-50 px-2 py-0.5 rounded-full">
                         <i class="fa-solid fa-bag-shopping"></i> My Orders
                     </button>
                 </div>
@@ -59,97 +59,97 @@
         </div>
         
         <div class="flex items-center gap-1.5">
-            <select id="langSelector" onchange="window.changeLanguage()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl p-2 font-medium focus:outline-none">
+            <select id="langSelector" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl p-2 font-bold focus:outline-none">
                 <option value="hinglish">Hinglish</option>
                 <option value="english">English</option>
                 <option value="gujarati">ગુજરાતી</option>
             </select>
-            <button onclick="openLoginModal()" id="sellerModeBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold p-2.5 rounded-xl">
+            <button onclick="openModal('loginModal')" id="sellerModeBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-black p-2.5 rounded-xl transition-all">
                 <i class="fa-solid fa-lock text-emerald-600" id="lockIcon"></i>
             </button>
         </div>
     </nav>
 
     <!-- MAIN INTERFACE CONTAINER -->
-    <div class="max-w-md mx-auto p-4 space-y-5">
+    <div class="max-w-md mx-auto p-4 space-y-6">
 
         <!-- 1. PRO SELLER DASHBOARD -->
-        <div id="sellerPanel" class="hidden space-y-5 animate-fadeIn">
-            <div class="bg-gradient-to-br from-slate-800 via-slate-900 to-emerald-950 rounded-3xl p-5 text-white shadow-xl flex justify-between items-center relative overflow-hidden">
+        <div id="sellerPanel" class="hidden space-y-5">
+            <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 rounded-3xl p-5 text-white shadow-xl flex justify-between items-center relative overflow-hidden">
                 <div class="space-y-0.5">
-                    <p class="text-xs text-emerald-400 font-bold tracking-wider uppercase" data-key="welcomeSeller">Welcome Back, Seller!</p>
-                    <h3 class="text-lg font-extrabold" data-key="manageStore">Manage Online Store</h3>
+                    <p class="text-xs text-emerald-400 font-black tracking-wider uppercase">Welcome Back, Seller!</p>
+                    <h3 class="text-lg font-extrabold">Manage Online Store</h3>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <button onclick="window.logoutSeller()" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-[11px] font-bold px-2.5 py-1.5 rounded-xl">Logout</button>
-                    <button onclick="window.shareStoreLink()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-[11px] font-bold px-2.5 py-1.5 rounded-xl"><i class="fa-solid fa-share-nodes"></i> Share Link</button>
+                    <button id="sellerLogoutActionBtn" class="bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 text-red-300 text-[11px] font-black px-3 py-1.5 rounded-xl transition-all">Logout</button>
+                    <button id="sellerShareActionBtn" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-[11px] font-black px-3 py-1.5 rounded-xl transition-all"><i class="fa-solid fa-share-nodes"></i> Share Link</button>
                 </div>
             </div>
 
             <!-- LIVE INCOMING ORDERS PANEL FOR SELLER -->
-            <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-3">
-                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2 text-amber-600">
-                    <i class="fa-solid fa-bell animate-bounce"></i> Naye Orders (Live Dashboard)
+            <div class="premium-glass rounded-3xl p-5 pro-shadow space-y-3">
+                <h2 class="text-sm font-extrabold flex items-center gap-2 text-amber-600">
+                    <i class="fa-solid fa-bell animate-bounce"></i> Live Orders Dashboard
                 </h2>
                 <div id="sellerIncomingOrdersList" class="space-y-3 max-h-80 overflow-y-auto pr-1">
-                    <p class="text-xs text-slate-400 text-center py-4">Koi pending orders nahi hain abhi.</p>
+                    <p class="text-xs text-slate-400 text-center py-4">No live pending entries right now.</p>
                 </div>
             </div>
 
             <!-- Merchant Store Settings -->
-            <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-4">
-                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-sliders text-emerald-500"></i> <span data-key="storeSettings">Store Profile Settings</span></h2>
+            <div class="glass-card rounded-3xl p-5 shadow-lg border border-white/60 space-y-4">
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-sliders text-emerald-500"></i> Store Profile Settings</h2>
                 <div class="space-y-3">
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="mDukanName" placeholder="Dukan Ka Naam" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
-                        <input type="text" id="mWorkspace" placeholder="WhatsApp Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
+                        <input type="text" id="mDukanName" placeholder="Dukan Ka Naam" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500">
+                        <input type="text" id="mWorkspace" placeholder="WhatsApp Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="mGst" placeholder="GSTIN Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
-                        <input type="text" id="mUpi" placeholder="UPI ID (e.g. dukan@ybl)" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white font-semibold text-emerald-700">
+                        <input type="text" id="mGst" placeholder="GSTIN Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500">
+                        <input type="text" id="mUpi" placeholder="UPI ID (e.g. dukan@ybl)" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white font-bold text-emerald-700 focus:outline-none focus:border-emerald-500">
                     </div>
-                    <input type="text" id="mMaps" placeholder="Google Maps Location" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
-                    <textarea id="mAddress" placeholder="Full Store Address" class="w-full px-3 py-2 border border-slate-200 rounded-2xl text-xs bg-white h-16 resize-none"></textarea>
+                    <input type="text" id="mMaps" placeholder="Google Maps Location Link" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500">
+                    <textarea id="mAddress" placeholder="Full Store Address" class="w-full px-3 py-2 border border-slate-200 rounded-2xl text-xs bg-white h-16 resize-none focus:outline-none focus:border-emerald-500"></textarea>
                     <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200/60">
-                        <label class="bg-slate-800 hover:bg-black text-white text-[11px] font-bold px-3 py-2 rounded-xl cursor-pointer">
+                        <label class="bg-slate-800 hover:bg-black text-white text-[11px] font-bold px-3 py-2 rounded-xl cursor-pointer transition-all">
                             Upload Logo
-                            <input type="file" id="storeLogoInput" accept="image/*" class="hidden" onchange="window.processStoreLogo()" />
+                            <input type="file" id="storeLogoInput" accept="image/*" class="hidden" />
                         </label>
                         <span id="logoFileName" class="text-[10px] text-slate-400 font-semibold">No logo selected</span>
                     </div>
                 </div>
-                <button onclick="window.saveStoreProfile()" class="w-full bg-slate-800 text-white text-xs font-extrabold py-3 rounded-2xl shadow-md">Save Profile Configurations</button>
+                <button id="saveStoreProfileBtn" class="w-full bg-slate-800 hover:bg-black text-white text-xs font-black py-3 rounded-2xl transition-all shadow-md">Save Profile Configurations</button>
             </div>
 
             <!-- Add Product Form -->
-            <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-4">
-                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-square-plus text-emerald-500"></i> <span data-key="addNewItem">Naya Product Add Karein</span></h2>
+            <div class="glass-card rounded-3xl p-5 shadow-lg border border-white/60 space-y-4">
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-square-plus text-emerald-500"></i> Naya Product Add Karein</h2>
                 <div class="space-y-2">
                     <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-slate-50/50 hover:border-emerald-400 transition-all text-center">
                         <i class="fa-solid fa-images text-xl text-slate-400 mb-1"></i>
-                        <p class="text-xs text-slate-600 font-semibold">Upload Product Photos (Up to 3)</p>
-                        <input type="file" id="productImagesInput" accept="image/*" multiple class="hidden" onchange="window.displayMultiFileNames()" />
+                        <p class="text-xs text-slate-600 font-bold">Upload Product Photos (Up to 3)</p>
+                        <input type="file" id="productImagesInput" accept="image/*" multiple class="hidden" />
                     </label>
                     <p id="multiFileStatus" class="text-[10px] text-emerald-600 font-bold text-center hidden"></p>
                 </div>
-                <input type="text" id="pName" placeholder="Product Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white">
+                <input type="text" id="pName" placeholder="Product Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500">
                 <div class="grid grid-cols-2 gap-3">
-                    <input type="number" id="pPrice" placeholder="Price (₹)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white">
-                    <input type="text" id="pUnit" placeholder="Unit (e.g., 1kg, 500ml)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white">
+                    <input type="number" id="pPrice" placeholder="Price (₹)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500">
+                    <input type="text" id="pUnit" placeholder="Unit (e.g., 1kg, 500ml)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500">
                 </div>
                 <textarea id="pDesc" placeholder="Product Details / Description" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white h-20 resize-none focus:outline-none focus:border-emerald-500"></textarea>
-                <select id="pCategory" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white text-slate-600 font-medium">
+                <select id="pCategory" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white text-slate-600 font-bold focus:outline-none">
                     <option value="Groceries">Groceries / Kirana</option>
                     <option value="Dairy">Dairy & Milk Products</option>
                     <option value="Fruits">Fruits & Vegetables</option>
                     <option value="Snacks">Snacks & Beverages</option>
                     <option value="Others">Others</option>
                 </select>
-                <button onclick="window.addProductToFirebase()" id="uploadBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg"><i class="fa-solid fa-paper-plane"></i> <span data-key="liveOnStore">Store Par Live Karein</span></button>
+                <button id="addProductBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black py-3.5 rounded-2xl text-xs shadow-lg shadow-emerald-100 transition-all"><i class="fa-solid fa-paper-plane"></i> Store Par Live Karein</button>
             </div>
 
             <!-- Live Inventory Items List -->
-            <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-3">
+            <div class="glass-card rounded-3xl p-5 shadow-lg border border-white/60 space-y-3">
                 <h2 class="text-sm font-extrabold text-slate-800"><i class="fa-solid fa-boxes-stacked text-emerald-500"></i> Live Inventory Items</h2>
                 <div id="sellerInventoryList" class="space-y-2.5 max-h-64 overflow-y-auto pr-1"></div>
             </div>
@@ -158,85 +158,103 @@
         <!-- 2. CUSTOMER VIEW MODULE -->
         <div id="customerPanel" class="space-y-5">
             <!-- Written Parchi Scanner -->
-            <div class="bg-gradient-to-r from-emerald-500/10 to-green-600/10 border border-emerald-500/20 rounded-3xl p-4 flex items-center justify-between">
+            <div class="bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-green-600/10 border border-emerald-500/20 rounded-3xl p-4 flex items-center justify-between shadow-sm">
                 <div class="space-y-0.5">
                     <h4 class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i> Upload Written Parchi</h4>
-                    <p class="text-[10px] text-slate-500 font-medium">List scan karke automatic cart me items search karein!</p>
+                    <p class="text-[10px] text-slate-500 font-semibold">Automatic scan karke catalog cart fill karein!</p>
                 </div>
-                <label class="bg-emerald-600 text-white text-xs font-extrabold px-3 py-2.5 rounded-xl cursor-pointer shadow-md whitespace-nowrap">
+                <label class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2.5 rounded-xl cursor-pointer shadow-md shadow-emerald-100 transition-all">
                     <span id="ocrStatusText"><i class="fa-solid fa-camera mr-1"></i> Scan List</span>
-                    <input type="file" id="ocrInput" accept="image/*" class="hidden" onchange="window.runParchiOcrParser()" />
+                    <input type="file" id="ocrInput" accept="image/*" class="hidden" />
                 </label>
             </div>
 
             <div class="relative">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
-                <input type="text" id="storeSearchBar" oninput="window.triggerLocalSearch()" placeholder="Search products in this mart..." class="w-full pl-10 pr-4 py-3 bg-white shadow-sm border border-slate-100 rounded-2xl text-xs focus:outline-none focus:border-emerald-500">
+                <input type="text" id="storeSearchBar" placeholder="Search fresh products in this mart..." class="w-full pl-10 pr-4 py-3.5 bg-white pro-shadow border border-slate-100 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 transition-all">
             </div>
 
             <div class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-none snap-x" id="categoryTabs">
-                <button onclick="window.filterCategory('All')" class="bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-bold px-5 py-2.5 rounded-full shadow-md">All Items</button>
-                <button onclick="window.filterCategory('Groceries')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Groceries</button>
-                <button onclick="window.filterCategory('Dairy')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Dairy</button>
-                <button onclick="window.filterCategory('Fruits')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Fruits</button>
-                <button onclick="window.filterCategory('Snacks')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Snacks</button>
+                <button data-cat="All" class="cat-filter-btn bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-black px-5 py-2.5 rounded-full shadow-md">All Items</button>
+                <button data-cat="Groceries" class="cat-filter-btn bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Groceries</button>
+                <button data-cat="Dairy" class="cat-filter-btn bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Dairy</button>
+                <button data-cat="Fruits" class="cat-filter-btn bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Fruits</button>
+                <button data-cat="Snacks" class="cat-filter-btn bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Snacks</button>
             </div>
 
             <div class="space-y-3">
-                <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-widest px-1" data-key="availProducts">Available Products</h3>
-                <div id="productsContainer" class="grid grid-cols-2 gap-3.5">
-                    <p class="text-xs text-slate-400 col-span-2 text-center py-12 font-medium">Loading digital catalog...</p>
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Available Products</h3>
+                <div id="productsContainer" class="grid grid-cols-2 gap-4">
+                    <p class="text-xs text-slate-400 col-span-2 text-center py-12 font-medium">Loading digital storefront...</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- 🛒 SLIDE-IN SIDE CART PANEL -->
-    <div id="sideCartPanel" class="fixed top-0 bottom-0 right-0 w-full max-w-sm bg-white shadow-2xl z-50 translate-x-full slide-in-right flex flex-col border-l border-slate-100 transition-transform duration-300 rounded-l-3xl">
+    <div id="sideCartPanel" class="fixed top-0 bottom-0 right-0 w-full max-w-sm bg-white shadow-2xl z-50 translate-x-full slide-in-right flex flex-col border-l border-slate-100 rounded-l-3xl">
         <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-tl-3xl">
             <h3 class="font-extrabold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-emerald-500"></i> Your Shopping Basket</h3>
-            <button onclick="window.closeSideCart()" class="text-slate-400 hover:text-slate-600 bg-white p-1.5 rounded-full shadow-sm"><i class="fa-solid fa-arrow-right"></i></button>
+            <button id="closeSideCartBtn" class="text-slate-400 hover:text-slate-600 bg-white p-1.5 rounded-full shadow-sm transition-all"><i class="fa-solid fa-arrow-right"></i></button>
         </div>
-        <div id="sideCartItemsList" class="p-4 flex-1 overflow-y-auto space-y-3">
-            <!-- Dynamic products go here -->
-        </div>
+        <div id="sideCartItemsList" class="p-4 flex-1 overflow-y-auto space-y-3"></div>
         <div class="p-4 border-t border-slate-100 space-y-3 bg-slate-50/50 rounded-bl-3xl">
             <div class="flex justify-between text-xs font-bold text-slate-600">
                 <span>Subtotal Amount:</span>
                 <span id="sideCartTotalPriceLabel" class="text-slate-900 text-sm font-black">₹0</span>
             </div>
-            <button onclick="openCheckoutModal()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs tracking-wide shadow-lg flex items-center justify-center gap-2 active:scale-[0.99]">
+            <button onclick="openModal('checkoutModal')" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black py-4 rounded-2xl text-xs tracking-wide shadow-lg shadow-emerald-100 flex items-center justify-center gap-2 active:scale-95 transition-all">
                 Proceed to Checkout <i class="fa-solid fa-circle-arrow-right"></i>
             </button>
         </div>
     </div>
 
-    <!-- CUSTOMER ENTRY/LOGIN GATE MODAL -->
+    <!-- CUSTOMER LOGIN GATE MODAL -->
     <div id="customerLoginModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100 animate-scaleUp">
             <div class="text-center space-y-1">
-                <div class="bg-emerald-100 text-emerald-600 w-12 h-12 rounded-full flex items-center justify-center mx-auto text-xl font-bold"><i class="fa-solid fa-user-check"></i></div>
+                <div class="bg-emerald-100 text-emerald-600 w-12 h-12 rounded-full flex items-center justify-center mx-auto text-xl font-bold shadow-inner"><i class="fa-solid fa-user-check"></i></div>
                 <h3 class="font-extrabold text-lg text-slate-800">Welcome to ApniDukan</h3>
                 <p class="text-xs text-slate-400">Dukan me enter karne ke liye apna naam aur number likhein</p>
             </div>
             <div class="space-y-3">
-                <input type="text" id="cLoginName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:outline-none">
-                <input type="number" id="cLoginPhone" placeholder="Mobile Number" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:outline-none">
-                <button onclick="window.saveCustomerSession()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-2xl text-xs shadow-md transition-all">Start Shopping <i class="fa-solid fa-circle-arrow-right ml-1"></i></button>
+                <input type="text" id="cLoginName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3.5 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:outline-none">
+                <input type="number" id="cLoginPhone" placeholder="Mobile Number" class="w-full px-4 py-3.5 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:outline-none">
+                <button id="customerLoginSubmitBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3.5 rounded-2xl text-xs shadow-md transition-all">Start Shopping <i class="fa-solid fa-circle-arrow-right ml-1"></i></button>
             </div>
         </div>
     </div>
 
-    <!-- CUSTOMER MY ORDERS HISTORY POPUP -->
+    <!-- CLIENT DETAILS CHECKOUT MODAL -->
+    <div id="checkoutModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <h3 class="font-extrabold text-md text-slate-800 flex items-center gap-2"><i class="fa-solid fa-map-pin text-emerald-500"></i> Enter Delivery Details</h3>
+                <button onclick="closeModal('checkoutModal')" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="space-y-3">
+                <input type="text" id="custName" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-100 text-slate-500 font-bold" readonly>
+                <input type="text" id="custPhone" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-100 text-slate-500 font-bold" readonly>
+                <textarea id="custAddress" placeholder="Pura Delivery Address (Ghar No, Landmark, Area)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 h-20 resize-none focus:outline-none focus:border-emerald-500"></textarea>
+                
+                <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 text-xs font-bold text-slate-700 space-y-2">
+                    <span class="text-[9px] tracking-wider text-slate-400 block uppercase">Select Payment Mode</span>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="payMethod" value="COD" checked class="accent-emerald-600"> Cash on Delivery (COD)</label>
+                    <label id="upiRadioLabel" class="hidden items-center gap-2 cursor-pointer"><input type="radio" name="payMethod" value="UPI" class="accent-emerald-600"> Online Pay via UPI Apps</label>
+                </div>
+                <button id="placeOrderFinalBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black py-3.5 rounded-2xl text-xs shadow-lg transition-all active:scale-95">Place Order on Website</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOMER MY ORDERS POPUP -->
     <div id="customerOrdersModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100 max-h-[85vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <h3 class="font-extrabold text-slate-800 flex items-center gap-2 text-sm"><i class="fa-solid fa-clock-history text-blue-500"></i> My Order History</h3>
-                <button onclick="closeCustomerOrdersModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeModal('customerOrdersModal')" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="customerOrdersTrackList" class="space-y-4">
-                <p class="text-xs text-slate-400 text-center py-8">Aapne abhi tak koi order nahi kiya hai.</p>
-            </div>
+            <div id="customerOrdersTrackList" class="space-y-4"></div>
         </div>
     </div>
 
@@ -245,9 +263,9 @@
         <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl border border-slate-100 max-h-[85vh] overflow-y-auto">
             <div class="flex justify-between items-center pb-2 border-b border-slate-100">
                 <h3 id="modalProductName" class="font-extrabold text-slate-800 text-sm tracking-tight">-</h3>
-                <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeModal('detailsModal')" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="modalImageContainer" class="bg-slate-50 rounded-2xl p-1 flex overflow-x-auto snap-x h-48 scrollbar-none relative shadow-inner"></div>
+            <div id="modalImageContainer" class="bg-slate-50 rounded-2xl p-1 flex overflow-x-auto snap-x h-52 scrollbar-none relative shadow-inner"></div>
             <div class="space-y-2">
                 <div class="flex justify-between items-center">
                     <span id="modalProductPrice" class="text-lg font-black text-slate-800">₹0</span>
@@ -266,7 +284,7 @@
         <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <h3 class="font-extrabold text-slate-800 flex items-center gap-2 text-sm"><i class="fa-solid fa-building-shield text-emerald-500"></i> Store Verification Details</h3>
-                <button onclick="closeInfoModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeModal('infoModal')" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="space-y-3 text-xs">
                 <div><span class="text-slate-400 block font-bold uppercase tracking-wider text-[9px]">Store Name</span><p id="infoDukanName" class="font-bold text-slate-800 mt-0.5">-</p></div>
@@ -282,53 +300,32 @@
         <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl">
             <div class="flex justify-between items-center">
                 <h3 class="font-extrabold text-md text-slate-800 flex items-center gap-2"><i class="fa-solid fa-shield-halved text-emerald-500"></i> Merchant Access Lock</h3>
-                <button onclick="closeLoginModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeModal('loginModal')" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <input type="password" id="loginPassword" placeholder="Enter Security Password" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-emerald-500 bg-slate-50/50">
-            <button onclick="window.loginSeller()" class="w-full bg-slate-900 text-white font-extrabold py-3 rounded-2xl text-xs shadow-md">Verify Password</button>
-        </div>
-    </div>
-
-    <!-- CLIENT DETAILS CHECKOUT MODAL -->
-    <div id="checkoutModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl">
-            <div class="flex justify-between items-center">
-                <h3 class="font-extrabold text-md text-slate-800 flex items-center gap-2"><i class="fa-solid fa-map-pin text-emerald-500"></i> Enter Delivery Details</h3>
-                <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="space-y-3">
-                <input type="text" id="custName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50" readonly>
-                <input type="text" id="custPhone" placeholder="Mobile Number" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50" readonly>
-                <textarea id="custAddress" placeholder="Pura Delivery Address" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 h-16 resize-none"></textarea>
-                
-                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-xs font-bold text-slate-700 space-y-2">
-                    <span class="text-[9px] tracking-wider text-slate-400 block uppercase">Select Payment Mode</span>
-                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="payMethod" value="COD" checked class="accent-emerald-600"> Cash on Delivery (COD)</label>
-                    <label id="upiRadioLabel" class="hidden items-center gap-2 cursor-pointer"><input type="radio" name="payMethod" value="UPI" class="accent-emerald-600"> Online Pay via UPI Apps</label>
-                </div>
-
-                <button onclick="window.submitOrderToDatabase()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg">Place Order on Website</button>
-            </div>
+            <button id="sellerLoginVerifyBtn" class="w-full bg-slate-900 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-md">Verify Password</button>
         </div>
     </div>
 
     <!-- FIXED BOTTOM BAR FOR CUSTOMER CART VIEW -->
-    <div id="customerCartBar" onclick="window.openSideCart()" class="fixed bottom-4 left-4 right-4 max-w-sm mx-auto bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 flex justify-between items-center text-white shadow-xl z-40 hidden border border-white/10 animate-slideUp cursor-pointer">
+    <div id="customerCartBar" class="fixed bottom-4 left-4 right-4 max-w-sm mx-auto bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 flex justify-between items-center text-white shadow-2xl z-40 hidden border border-white/10 animate-slideUp cursor-pointer transition-all active:scale-95">
         <div class="flex items-center gap-3 pl-2">
-            <div class="bg-emerald-500 text-white p-2 rounded-xl"><i class="fa-solid fa-basket-shopping text-sm"></i></div>
+            <div class="bg-emerald-500 text-white p-2.5 rounded-xl shadow-lg"><i class="fa-solid fa-basket-shopping text-sm"></i></div>
             <div class="text-xs">
-                <span id="cartCount" class="font-extrabold block text-slate-100">0 Items • ₹0</span>
+                <span id="cartCount" class="font-black block text-slate-100 text-sm">0 Items • ₹0</span>
                 <span class="text-[9px] text-emerald-400 font-bold block uppercase tracking-wider">Click to view basket / cart</span>
             </div>
         </div>
-        <button class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-900 text-xs font-extrabold px-4 py-2.5 rounded-xl flex items-center gap-1.5">
+        <button class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-900 text-xs font-black px-4 py-2.5 rounded-xl flex items-center gap-1.5 pointer-events-none">
             View Cart <i class="fa-solid fa-chevron-right text-[10px]"></i>
         </button>
     </div>
 
     <div id="thermalPrintArea" class="hidden"></div>
 
-    <!-- FIREBASE SYSTEM ENGINE MODULES -->
+    <!-- ========================================== -->
+    <!-- FIREBASE AND CART EVENT ENGINE (type="module") -->
+    <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, where, doc, deleteDoc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -355,7 +352,7 @@
         let merchantUpiId = ""; 
         let storeLogoBase64 = "";
 
-        // 🎯 WINDOW ACCESSIBILITY BINDINGS
+        // 🎯 EXPLICIT WINDOW ACTION CONTROLLERS FOR ALL DYNAMIC CLICKS
         window.openSideCart = function() {
             window.renderSideCartPanelItems();
             document.getElementById('sideCartPanel').style.transform = "translateX(0)";
@@ -366,9 +363,13 @@
         }
 
         window.modifyCartQty = function(id, countDelta) {
-            const product = allProducts.find(p => p.id === id); if(!product) return;
-            if(!cart[id]) cart[id] = { product, qty: 0 }; cart[id].qty += countDelta; if(cart[id].qty <= 0) delete cart[id];
-            renderProducts(allProducts); updateCartUI();
+            const product = allProducts.find(p => p.id === id);
+            if(!product) return;
+            if(!cart[id]) cart[id] = { product, qty: 0 };
+            cart[id].qty += countDelta;
+            if(cart[id].qty <= 0) delete cart[id];
+            renderProducts(allProducts);
+            updateCartUI();
         }
 
         window.renderSideCartPanelItems = function() {
@@ -390,32 +391,39 @@
                 computedGrandTotal += costSum;
                 const targetThumb = item.product.images ? item.product.images[0] : "https://placehold.co/150?text=Product";
 
-                container.innerHTML += `
-                    <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-2xl text-xs border border-slate-100/60 shadow-sm">
-                        <div class="flex items-center gap-3">
-                            <img src="${targetThumb}" class="w-10 h-10 object-cover rounded-xl shadow-sm">
-                            <div>
-                                <span class="font-extrabold text-slate-800 block tracking-tight">${item.product.name}</span>
-                                <span class="text-slate-400 text-[10px] font-bold">₹${item.product.price} • ${item.product.unit}</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center bg-white border border-slate-200/80 rounded-xl text-[11px] font-black text-slate-700 shadow-sm">
-                            <button onclick="window.modifyCartQty('${key}', -1); window.renderSideCartPanelItems();" class="px-2 py-1 text-slate-400 hover:text-red-500"><i class="fa-solid fa-minus text-[9px]"></i></button>
-                            <span class="px-1.5 select-none text-slate-800">${item.qty}</span>
-                            <button onclick="window.modifyCartQty('${key}', 1); window.renderSideCartPanelItems();" class="px-2 py-1 text-slate-400 hover:text-emerald-500"><i class="fa-solid fa-plus text-[9px]"></i></button>
+                const cartItemElement = document.createElement('div');
+                cartItemElement.className = "flex items-center justify-between bg-slate-50 p-3 rounded-2xl text-xs border border-slate-100/60 shadow-sm";
+                cartItemElement.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <img src="${targetThumb}" class="w-10 h-10 object-cover rounded-xl shadow-sm">
+                        <div>
+                            <span class="font-extrabold text-slate-800 block tracking-tight">${item.product.name}</span>
+                            <span class="text-slate-400 text-[10px] font-bold">₹${item.product.price} • ${item.product.unit}</span>
                         </div>
                     </div>
+                    <div class="flex items-center bg-white border border-slate-200/80 rounded-xl text-[11px] font-black text-slate-700 shadow-sm">
+                        <button class="cart-minus-btn px-2.5 py-1 text-slate-400 hover:text-red-500" data-id="${key}"><i class="fa-solid fa-minus text-[9px]"></i></button>
+                        <span class="px-1 select-none text-slate-800">${item.qty}</span>
+                        <button class="cart-plus-btn px-2.5 py-1 text-slate-400 hover:text-emerald-500" data-id="${key}"><i class="fa-solid fa-plus text-[9px]"></i></button>
+                    </div>
                 `;
+                container.appendChild(cartItemElement);
             });
+
+            // Map sub-controls internally to safely avoid cross-script bindings leaks
+            container.querySelectorAll('.cart-minus-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => { window.modifyCartQty(btn.getAttribute('data-id'), -1); window.renderSideCartPanelItems(); });
+            });
+            container.querySelectorAll('.cart-plus-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => { window.modifyCartQty(btn.getAttribute('data-id'), 1); window.renderSideCartPanelItems(); });
+            });
+
             totalLabel.innerText = `₹${computedGrandTotal}`;
         }
 
         window.submitOrderToDatabase = async function() {
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
             const addr = document.getElementById('custAddress').value.trim();
             const selectedPayment = document.querySelector('input[name="payMethod"]:checked').value;
-
             if(!addr) return alert("Pehle delivery address likh lijiye!");
 
             let itemsList = []; let total = 0;
@@ -425,258 +433,238 @@
             });
 
             try {
-                await addDoc(collection(db, "orders"), { storeId: currentStoreId, customerName: name, customerPhone: phone, customerAddress: addr, paymentMode: selectedPayment, items: itemsList, totalAmount: total, status: "pending", createdAt: Date.now() });
+                await addDoc(collection(db, "orders"), {
+                    storeId: currentStoreId, customerName: localStorage.getItem("c_name"), customerPhone: localStorage.getItem("c_phone"), customerAddress: addr, paymentMode: selectedPayment, items: itemsList, totalAmount: total, status: "pending", createdAt: Date.now()
+                });
                 alert(`🎉 Order Placed Successfully!`);
                 if(selectedPayment === "UPI" && merchantUpiId) {
-                    const upiIntentUrl = `upi://pay?pa=${merchantUpiId}&pn=${encodeURIComponent(document.getElementById('navStoreName').innerText)}&am=${total}&cu=INR`; 
-                    window.open(upiIntentUrl, '_blank');
+                    window.open(`upi://pay?pa=${merchantUpiId}&pn=${encodeURIComponent(document.getElementById('navStoreName').innerText)}&am=${total}&cu=INR`, '_blank');
                 }
-                cart = {}; 
-                document.getElementById('customerCartBar').classList.add('hidden'); 
-                window.closeSideCart(); 
-                renderProducts(allProducts); 
-                closeCheckoutModal(); 
-                openCustomerOrdersModal();
-            } catch (e) { alert("Database error."); }
+                cart = {}; document.getElementById('customerCartBar').classList.add('hidden'); window.closeSideCart(); renderProducts(allProducts); closeModal('checkoutModal'); openModal('customerOrdersModal');
+            } catch (e) { alert("Database rejection."); }
+        }
+
+        window.openDetailsModal = function(id) {
+            const p = allProducts.find(item => item.id === id); if(!p) return;
+            document.getElementById('modalProductName').innerText = p.name;
+            document.getElementById('modalProductPrice').innerText = `₹${p.price}`;
+            document.getElementById('modalProductUnit').innerText = p.unit;
+            document.getElementById('modalProductDesc').innerText = p.description || "Is product ke liye koi extra details nahi di gayi hain.";
+            const imgContainer = document.getElementById('modalImageContainer'); imgContainer.innerHTML = "";
+            (p.images || ["https://placehold.co/150?text=Product"]).forEach(imgUrl => {
+                imgContainer.innerHTML += `<img src="${imgUrl}" class="snap-center object-contain h-full w-full rounded-xl min-w-full inline-block">`;
+            });
+            openModal('detailsModal');
         }
 
         function updateCartUI() {
             const cartBar = document.getElementById('customerCartBar');
-            const cartCount = document.getElementById('cartCount');
             const cartKeys = Object.keys(cart);
             if(cartKeys.length > 0) {
                 let totalItemsCount = 0; let totalBillingValue = 0;
-                cartKeys.forEach(key => {
-                    totalItemsCount += cart[key].qty; totalBillingValue += (cart[key].product.price * cart[key].qty);
-                });
+                cartKeys.forEach(key => { totalItemsCount += cart[key].qty; totalBillingValue += (cart[key].product.price * cart[key].qty); });
                 cartBar.classList.remove('hidden');
-                cartCount.innerText = `${totalItemsCount} Items • Total: ₹${totalBillingValue}`;
+                document.getElementById('cartCount').innerText = `${totalItemsCount} Items • Total: ₹${totalBillingValue}`;
             } else { cartBar.classList.add('hidden'); window.closeSideCart(); }
-        }
-
-        window.runParchiOcrParser = async function() {
-            const fileInput = document.getElementById('ocrInput'); const statusLabel = document.getElementById('ocrStatusText');
-            if (fileInput.files.length === 0) return;
-            statusLabel.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Reading...`;
-            try {
-                const file = fileInput.files[0]; const base64Img = await fileToDataUri(file);
-                const result = await Tesseract.recognize(base64Img, 'eng+hin');
-                const cleanLines = result.data.text.toLowerCase().split('\n');
-                let matchedItemsCount = 0;
-                cleanLines.forEach(line => {
-                    if(line.trim().length < 3) return;
-                    const foundProduct = allProducts.find(p => line.includes(p.name.toLowerCase()));
-                    if(foundProduct) {
-                        if(!cart[foundProduct.id]) cart[foundProduct.id] = { product: foundProduct, qty: 1 };
-                        else cart[foundProduct.id].qty += 1;
-                        matchedItemsCount++;
-                    }
-                });
-                if(matchedItemsCount > 0) { alert(`✓ Scanned! ${matchedItemsCount} items add ho gaye.`); renderProducts(allProducts); updateCartUI(); }
-                else { alert("No product matched."); }
-            } catch (err) { alert("OCR Rejection."); }
-            finally { statusLabel.innerHTML = `<i class="fa-solid fa-camera mr-1"></i> Scan List`; fileInput.value = ""; }
-        }
-
-        function checkCustomerSession() {
-            const savedName = localStorage.getItem("c_name"); const savedPhone = localStorage.getItem("c_phone");
-            if (!savedName || !savedPhone) { document.getElementById('customerLoginModal').classList.remove('hidden'); }
-            else { document.getElementById('custName').value = savedName; document.getElementById('custPhone').value = savedPhone; listenToCustomerOrdersLive(savedPhone); }
-        }
-
-        window.saveCustomerSession = function() {
-            const name = document.getElementById('cLoginName').value.trim(); const phone = document.getElementById('cLoginPhone').value.trim();
-            if(!name || phone.length < 10) return alert("Fill data completely!");
-            localStorage.setItem("c_name", name); localStorage.setItem("c_phone", phone);
-            document.getElementById('customerLoginModal').classList.add('hidden'); checkCustomerSession();
-        }
-
-        function listenToCustomerOrdersLive(phone) {
-            const container = document.getElementById('customerOrdersTrackList');
-            const q = query(collection(db, "orders"), where("storeId", "==", currentStoreId), where("customerPhone", "==", phone));
-            onSnapshot(q, (snapshot) => {
-                container.innerHTML = ""; if(snapshot.empty) { container.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">No order entries yet.</p>`; return; }
-                snapshot.forEach((docSnapshot) => {
-                    const order = docSnapshot.data(); let statusColor = "text-amber-500 bg-amber-50"; let stepIndex = 0;
-                    if(order.status === 'accepted') { statusColor = "text-emerald-600 bg-emerald-50"; stepIndex = 1; }
-                    if(order.status === 'shipped') { statusColor = "text-blue-600 bg-blue-50"; stepIndex = 2; }
-                    if(order.status === 'delivered') { statusColor = "text-purple-600 bg-purple-50"; stepIndex = 3; }
-                    container.innerHTML += `<div class="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl text-xs space-y-3 shadow-sm"><div class="flex justify-between items-center font-bold"><span class="text-slate-400 font-mono text-[10px]">ID: ${docSnapshot.id.substring(0,8)}...</span><span class="${statusColor} px-2 py-0.5 rounded-md uppercase text-[9px] font-black">${order.status}</span></div><div class="bg-white border border-slate-100 p-2 rounded-xl text-slate-600 font-semibold space-y-0.5">${order.items.map(i => `<div>• ${i.name} x${i.qty} = ₹${i.price * i.qty}</div>`).join('')}</div><div class="flex justify-between text-[9px] text-slate-300 font-bold pt-1 border-t border-slate-100"><span class="${stepIndex >= 0 ? 'text-emerald-600' : ''}">Placed</span><span class="${stepIndex >= 1 ? 'text-emerald-600' : ''}">Packed</span><span class="${stepIndex >= 2 ? 'text-blue-600' : ''}">OnWay</span><span class="${stepIndex >= 3 ? 'text-purple-600' : ''}">Delivered</span><span class="text-slate-800 font-black ml-auto">Total: ₹${order.totalAmount}</span></div></div>`;
-                });
-            });
-        }
-
-        function listenToIncomingOrders() {
-            const ordersListContainer = document.getElementById('sellerIncomingOrdersList');
-            const q = query(collection(db, "orders"), where("storeId", "==", currentStoreId));
-            onSnapshot(q, (snapshot) => {
-                ordersListContainer.innerHTML = ""; if(snapshot.empty) { ordersListContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No pending orders.</p>`; return; }
-                snapshot.forEach((docSnapshot) => {
-                    const order = docSnapshot.data(); const orderId = docSnapshot.id;
-                    let orderItemsHtml = order.items.map(item => `<div>• ${item.name} (${item.unit}) x ${item.qty} = ₹${item.price * item.qty}</div>`).join('');
-                    let controlsHtml = '';
-                    if(order.status === 'pending') controlsHtml = `<button onclick="updateOrderStatus('${orderId}', 'accepted')" class="bg-emerald-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg">Accept & Pack</button>`;
-                    else if(order.status === 'accepted') controlsHtml = `<button onclick="updateOrderStatus('${orderId}', 'shipped')" class="bg-blue-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg">Out for Delivery</button>`;
-                    else if(order.status === 'shipped') controlsHtml = `<button onclick="updateOrderStatus('${orderId}', 'delivered')" class="bg-purple-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg">Mark Delivered</button>`;
-                    else controlsHtml = `<span class="text-xs text-slate-400 font-bold"><i class="fa-solid fa-circle-check text-green-500"></i> Completed</span>`;
-
-                    ordersListContainer.innerHTML += `
-                        <div class="bg-slate-50 border border-slate-200/60 rounded-2xl p-4 text-xs space-y-3 shadow-sm">
-                            <div class="flex justify-between font-bold text-slate-800"><span>ID: <span class="font-mono text-emerald-600">${orderId.substring(0,8)}...</span></span><span class="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded-md uppercase">${order.status}</span></div>
-                            <div class="text-slate-600 font-medium space-y-0.5"><p><b>Client:</b> ${order.customerName} (${order.customerPhone})</p><p><b>Address:</b> ${order.customerAddress}</p><p><b>Pay Mode:</b> ${order.paymentMode}</p></div>
-                            <div class="bg-white border border-slate-100 rounded-xl p-2.5 font-semibold text-slate-500 space-y-1">${orderItemsHtml}</div>
-                            <div class="flex justify-between items-center pt-1 border-t border-slate-100"><span class="font-black text-slate-800 text-sm">₹${order.totalAmount}</span><div class="flex gap-1.5">${controlsHtml} <button onclick="printThermalInvoiceDirect('${orderId}')" class="bg-slate-200 text-slate-800 font-bold text-[10px] px-2.5 py-1.5 rounded-lg"><i class="fa-solid fa-print"></i></button></div></div>
-                        </div>
-                    `;
-                });
-            });
-        }
-
-        window.updateOrderStatus = async function(orderId, nextStatus) { await updateDoc(doc(db, "orders", orderId), { status: nextStatus }); }
-
-        window.printThermalInvoiceDirect = async function(id) {
-            const orderSnap = await getDoc(doc(db, "orders", id)); if(!orderSnap.exists()) return;
-            const order = orderSnap.data(); const printArea = document.getElementById('thermalPrintArea');
-            let receiptHtml = `<div style="text-align:center; font-size:12px; font-weight:bold;">${document.getElementById('navStoreName').innerText}</div><div style="text-align:center; font-size:9px;">Order Invoice Slip</div><div>--------------------------------</div><div style="font-size:9px; word-break:break-all;"><b>ID:</b> ${id}</div><div style="font-size:9px;"><b>Cust:</b> ${order.customerName}</div><div style="font-size:9px;"><b>Addr:</b> ${order.customerAddress}</div><div>--------------------------------</div>`;
-            order.items.forEach(item => { receiptHtml += `<div style="font-size:10px;">${item.name} x${item.qty} = ₹${item.price * item.qty}</div>`; });
-            receiptHtml += `<div>--------------------------------</div><div style="font-size:11px; font-weight:bold;">TOTAL AMOUNT: ₹${order.totalAmount}</div><div style="text-align:center; font-size:9px; margin-top:4px; font-weight:bold; color:white; background:black;">PAY: ${order.paymentMode}</div>`;
-            printArea.innerHTML = receiptHtml; window.print();
-        }
-
-        window.processStoreLogo = async function() {
-            const logoInput = document.getElementById('storeLogoInput');
-            if(logoInput.files.length > 0) { storeLogoBase64 = await fileToDataUri(logoInput.files[0]); document.getElementById('logoFileName').innerText = "✓ Logo Attached"; }
-        }
-
-        window.displayMultiFileNames = function() {
-            const files = document.getElementById('productImagesInput').files; const statusLabel = document.getElementById('multiFileStatus');
-            if(files.length > 3) { alert("Max 3 photos permitted!"); return; }
-            if(files.length > 0) { statusLabel.innerText = `✓ ${files.length} Photos Selected`; statusLabel.classList.remove('hidden'); }
-        }
-
-        async function loadMerchantProfile() {
-            const profileRef = doc(db, "stores", currentStoreId); const profileSnap = await getDoc(profileRef);
-            if(profileSnap.exists()) {
-                const data = profileSnap.data(); const resolvedName = data.dukanName || currentStoreId;
-                document.getElementById('navStoreName').innerText = resolvedName.toUpperCase();
-                document.getElementById('infoDukanName').innerText = resolvedName;
-                merchantConfigNumber = data.whatsappNumber || "919999999999"; merchantUpiId = data.upiId || "";
-                if(merchantUpiId) { document.getElementById('upiRadioLabel').className = "flex items-center gap-2 cursor-pointer"; }
-                document.getElementById('mDukanName').value = data.dukanName || ""; document.getElementById('mWorkspace').value = data.whatsappNumber || "";
-                document.getElementById('mGst').value = data.gstNumber || ""; document.getElementById('mUpi').value = data.upiId || "";
-                document.getElementById('mMaps').value = data.mapsLink || ""; document.getElementById('mAddress').value = data.address || "";
-                if(data.gstNumber) document.getElementById('infoGst').innerText = data.gstNumber;
-                if(data.address) document.getElementById('infoAddress').innerText = data.address;
-                if(data.mapsLink) { document.getElementById('infoMapsLink').href = data.mapsLink; document.getElementById('mapsActionContainer').classList.remove('hidden'); }
-                if(data.logo) { storeLogoBase64 = data.logo; document.getElementById('defaultLogoIcon').classList.add('hidden'); const img = document.getElementById('storeLiveLogo'); img.src = data.logo; img.classList.remove('hidden'); }
-            }
-        }
-
-        window.saveStoreProfile = async function() {
-            const dName = document.getElementById('mDukanName').value.trim(); const wNum = document.getElementById('mWorkspace').value.trim();
-            if(!dName || !wNum) return alert("Fields required!");
-            await setDoc(doc(db, "stores", currentStoreId), {
-                dukanName: dName, whatsappNumber: wNum, gstNumber: document.getElementById('mGst').value.trim(), upiId: document.getElementById('mUpi').value.trim(), mapsLink: document.getElementById('mMaps').value.trim(), address: document.getElementById('mAddress').value.trim(), logo: storeLogoBase64 || ""
-            });
-            alert("Profile Saved!"); loadMerchantProfile();
-        }
-
-        window.loginSeller = function() {
-            if(document.getElementById('loginPassword').value.trim() === "786786") {
-                document.getElementById('sellerPanel').classList.remove('hidden'); sellerPanel.scrollIntoView(); sessionStorage.setItem("seller_logged_in", "true"); closeLoginModal();
-            } else { alert("Access Denied!"); }
-        }
-
-        window.logoutSeller = function() { sessionStorage.removeItem("seller_logged_in"); document.getElementById('sellerPanel').classList.add('hidden'); }
-        if(sessionStorage.getItem("seller_logged_in") === "true") document.getElementById('sellerPanel').classList.remove('hidden');
-
-        window.shareStoreLink = function() {
-            const shareUrl = window.location.href.split('?')[0] + `?store=${currentStoreId}`; navigator.clipboard.writeText(shareUrl); alert("Link copied!");
-        }
-
-        window.addProductToFirebase = async function() {
-            const name = document.getElementById('pName').value.trim(); const price = document.getElementById('pPrice').value.trim();
-            const unit = document.getElementById('pUnit').value.trim(); const desc = document.getElementById('pDesc').value.trim();
-            const cat = document.getElementById('pCategory').value; const filesInput = document.getElementById('productImagesInput');
-            const uploadBtn = document.getElementById('uploadBtn');
-            if(!name || !price || !unit) return alert("Fill mandatory fields!");
-            uploadBtn.innerText = "Syncing...";
-            let imageArray = [];
-            try {
-                if(filesInput.files.length > 0) {
-                    for(let i=0; i<filesInput.files.length; i++) { let dataUri = await fileToDataUri(filesInput.files[i]); imageArray.push(dataUri); }
-                } else { imageArray.push("https://placehold.co/150?text=Product"); }
-                await addDoc(collection(db, "products"), { storeId: currentStoreId, name, price: parseFloat(price), unit, description: desc, category: cat, images: imageArray, createdAt: Date.now() });
-                alert("Product live!");
-                document.getElementById('pName').value = ""; document.getElementById('pPrice').value = ""; document.getElementById('pUnit').value = ""; document.getElementById('pDesc').value = ""; filesInput.value = ""; document.getElementById('multiFileStatus').classList.add('hidden');
-            } catch (e) { alert("Write failed."); }
-            finally { uploadBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Store Par Live Karein'; }
-        }
-
-        window.deleteProduct = async function(id) { if(confirm("Delete item?")) await deleteDoc(doc(db, "products", id)); }
-
-        window.triggerLocalSearch = function() {
-            const k = document.getElementById('storeSearchBar').value.trim().toLowerCase();
-            if(!k) renderProducts(allProducts); else renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(k)));
-        }
-
-        window.filterCategory = function(cat) { if(cat === "All") renderProducts(allProducts); else renderProducts(allProducts.filter(p => p.category === cat)); }
-
-        function listenToLiveStoreCatalog() {
-            const container = document.getElementById('productsContainer'); const invList = document.getElementById('sellerInventoryList');
-            const q = query(collection(db, "products"), where("storeId", "==", currentStoreId));
-            onSnapshot(q, (snapshot) => {
-                allProducts = []; snapshot.forEach((doc) => { let pData = doc.data(); pData.id = doc.id; allProducts.push(pData); });
-                renderProducts(allProducts); renderInventoryManager(allProducts);
-            });
         }
 
         function renderProducts(items) {
             const container = document.getElementById('productsContainer'); container.innerHTML = "";
             if(items.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-12 font-medium">Catalog empty.</p>`; return; }
+            
             items.forEach((product) => {
-                const imgList = product.images || ["https://placehold.co/150?text=Product"]; const currentQty = cart[product.id] ? cart[product.id].qty : 0;
-                let imagesHtml = ''; imgList.forEach((imgUrl) => { imagesHtml += `<img src="${imgUrl}" onclick="openDetailsModal('${product.id}')" class="snap-center object-cover h-full w-full rounded-lg min-w-full inline-block cursor-pointer">`; });
-                let actionBtnHtml = `<button onclick="window.modifyCartQty('${product.id}', 1)" class="border border-emerald-500 text-emerald-600 text-[11px] font-extrabold px-3 py-1.5 rounded-xl bg-emerald-50/30 hover:bg-emerald-500 hover:text-white transition-all shadow-sm active:scale-90">ADD</button>`;
-                if(currentQty > 0) { actionBtnHtml = `<div class="flex items-center bg-emerald-500 text-white rounded-xl text-xs font-extrabold shadow-sm"><button onclick="window.modifyCartQty('${product.id}', -1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-l-xl"><i class="fa-solid fa-minus text-[10px]"></i></button><span class="px-2 font-black select-none text-slate-900">${currentQty}</span><button onclick="window.modifyCartQty('${product.id}', 1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-r-xl"><i class="fa-solid fa-plus text-[10px]"></i></button></div>`; }
-                container.innerHTML += `<div class="bg-white border border-slate-100/80 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between space-y-3"><div class="bg-slate-50/50 rounded-xl p-1 flex overflow-x-auto snap-x h-32 scrollbar-none shadow-inner relative">${imagesHtml}${imgList.length > 1 ? '<span class="absolute bottom-1 right-2 bg-black/40 text-[8px] text-white font-bold px-1.5 py-0.5 rounded-full backdrop-blur-xs"><i class="fa-solid fa-images"></i> Swipe</span>' : ''}</div><div onclick="openDetailsModal('${product.id}')" class="space-y-0.5 cursor-pointer"><h4 class="font-extrabold text-xs text-slate-800 line-clamp-1 tracking-tight">${product.name}</h4><p class="text-[10px] text-slate-400 font-bold">${product.unit}</p></div><div class="flex justify-between items-center pt-0.5"><span class="font-black text-sm text-slate-800">₹${product.price}</span><div id="action-wrapper-${product.id}">${actionBtnHtml}</div></div></div>`;
+                const imgList = product.images || ["https://placehold.co/150?text=Product"];
+                const currentQty = cart[product.id] ? cart[product.id].qty : 0;
+                let imagesHtml = imgList.map(imgUrl => `<img src="${imgUrl}" class="p-carousel-img snap-center object-cover h-full w-full rounded-lg min-w-full inline-block cursor-pointer" data-id="${product.id}">`).join('');
+                
+                const card = document.createElement('div');
+                card.className = "bg-white border border-slate-100 pro-shadow rounded-3xl p-3.5 flex flex-col justify-between space-y-3 relative group";
+                
+                let btnHtml = `<button class="p-add-btn border border-emerald-500 text-emerald-600 text-[11px] font-black px-4 py-1.5 rounded-xl bg-emerald-50/30 hover:bg-emerald-500 hover:text-white transition-all shadow-sm active:scale-90" data-id="${product.id}">ADD</button>`;
+                if(currentQty > 0) {
+                    btnHtml = `<div class="flex items-center bg-emerald-500 text-white rounded-xl text-xs font-black shadow-sm"><button class="p-minus-btn px-2.5 py-1.5 hover:bg-emerald-600 rounded-l-xl transition-colors" data-id="${product.id}"><i class="fa-solid fa-minus text-[9px]"></i></button><span class="px-2 text-slate-900 font-black">${currentQty}</span><button class="p-plus-btn px-2.5 py-1.5 hover:bg-emerald-600 rounded-r-xl transition-colors" data-id="${product.id}"><i class="fa-solid fa-plus text-[9px]"></i></button></div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="bg-slate-50 rounded-2xl p-1 flex overflow-x-auto snap-x h-32 scrollbar-none relative shadow-inner">
+                        ${imagesHtml}
+                        ${imgList.length > 1 ? '<span class="absolute bottom-1 right-2 bg-black/40 text-[7px] text-white font-extrabold px-1.5 py-0.5 rounded-full backdrop-blur-xs uppercase"><i class="fa-solid fa-images"></i> Swipe</span>' : ''}
+                    </div>
+                    <div class="p-details-trigger space-y-0.5 cursor-pointer" data-id="${product.id}">
+                        <h4 class="font-extrabold text-xs text-slate-800 line-clamp-1 tracking-tight">${product.name}</h4>
+                        <p class="text-[10px] text-slate-400 font-bold">${product.unit}</p>
+                    </div>
+                    <div class="flex justify-between items-center pt-0.5">
+                        <span class="font-black text-slate-800 text-sm">₹${product.price}</span>
+                        <div>${btnHtml}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Modern Node Events Mapping Loop blocks to isolate element layers flawlessly
+            container.querySelectorAll('.p-add-btn, .p-plus-btn').forEach(b => b.addEventListener('click', () => window.modifyCartQty(b.getAttribute('data-id'), 1)));
+            container.querySelectorAll('.p-minus-btn').forEach(b => b.addEventListener('click', () => window.modifyCartQty(b.getAttribute('data-id'), -1)));
+            container.querySelectorAll('.p-carousel-img, .p-details-trigger').forEach(el => el.addEventListener('click', () => window.openDetailsModal(el.getAttribute('data-id'))));
+        }
+
+        // Setup Document System Observers Core Triggers
+        document.getElementById('customerCartBar').addEventListener('click', () => window.openSideCart());
+        document.getElementById('closeSideCartBtn').addEventListener('click', () => window.closeSideCart());
+        document.getElementById('placeOrderFinalBtn').addEventListener('click', () => window.submitOrderToDatabase());
+
+        // Merchant and core OCR workflows bindings map setup
+        window.processStoreLogo = async function() {
+            const logoInput = document.getElementById('storeLogoInput'); if(logoInput.files.length > 0) { storeLogoBase64 = await fileToDataUri(logoInput.files[0]); document.getElementById('logoFileName').innerText = "✓ Logo Attached"; }
+        }
+        window.displayMultiFileNames = function() {
+            const files = document.getElementById('productImagesInput').files; const statusLabel = document.getElementById('multiFileStatus');
+            if(files.length > 3) { alert("Max 3 photos permitted!"); return; }
+            if(files.length > 0) { statusLabel.innerText = `✓ ${files.length} Photos Selected`; statusLabel.classList.remove('hidden'); }
+        }
+        window.saveStoreProfile = async function() {
+            await setDoc(doc(db, "stores", currentStoreId), { dukanName: document.getElementById('mDukanName').value.trim(), whatsappNumber: document.getElementById('mWorkspace').value.trim(), gstNumber: document.getElementById('mGst').value.trim(), upiId: document.getElementById('mUpi').value.trim(), mapsLink: document.getElementById('mMaps').value.trim(), address: document.getElementById('mAddress').value.trim(), logo: storeLogoBase64 || "" });
+            alert("Profile Saved!"); loadMerchantProfile();
+        }
+        window.loginSeller = function() {
+            if(document.getElementById('loginPassword').value.trim() === "786786") { document.getElementById('sellerPanel').classList.remove('hidden'); sessionStorage.setItem("seller_logged_in", "true"); closeModal('loginModal'); } else { alert("Access Denied!"); }
+        }
+        window.logoutSeller = function() { sessionStorage.removeItem("seller_logged_in"); document.getElementById('sellerPanel').classList.add('hidden'); }
+        window.shareStoreLink = function() { navigator.clipboard.writeText(window.location.href.split('?')[0] + `?store=${currentStoreId}`); alert("Link copied!"); }
+        
+        window.addProductToFirebase = async function() {
+            const name = document.getElementById('pName').value.trim(); const price = document.getElementById('pPrice').value.trim(); const unit = document.getElementById('pUnit').value.trim(); const desc = document.getElementById('pDesc').value.trim(); const cat = document.getElementById('pCategory').value; const filesInput = document.getElementById('productImagesInput');
+            if(!name || !price || !unit) return alert("Fill mandatory fields!");
+            let imageArray = [];
+            try {
+                if(filesInput.files.length > 0) { for(let i=0; i<filesInput.files.length; i++) { let dataUri = await fileToDataUri(filesInput.files[i]); imageArray.push(dataUri); } } else { imageArray.push("https://placehold.co/150?text=Product"); }
+                await addDoc(collection(db, "products"), { storeId: currentStoreId, name, price: parseFloat(price), unit, description: desc, category: cat, images: imageArray, createdAt: Date.now() });
+                alert("Product live!"); document.getElementById('pName').value = ""; document.getElementById('pPrice').value = ""; document.getElementById('pUnit').value = ""; document.getElementById('pDesc').value = ""; filesInput.value = ""; document.getElementById('multiFileStatus').classList.add('hidden');
+            } catch (e) { alert("Write error."); }
+        }
+        window.deleteProduct = async function(id) { if(confirm("Delete item?")) await deleteDoc(doc(db, "products", id)); }
+
+        window.runParchiOcrParser = async function() {
+            const fileInput = document.getElementById('ocrInput'); const statusLabel = document.getElementById('ocrStatusText'); if (fileInput.files.length === 0) return;
+            statusLabel.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Processing...`;
+            try {
+                const result = await Tesseract.recognize(await fileToDataUri(fileInput.files[0]), 'eng+hin');
+                let matches = 0; result.data.text.toLowerCase().split('\n').forEach(line => {
+                    const found = allProducts.find(p => line.includes(p.name.toLowerCase()));
+                    if(found) { if(!cart[found.id]) cart[found.id] = { product: found, qty: 1 }; else cart[found.id].qty += 1; matches++; }
+                });
+                if(matches > 0) { alert(`✓ Scanned! ${matches} items add ho gaye.`); renderProducts(allProducts); updateCartUI(); } else { alert("No product matched."); }
+            } catch (e) { alert("OCR Fail."); } finally { statusLabel.innerHTML = `<i class="fa-solid fa-camera mr-1"></i> Scan List`; fileInput.value = ""; }
+        }
+
+        window.saveCustomerSession = function() {
+            const name = document.getElementById('cLoginName').value.trim(); const phone = document.getElementById('cLoginPhone').value.trim();
+            if(!name || phone.length < 10) return alert("Fill fully!");
+            localStorage.setItem("c_name", name); localStorage.setItem("c_phone", phone);
+            closeModal('customerLoginModal'); checkCustomerSession();
+        }
+
+        window.triggerLocalSearch = function() {
+            const k = document.getElementById('storeSearchBar').value.trim().toLowerCase();
+            if(!k) renderProducts(allProducts); else renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(k)));
+        }
+        window.filterCategory = function(cat) {
+            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+                if(btn.getAttribute('data-cat') === cat) btn.className = "cat-filter-btn bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-black px-5 py-2.5 rounded-full shadow-md";
+                else btn.className = "cat-filter-btn bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm";
+            });
+            if(cat === "All") renderProducts(allProducts); else renderProducts(allProducts.filter(p => p.category === cat));
+        }
+
+        // Attach action forms listener hooks manually to block any leak paths securely
+        document.getElementById('storeLogoInput').addEventListener('change', () => window.processStoreLogo());
+        document.getElementById('productImagesInput').addEventListener('change', () => window.displayMultiFileNames());
+        document.getElementById('saveStoreProfileBtn').addEventListener('click', () => window.saveStoreProfile());
+        document.getElementById('sellerLoginVerifyBtn').addEventListener('click', () => window.loginSeller());
+        document.getElementById('sellerLogoutActionBtn').addEventListener('click', () => window.logoutSeller());
+        document.getElementById('sellerShareActionBtn').addEventListener('click', () => window.shareStoreLink());
+        document.getElementById('addProductBtn').addEventListener('click', () => window.addProductToFirebase());
+        document.getElementById('customerLoginSubmitBtn').addEventListener('click', () => window.saveCustomerSession());
+        document.querySelectorAll('.cat-filter-btn').forEach(btn => btn.addEventListener('click', () => window.filterCategory(btn.getAttribute('data-cat'))));
+
+        function checkCustomerSession() {
+            const name = localStorage.getItem("c_name"); const phone = localStorage.getItem("c_phone");
+            if (!name || !phone) document.getElementById('customerLoginModal').classList.remove('hidden');
+            else { document.getElementById('custName').value = name; document.getElementById('custPhone').value = phone; listenToCustomerOrdersLive(phone); }
+        }
+
+        function listenToCustomerOrdersLive(phone) {
+            const container = document.getElementById('customerOrdersTrackList');
+            onSnapshot(query(collection(db, "orders"), where("storeId", "==", currentStoreId), where("customerPhone", "==", phone)), (snapshot) => {
+                container.innerHTML = ""; if(snapshot.empty) { container.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">No orders yet.</p>`; return; }
+                snapshot.forEach((snap) => {
+                    const o = snap.data(); let color = "text-amber-500 bg-amber-50"; let idx = 0;
+                    if(o.status === 'accepted') { color = "text-emerald-600 bg-emerald-50"; idx = 1; }
+                    if(o.status === 'shipped') { color = "text-blue-600 bg-blue-50"; idx = 2; }
+                    if(o.status === 'delivered') { color = "text-purple-600 bg-purple-50"; idx = 3; }
+                    container.innerHTML += `<div class="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-xs space-y-3"><div class="flex justify-between items-center font-bold"><span class="text-slate-400 font-mono">ID: ${snap.id.substring(0,6)}...</span><span class="${color} px-2 py-0.5 rounded-md uppercase text-[9px] font-black">${o.status}</span></div><div class="bg-white p-2 rounded-xl text-slate-600 font-bold">${o.items.map(i => `<div>• ${i.name} x${i.qty} = ₹${i.price * i.qty}</div>`).join('')}</div><div class="flex justify-between text-[9px] text-slate-300 font-black pt-1 border-t border-slate-100"><span class="${idx >= 0 ? 'text-emerald-600' : ''}">Placed</span><span class="${idx >= 1 ? 'text-emerald-600' : ''}">Packed</span><span class="${idx >= 2 ? 'text-blue-600' : ''}">OnWay</span><span class="${idx >= 3 ? 'text-purple-600' : ''}">Delivered</span><span class="text-slate-800 font-black ml-auto">Total: ₹${o.totalAmount}</span></div></div>`;
+                });
             });
         }
 
-        window.changeLanguage = function() {
-            const currentSelectedLang = document.getElementById('langSelector').value;
-            const dictionary = langData[currentSelectedLang];
-            document.querySelectorAll("[data-key]").forEach(element => {
-                const translationKey = element.getAttribute("data-key");
-                if (dictionary[translationKey]) element.innerText = dictionary[translationKey];
+        function listenToIncomingOrders() {
+            const container = document.getElementById('sellerIncomingOrdersList');
+            onSnapshot(query(collection(db, "orders"), where("storeId", "==", currentStoreId)), (snapshot) => {
+                container.innerHTML = ""; if(snapshot.empty) { container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No pending orders.</p>`; return; }
+                snapshot.forEach((snap) => {
+                    const o = snap.data(); const id = snap.id;
+                    let controls = '';
+                    if(o.status === 'pending') controls = `<button class="st-act-btn bg-emerald-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg" data-id="${id}" data-st="accepted">Accept</button>`;
+                    else if(o.status === 'accepted') controls = `<button class="st-act-btn bg-blue-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg" data-id="${id}" data-st="shipped">Ship</button>`;
+                    else if(o.status === 'shipped') controls = `<button class="st-act-btn bg-purple-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg" data-id="${id}" data-st="delivered">Deliver</button>`;
+                    else controls = `<span class="text-xs text-slate-400 font-bold">Completed</span>`;
+
+                    const row = document.createElement('div');
+                    row.className = "bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs space-y-3";
+                    row.innerHTML = `<div class="flex justify-between font-bold"><span>ID: <span class="font-mono text-emerald-600">${id.substring(0,6)}...</span></span><span class="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded-md uppercase">${o.status}</span></div><p><b>Client:</b> ${o.customerName} (${o.customerPhone})<br><b>Address:</b> ${o.customerAddress}</p><div class="bg-white p-2.5 rounded-xl font-bold text-slate-500">${o.items.map(i => `<div>• ${i.name} x ${i.qty}</div>`).join('')}</div><div class="flex justify-between items-center pt-1 border-t border-slate-100"><span class="font-black text-slate-800 text-sm">₹${o.totalAmount}</span><div class="flex gap-1.5">${controls}</div></div>`;
+                    container.appendChild(row);
+                });
+                container.querySelectorAll('.st-act-btn').forEach(b => b.addEventListener('click', () => updateDoc(doc(db, "orders", b.getAttribute('data-id')), { status: b.getAttribute('data-st') })));
             });
         }
 
-        function renderInventoryManager(items) {
-            const invList = document.getElementById('sellerInventoryList'); invList.innerHTML = "";
-            items.forEach(p => {
-                const thumb = p.images ? p.images[0] : "https://placehold.co/150?text=Product";
-                invList.innerHTML += `<div class="flex items-center justify-between bg-slate-50 p-2 rounded-2xl border border-slate-100"><div class="flex items-center gap-3"><img src="${thumb}" class="w-9 h-9 object-cover rounded-xl shadow-sm"><div><span class="font-extrabold text-slate-800 block tracking-tight">${p.name}</span><span class="text-slate-400 text-[10px] font-bold">₹${p.price}</span></div></div><button onclick="deleteProduct('${p.id}')" class="text-slate-400 hover:text-red-500 p-2 bg-white rounded-xl shadow-sm"><i class="fa-solid fa-trash-can"></i></button></div>`;
+        async function loadMerchantProfile() {
+            const profileSnap = await getDoc(doc(db, "stores", currentStoreId));
+            if(profileSnap.exists()) {
+                const data = profileSnap.data(); const name = data.dukanName || currentStoreId;
+                document.getElementById('navStoreName').innerText = name.toUpperCase();
+                document.getElementById('infoDukanName').innerText = name; merchantConfigNumber = data.whatsappNumber || "919999999999"; merchantUpiId = data.upiId || "";
+                if(merchantUpiId) document.getElementById('upiRadioLabel').className = "flex items-center gap-2 cursor-pointer";
+                document.getElementById('mDukanName').value = data.dukanName || ""; document.getElementById('mWorkspace').value = data.whatsappNumber || "";
+                document.getElementById('mGst').value = data.gstNumber || ""; document.getElementById('mUpi').value = data.upiId || "";
+                document.getElementById('mMaps').value = data.mapsLink || ""; document.getElementById('mAddress').value = data.address || "";
+                if(data.gstNumber) document.getElementById('infoGst').innerText = data.gstNumber;
+                if(data.address) document.getElementById('infoAddress').innerText = data.address;
+                if(data.logo) { storeLogoBase64 = data.logo; document.getElementById('defaultLogoIcon').classList.add('hidden'); const img = document.getElementById('storeLiveLogo'); img.src = data.logo; img.classList.remove('hidden'); }
+            }
+        }
+
+        function listenToLiveStoreCatalog() {
+            onSnapshot(query(collection(db, "products"), where("storeId", "==", currentStoreId)), (snapshot) => {
+                allProducts = []; const invList = document.getElementById('sellerInventoryList'); invList.innerHTML = "";
+                snapshot.forEach((doc) => { let pData = doc.data(); pData.id = doc.id; allProducts.push(pData); });
+                renderProducts(allProducts);
+                allProducts.forEach(p => {
+                    const row = document.createElement('div'); row.className = "flex items-center justify-between bg-slate-50 p-2 rounded-2xl border border-slate-100";
+                    row.innerHTML = `<div class="flex items-center gap-3"><img src="${p.images?p.images[0]:'https://placehold.co/150'}" class="w-9 h-9 object-cover rounded-xl shadow-sm"><div><span class="font-extrabold text-slate-800 block">${p.name}</span><span class="text-slate-400 text-[10px] font-bold">₹${p.price}</span></div></div><button class="inv-del-btn text-slate-400 hover:text-red-500 p-2" data-id="${p.id}"><i class="fa-solid fa-trash-can"></i></button>`;
+                    invList.appendChild(row);
+                });
+                invList.querySelectorAll('.inv-del-btn').forEach(b => b.addEventListener('click', () => window.deleteProduct(b.getAttribute('data-id'))));
             });
         }
 
-        loadMerchantProfile(); 
-        listenToLiveStoreCatalog();
-        listenToIncomingOrders();
-        checkCustomerSession();
+        loadMerchantProfile(); listenToLiveStoreCatalog(); listenToIncomingOrders(); checkCustomerSession();
     </script>
 
-    <!-- WINDOW MODAL CONTROLLERS -->
+    <!-- WINDOW MODAL CONTROLLERS (GLOBAL ACCESS SCOPE) -->
     <script>
-        function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
-        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
-        function openCheckoutModal() { document.getElementById('checkoutModal').classList.remove('hidden'); }
-        function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
-        function openInfoModal() { document.getElementById('infoModal').classList.remove('hidden'); }
-        function closeInfoModal() { document.getElementById('infoModal').classList.add('hidden'); }
-        function openCustomerOrdersModal() { document.getElementById('customerOrdersModal').classList.remove('hidden'); }
-        function closeCustomerOrdersModal() { document.getElementById('customerOrdersModal').classList.add('hidden'); }
-        function closeDetailsModal() { document.getElementById('detailsModal').classList.add('hidden'); }
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
     </script>
 </body>
 </html>
