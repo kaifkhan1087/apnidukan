@@ -117,7 +117,6 @@
                 <button onclick="closeLoginModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="space-y-3">
-                <input type="email" id="loginEmail" placeholder="Registered Email (e.g., store@mail.com)" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500">
                 <input type="password" id="loginPassword" placeholder="Secret Password" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500">
                 <button onclick="loginSeller()" id="loginSubmitBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md">
                     Verify & Unlock Dashboard
@@ -146,8 +145,7 @@
     <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDModwog0Tdj0avtqHJX0Qrj6XyEacuPD4",
@@ -161,17 +159,13 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app);
 
-        // Parse Multi-Vendor URL Store Identifier
         const urlParams = new URLSearchParams(window.location.search);
-        // Default dynamically falls back to "demo-store" if no variable present
         let currentStoreId = urlParams.get('store') || "demo-store"; 
         
         let cart = [];
         let allProducts = [];
 
-        // Set Store Titles Dynamically based on URL Parameter
         document.getElementById('navStoreName').innerText = currentStoreId.replace('-', ' ').toUpperCase();
 
         window.displayFileName = function() {
@@ -187,44 +181,36 @@
             reader.readAsDataURL(file);
         });
 
-        // 1. SELLER CONTROLS
-        window.loginSeller = async function() {
-            const email = document.getElementById('loginEmail').value.trim();
+        // 🔐 SECURE MASTER PASSWORD LOGIC
+        window.loginSeller = function() {
             const pass = document.getElementById('loginPassword').value.trim();
-            const btn = document.getElementById('loginSubmitBtn');
-
-            if(!email || !pass) return alert("Email aur Password dono likho bhai!");
-
-            btn.innerText = "Verifying Credentials...";
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
+            
+            // Hardcoded safe password matching rule
+            if(pass === "786786") {
+                document.getElementById('sellerPanel').classList.remove('hidden');
+                document.getElementById('loginBtnText').innerText = "Dashboard Active";
+                document.getElementById('lockIcon').className = "fa-solid fa-unlock text-green-600";
+                sessionStorage.setItem("seller_logged_in", "true");
                 closeLoginModal();
-            } catch(e) {
-                alert("Login Failed! Email ya Password galat hai.");
-            } finally {
-                btn.innerText = "Verify & Unlock Dashboard";
+            } else {
+                alert("Login Failed! Galat secret password hai bhai.");
             }
         }
 
         window.logoutSeller = function() {
-            signOut(auth).then(() => {
-                document.getElementById('sellerPanel').classList.add('hidden');
-                alert("Dashboard Locked Successfully!");
-            });
+            sessionStorage.removeItem("seller_logged_in");
+            document.getElementById('sellerPanel').classList.add('hidden');
+            document.getElementById('loginBtnText').innerText = "Seller Login";
+            document.getElementById('lockIcon').className = "fa-solid fa-lock text-green-600";
+            alert("Dashboard Locked!");
         }
 
-        // Monitor Auth State State-Change
-        onAuthStateChanged(auth, (user) => {
-            if(user) {
-                document.getElementById('sellerPanel').classList.remove('hidden');
-                document.getElementById('loginBtnText').innerText = "Dashboard Active";
-                document.getElementById('lockIcon').className = "fa-solid fa-unlock text-green-600";
-            } else {
-                document.getElementById('sellerPanel').classList.add('hidden');
-                document.getElementById('loginBtnText').innerText = "Seller Login";
-                document.getElementById('lockIcon').className = "fa-solid fa-lock text-green-600";
-            }
-        });
+        // Check login persistence on refresh
+        if(sessionStorage.getItem("seller_logged_in") === "true") {
+            document.getElementById('sellerPanel').classList.remove('hidden');
+            document.getElementById('loginBtnText').innerText = "Dashboard Active";
+            document.getElementById('lockIcon').className = "fa-solid fa-unlock text-green-600";
+        }
 
         window.addProductToFirebase = async function() {
             const name = document.getElementById('pName').value.trim();
@@ -245,7 +231,7 @@
                 if(fileInput.files.length > 0) base64Img = await fileToDataUri(fileInput.files[0]);
 
                 await addDoc(collection(db, "products"), {
-                    storeId: currentStoreId, // Scope product exclusively to specific url parameter store
+                    storeId: currentStoreId,
                     name: name,
                     price: parseFloat(price),
                     unit: unit,
@@ -268,7 +254,6 @@
             }
         }
 
-        // 2. DYNAMIC REALTIME CUSTOMER CATALOG READ
         function listenToLiveStoreCatalog() {
             const container = document.getElementById('productsContainer');
             const q = query(collection(db, "products"), where("storeId", "==", currentStoreId));
@@ -319,7 +304,6 @@
         }
 
         window.filterCategory = function(cat) {
-            // Style adjustment logic for horizontal scroll tab indicators
             const tabs = document.querySelectorAll('#categoryTabs button');
             tabs.forEach(btn => {
                 if(btn.innerText.toLowerCase().includes(cat.toLowerCase()) || (cat === 'All' && btn.innerText.includes('All'))) {
@@ -360,7 +344,6 @@
             });
             orderText += `\n*Total Billing Amount: ₹${total}*\n\nKripya order ready karke bataiye!`;
             
-            // Redirect text seamlessly via WhatsApp Web deep links
             const whatsappUrl = `https://wa.me/919999999999?text=${encodeURIComponent(orderText)}`;
             window.open(whatsappUrl, '_blank');
             cart = [];
@@ -373,8 +356,7 @@
     <!-- WINDOW MODAL CONTROLLERS -->
     <script>
         function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
-        document.windowClose = function() { document.getElementById('loginModal').classList.add('hidden'); }
-        window.closeLoginModal = document.windowClose;
+        window.closeLoginModal = function() { document.getElementById('loginModal').classList.add('hidden'); }
     </script>
 </body>
 </html>
