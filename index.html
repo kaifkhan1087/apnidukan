@@ -59,7 +59,7 @@
         </div>
         
         <div class="flex items-center gap-1.5">
-            <select id="langSelector" onchange="changeLanguage()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl p-2 font-medium focus:outline-none">
+            <select id="langSelector" onchange="window.changeLanguage()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl p-2 font-medium focus:outline-none">
                 <option value="hinglish">Hinglish</option>
                 <option value="english">English</option>
                 <option value="gujarati">ગુજરાતી</option>
@@ -81,8 +81,8 @@
                     <h3 class="text-lg font-extrabold" data-key="manageStore">Manage Online Store</h3>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <button onclick="logoutSeller()" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-[11px] font-bold px-2.5 py-1.5 rounded-xl">Logout</button>
-                    <button onclick="shareStoreLink()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-[11px] font-bold px-2.5 py-1.5 rounded-xl"><i class="fa-solid fa-share-nodes"></i> Share Link</button>
+                    <button onclick="window.logoutSeller()" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-[11px] font-bold px-2.5 py-1.5 rounded-xl">Logout</button>
+                    <button onclick="window.shareStoreLink()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-[11px] font-bold px-2.5 py-1.5 rounded-xl"><i class="fa-solid fa-share-nodes"></i> Share Link</button>
                 </div>
             </div>
 
@@ -113,12 +113,12 @@
                     <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200/60">
                         <label class="bg-slate-800 hover:bg-black text-white text-[11px] font-bold px-3 py-2 rounded-xl cursor-pointer">
                             Upload Logo
-                            <input type="file" id="storeLogoInput" accept="image/*" class="hidden" onchange="processStoreLogo()" />
+                            <input type="file" id="storeLogoInput" accept="image/*" class="hidden" onchange="window.processStoreLogo()" />
                         </label>
                         <span id="logoFileName" class="text-[10px] text-slate-400 font-semibold">No logo selected</span>
                     </div>
                 </div>
-                <button onclick="saveStoreProfile()" class="w-full bg-slate-800 text-white text-xs font-extrabold py-3 rounded-2xl shadow-md">Save Profile Configurations</button>
+                <button onclick="window.saveStoreProfile()" class="w-full bg-slate-800 text-white text-xs font-extrabold py-3 rounded-2xl shadow-md">Save Profile Configurations</button>
             </div>
 
             <!-- Add Product Form -->
@@ -128,7 +128,7 @@
                     <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-slate-50/50 hover:border-emerald-400 transition-all text-center">
                         <i class="fa-solid fa-images text-xl text-slate-400 mb-1"></i>
                         <p class="text-xs text-slate-600 font-semibold">Upload Product Photos (Up to 3)</p>
-                        <input type="file" id="productImagesInput" accept="image/*" multiple class="hidden" onchange="displayMultiFileNames()" />
+                        <input type="file" id="productImagesInput" accept="image/*" multiple class="hidden" onchange="window.displayMultiFileNames()" />
                     </label>
                     <p id="multiFileStatus" class="text-[10px] text-emerald-600 font-bold text-center hidden"></p>
                 </div>
@@ -145,7 +145,7 @@
                     <option value="Snacks">Snacks & Beverages</option>
                     <option value="Others">Others</option>
                 </select>
-                <button onclick="addProductToFirebase()" id="uploadBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg"><i class="fa-solid fa-paper-plane"></i> <span data-key="liveOnStore">Store Par Live Karein</span></button>
+                <button onclick="window.addProductToFirebase()" id="uploadBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg"><i class="fa-solid fa-paper-plane"></i> <span data-key="liveOnStore">Store Par Live Karein</span></button>
             </div>
 
             <!-- Live Inventory Items List -->
@@ -165,21 +165,21 @@
                 </div>
                 <label class="bg-emerald-600 text-white text-xs font-extrabold px-3 py-2.5 rounded-xl cursor-pointer shadow-md whitespace-nowrap">
                     <span id="ocrStatusText"><i class="fa-solid fa-camera mr-1"></i> Scan List</span>
-                    <input type="file" id="ocrInput" accept="image/*" class="hidden" onchange="runParchiOcrParser()" />
+                    <input type="file" id="ocrInput" accept="image/*" class="hidden" onchange="window.runParchiOcrParser()" />
                 </label>
             </div>
 
             <div class="relative">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
-                <input type="text" id="storeSearchBar" oninput="triggerLocalSearch()" placeholder="Search products in this mart..." class="w-full pl-10 pr-4 py-3 bg-white shadow-sm border border-slate-100 rounded-2xl text-xs focus:outline-none focus:border-emerald-500">
+                <input type="text" id="storeSearchBar" oninput="window.triggerLocalSearch()" placeholder="Search products in this mart..." class="w-full pl-10 pr-4 py-3 bg-white shadow-sm border border-slate-100 rounded-2xl text-xs focus:outline-none focus:border-emerald-500">
             </div>
 
             <div class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-none snap-x" id="categoryTabs">
-                <button onclick="filterCategory('All')" class="bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-bold px-5 py-2.5 rounded-full shadow-md">All Items</button>
-                <button onclick="filterCategory('Groceries')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Groceries</button>
-                <button onclick="filterCategory('Dairy')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Dairy</button>
-                <button onclick="filterCategory('Fruits')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Fruits</button>
-                <button onclick="filterCategory('Snacks')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Snacks</button>
+                <button onclick="window.filterCategory('All')" class="bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-bold px-5 py-2.5 rounded-full shadow-md">All Items</button>
+                <button onclick="window.filterCategory('Groceries')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Groceries</button>
+                <button onclick="window.filterCategory('Dairy')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Dairy</button>
+                <button onclick="window.filterCategory('Fruits')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Fruits</button>
+                <button onclick="window.filterCategory('Snacks')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Snacks</button>
             </div>
 
             <div class="space-y-3">
@@ -198,7 +198,7 @@
             <button onclick="window.closeSideCart()" class="text-slate-400 hover:text-slate-600 bg-white p-1.5 rounded-full shadow-sm"><i class="fa-solid fa-arrow-right"></i></button>
         </div>
         <div id="sideCartItemsList" class="p-4 flex-1 overflow-y-auto space-y-3">
-            <!-- Dynamic products will appear here -->
+            <!-- Dynamic products go here -->
         </div>
         <div class="p-4 border-t border-slate-100 space-y-3 bg-slate-50/50 rounded-bl-3xl">
             <div class="flex justify-between text-xs font-bold text-slate-600">
@@ -222,7 +222,7 @@
             <div class="space-y-3">
                 <input type="text" id="cLoginName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:outline-none">
                 <input type="number" id="cLoginPhone" placeholder="Mobile Number" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:outline-none">
-                <button onclick="saveCustomerSession()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-2xl text-xs shadow-md transition-all">Start Shopping <i class="fa-solid fa-circle-arrow-right ml-1"></i></button>
+                <button onclick="window.saveCustomerSession()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-2xl text-xs shadow-md transition-all">Start Shopping <i class="fa-solid fa-circle-arrow-right ml-1"></i></button>
             </div>
         </div>
     </div>
@@ -285,7 +285,7 @@
                 <button onclick="closeLoginModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <input type="password" id="loginPassword" placeholder="Enter Security Password" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-emerald-500 bg-slate-50/50">
-            <button onclick="loginSeller()" class="w-full bg-slate-900 text-white font-extrabold py-3 rounded-2xl text-xs shadow-md">Verify Password</button>
+            <button onclick="window.loginSeller()" class="w-full bg-slate-900 text-white font-extrabold py-3 rounded-2xl text-xs shadow-md">Verify Password</button>
         </div>
     </div>
 
@@ -307,7 +307,7 @@
                     <label id="upiRadioLabel" class="hidden items-center gap-2 cursor-pointer"><input type="radio" name="payMethod" value="UPI" class="accent-emerald-600"> Online Pay via UPI Apps</label>
                 </div>
 
-                <button onclick="submitOrderToDatabase()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg">Place Order on Website</button>
+                <button onclick="window.submitOrderToDatabase()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg">Place Order on Website</button>
             </div>
         </div>
     </div>
@@ -355,7 +355,7 @@
         let merchantUpiId = ""; 
         let storeLogoBase64 = "";
 
-        // 🎯 GLOBAL WINDOW MAPPING FOR SIDE CART CONTROLS
+        // 🎯 WINDOW ACCESSIBILITY BINDINGS
         window.openSideCart = function() {
             window.renderSideCartPanelItems();
             document.getElementById('sideCartPanel').style.transform = "translateX(0)";
@@ -363,6 +363,12 @@
 
         window.closeSideCart = function() {
             document.getElementById('sideCartPanel').style.transform = "translateX(100%)";
+        }
+
+        window.modifyCartQty = function(id, countDelta) {
+            const product = allProducts.find(p => p.id === id); if(!product) return;
+            if(!cart[id]) cart[id] = { product, qty: 0 }; cart[id].qty += countDelta; if(cart[id].qty <= 0) delete cart[id];
+            renderProducts(allProducts); updateCartUI();
         }
 
         window.renderSideCartPanelItems = function() {
@@ -394,9 +400,9 @@
                             </div>
                         </div>
                         <div class="flex items-center bg-white border border-slate-200/80 rounded-xl text-[11px] font-black text-slate-700 shadow-sm">
-                            <button onclick="modifyCartQty('${key}', -1); renderSideCartPanelItems();" class="px-2 py-1 text-slate-400 hover:text-red-500"><i class="fa-solid fa-minus text-[9px]"></i></button>
+                            <button onclick="window.modifyCartQty('${key}', -1); window.renderSideCartPanelItems();" class="px-2 py-1 text-slate-400 hover:text-red-500"><i class="fa-solid fa-minus text-[9px]"></i></button>
                             <span class="px-1.5 select-none text-slate-800">${item.qty}</span>
-                            <button onclick="modifyCartQty('${key}', 1); renderSideCartPanelItems();" class="px-2 py-1 text-slate-400 hover:text-emerald-500"><i class="fa-solid fa-plus text-[9px]"></i></button>
+                            <button onclick="window.modifyCartQty('${key}', 1); window.renderSideCartPanelItems();" class="px-2 py-1 text-slate-400 hover:text-emerald-500"><i class="fa-solid fa-plus text-[9px]"></i></button>
                         </div>
                     </div>
                 `;
@@ -412,11 +418,9 @@
 
             if(!addr) return alert("Pehle delivery address likh lijiye!");
 
-            let itemsList = []; 
-            let total = 0;
+            let itemsList = []; let total = 0;
             Object.keys(cart).forEach(key => {
-                const item = cart[key]; 
-                itemsList.push({ productId: key, name: item.product.name, unit: item.product.unit, price: item.product.price, qty: item.qty });
+                const item = cart[key]; itemsList.push({ productId: key, name: item.product.name, unit: item.product.unit, price: item.product.price, qty: item.qty });
                 total += (item.product.price * item.qty);
             });
 
@@ -434,12 +438,6 @@
                 closeCheckoutModal(); 
                 openCustomerOrdersModal();
             } catch (e) { alert("Database error."); }
-        }
-
-        window.modifyCartQty = function(id, countDelta) {
-            const product = allProducts.find(p => p.id === id); if(!product) return;
-            if(!cart[id]) cart[id] = { product, qty: 0 }; cart[id].qty += countDelta; if(cart[id].qty <= 0) delete cart[id];
-            renderProducts(allProducts); updateCartUI();
         }
 
         function updateCartUI() {
@@ -617,6 +615,13 @@
 
         window.deleteProduct = async function(id) { if(confirm("Delete item?")) await deleteDoc(doc(db, "products", id)); }
 
+        window.triggerLocalSearch = function() {
+            const k = document.getElementById('storeSearchBar').value.trim().toLowerCase();
+            if(!k) renderProducts(allProducts); else renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(k)));
+        }
+
+        window.filterCategory = function(cat) { if(cat === "All") renderProducts(allProducts); else renderProducts(allProducts.filter(p => p.category === cat)); }
+
         function listenToLiveStoreCatalog() {
             const container = document.getElementById('productsContainer'); const invList = document.getElementById('sellerInventoryList');
             const q = query(collection(db, "products"), where("storeId", "==", currentStoreId));
@@ -632,9 +637,26 @@
             items.forEach((product) => {
                 const imgList = product.images || ["https://placehold.co/150?text=Product"]; const currentQty = cart[product.id] ? cart[product.id].qty : 0;
                 let imagesHtml = ''; imgList.forEach((imgUrl) => { imagesHtml += `<img src="${imgUrl}" onclick="openDetailsModal('${product.id}')" class="snap-center object-cover h-full w-full rounded-lg min-w-full inline-block cursor-pointer">`; });
-                let actionBtnHtml = `<button onclick="modifyCartQty('${product.id}', 1)" class="border border-emerald-500 text-emerald-600 text-[11px] font-extrabold px-3 py-1.5 rounded-xl bg-emerald-50/30 hover:bg-emerald-500 hover:text-white transition-all shadow-sm active:scale-90">ADD</button>`;
-                if(currentQty > 0) { actionBtnHtml = `<div class="flex items-center bg-emerald-500 text-white rounded-xl text-xs font-extrabold shadow-sm"><button onclick="modifyCartQty('${product.id}', -1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-l-xl"><i class="fa-solid fa-minus text-[10px]"></i></button><span class="px-2 font-black select-none text-slate-900">${currentQty}</span><button onclick="modifyCartQty('${product.id}', 1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-r-xl"><i class="fa-solid fa-plus text-[10px]"></i></button></div>`; }
+                let actionBtnHtml = `<button onclick="window.modifyCartQty('${product.id}', 1)" class="border border-emerald-500 text-emerald-600 text-[11px] font-extrabold px-3 py-1.5 rounded-xl bg-emerald-50/30 hover:bg-emerald-500 hover:text-white transition-all shadow-sm active:scale-90">ADD</button>`;
+                if(currentQty > 0) { actionBtnHtml = `<div class="flex items-center bg-emerald-500 text-white rounded-xl text-xs font-extrabold shadow-sm"><button onclick="window.modifyCartQty('${product.id}', -1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-l-xl"><i class="fa-solid fa-minus text-[10px]"></i></button><span class="px-2 font-black select-none text-slate-900">${currentQty}</span><button onclick="window.modifyCartQty('${product.id}', 1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-r-xl"><i class="fa-solid fa-plus text-[10px]"></i></button></div>`; }
                 container.innerHTML += `<div class="bg-white border border-slate-100/80 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between space-y-3"><div class="bg-slate-50/50 rounded-xl p-1 flex overflow-x-auto snap-x h-32 scrollbar-none shadow-inner relative">${imagesHtml}${imgList.length > 1 ? '<span class="absolute bottom-1 right-2 bg-black/40 text-[8px] text-white font-bold px-1.5 py-0.5 rounded-full backdrop-blur-xs"><i class="fa-solid fa-images"></i> Swipe</span>' : ''}</div><div onclick="openDetailsModal('${product.id}')" class="space-y-0.5 cursor-pointer"><h4 class="font-extrabold text-xs text-slate-800 line-clamp-1 tracking-tight">${product.name}</h4><p class="text-[10px] text-slate-400 font-bold">${product.unit}</p></div><div class="flex justify-between items-center pt-0.5"><span class="font-black text-sm text-slate-800">₹${product.price}</span><div id="action-wrapper-${product.id}">${actionBtnHtml}</div></div></div>`;
+            });
+        }
+
+        window.changeLanguage = function() {
+            const currentSelectedLang = document.getElementById('langSelector').value;
+            const dictionary = langData[currentSelectedLang];
+            document.querySelectorAll("[data-key]").forEach(element => {
+                const translationKey = element.getAttribute("data-key");
+                if (dictionary[translationKey]) element.innerText = dictionary[translationKey];
+            });
+        }
+
+        function renderInventoryManager(items) {
+            const invList = document.getElementById('sellerInventoryList'); invList.innerHTML = "";
+            items.forEach(p => {
+                const thumb = p.images ? p.images[0] : "https://placehold.co/150?text=Product";
+                invList.innerHTML += `<div class="flex items-center justify-between bg-slate-50 p-2 rounded-2xl border border-slate-100"><div class="flex items-center gap-3"><img src="${thumb}" class="w-9 h-9 object-cover rounded-xl shadow-sm"><div><span class="font-extrabold text-slate-800 block tracking-tight">${p.name}</span><span class="text-slate-400 text-[10px] font-bold">₹${p.price}</span></div></div><button onclick="deleteProduct('${p.id}')" class="text-slate-400 hover:text-red-500 p-2 bg-white rounded-xl shadow-sm"><i class="fa-solid fa-trash-can"></i></button></div>`;
             });
         }
 
