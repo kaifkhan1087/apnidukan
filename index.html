@@ -9,19 +9,24 @@
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Tesseract.js for Parchi OCR Scanner -->
+    <!-- Tesseract.js Library for Parchi OCR Scanner -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); 
             min-height: 100vh;
+            overflow-x: hidden;
         }
         .scrollbar-none::-webkit-scrollbar { display: none; }
         .glass-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
+        }
+        /* Smooth Custom Animations */
+        .slide-in-right {
+            transition: transform 0.3s ease-in-out;
         }
         @media print {
             body * { display: none; }
@@ -47,7 +52,6 @@
                     <button onclick="openInfoModal()" class="text-[10px] text-emerald-600 font-bold flex items-center gap-0.5 hover:underline">
                         <i class="fa-solid fa-circle-check"></i> Store Info
                     </button>
-                    <!-- 📦 UPGRADED CUSTOMER PROFILE TRACKER -->
                     <button onclick="openCustomerOrdersModal()" class="text-[10px] text-blue-600 font-bold flex items-center gap-0.5 hover:underline">
                         <i class="fa-solid fa-bag-shopping"></i> My Orders
                     </button>
@@ -188,7 +192,29 @@
         </div>
     </div>
 
-    <!-- 👤 CUSTOMER ENTRY/LOGIN GATE MODAL (STAYS PERSISTENT) -->
+    <!-- 🛒 SLIDE-IN SIDE CART PANEL (NEW PREMIUM COMPONENT) -->
+    <div id="sideCartPanel" class="fixed top-0 bottom-0 right-0 w-full max-w-sm bg-white shadow-2xl z-50 translate-x-full slide-in-right flex flex-col border-l border-slate-100 transition-transform duration-300 rounded-l-3xl">
+        <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-tl-3xl">
+            <h3 class="font-extrabold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-emerald-500"></i> Your Shopping Basket</h3>
+            <button onclick="closeSideCart()" class="text-slate-400 hover:text-slate-600 bg-white p-1.5 rounded-full shadow-sm"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <!-- Scrollable Selected Items Hook Grid -->
+        <div id="sideCartItemsList" class="p-4 flex-1 overflow-y-auto space-y-3">
+            <!-- Dynamic Cart Products Renderer goes here -->
+        </div>
+        <!-- Bottom Pricing and Sticky Button -->
+        <div class="p-4 border-t border-slate-100 space-y-3 bg-slate-50/50 rounded-bl-3xl">
+            <div class="flex justify-between text-xs font-bold text-slate-600">
+                <span>Subtotal Amount:</span>
+                <span id="sideCartTotalPriceLabel" class="text-slate-900 text-sm font-black">₹0</span>
+            </div>
+            <button onclick="openCheckoutModal()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs tracking-wide shadow-lg shadow-emerald-100 flex items-center justify-center gap-2 active:scale-[0.99] transition-transform">
+                Proceed to Checkout <i class="fa-solid fa-circle-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- CUSTOMER ENTRY/LOGIN GATE MODAL -->
     <div id="customerLoginModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100">
             <div class="text-center space-y-1">
@@ -204,14 +230,13 @@
         </div>
     </div>
 
-    <!-- 📦 CUSTOMER MY ORDERS HISTORY POPUP -->
+    <!-- CUSTOMER MY ORDERS HISTORY POPUP -->
     <div id="customerOrdersModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100 max-h-[85vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <h3 class="font-extrabold text-slate-800 flex items-center gap-2 text-sm"><i class="fa-solid fa-clock-history text-blue-500"></i> My Order History</h3>
                 <button onclick="closeCustomerOrdersModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <!-- Dynamic Realtime Customer Orders go here -->
             <div id="customerOrdersTrackList" class="space-y-4">
                 <p class="text-xs text-slate-400 text-center py-8">Aapne abhi tak koi order nahi kiya hai.</p>
             </div>
@@ -290,17 +315,17 @@
         </div>
     </div>
 
-    <!-- FIXED BOTTOM BAR FOR CUSTOMER CART VIEW -->
-    <div id="customerCartBar" class="fixed bottom-4 left-4 right-4 max-w-sm mx-auto bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 flex justify-between items-center text-white shadow-xl z-40 hidden border border-white/10 animate-slideUp">
+    <!-- FIXED BOTTOM BAR FOR CUSTOMER CART VIEW (TRIGGER UPGRADED) -->
+    <div id="customerCartBar" onclick="openSideCart()" class="fixed bottom-4 left-4 right-4 max-w-sm mx-auto bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 flex justify-between items-center text-white shadow-xl z-40 hidden border border-white/10 animate-slideUp cursor-pointer active:scale-[0.98] transition-transform">
         <div class="flex items-center gap-3 pl-2">
             <div class="bg-emerald-500 text-white p-2 rounded-xl"><i class="fa-solid fa-basket-shopping text-sm"></i></div>
             <div class="text-xs">
                 <span id="cartCount" class="font-extrabold block text-slate-100">0 Items • ₹0</span>
-                <span class="text-[9px] text-emerald-400 font-bold block uppercase tracking-wider">Ready to bag</span>
+                <span class="text-[9px] text-emerald-400 font-bold block uppercase tracking-wider">Click to view basket / cart</span>
             </div>
         </div>
-        <button onclick="openCheckoutModal()" class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-900 text-xs font-extrabold px-4 py-2.5 rounded-xl flex items-center gap-1.5 active:scale-95">
-            <span>Checkout Order</span> <i class="fa-solid fa-circle-arrow-right"></i>
+        <button class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-900 text-xs font-extrabold px-4 py-2.5 rounded-xl flex items-center gap-1.5">
+            View Cart <i class="fa-solid fa-chevron-right text-[10px]"></i>
         </button>
     </div>
 
@@ -333,128 +358,171 @@
         let merchantUpiId = ""; 
         let storeLogoBase64 = "";
 
-        // 👤 SMART LOCAL CUSTOMER SESSION LOGIC
-        function checkCustomerSession() {
-            const savedName = localStorage.getItem("c_name");
-            const savedPhone = localStorage.getItem("c_phone");
-
-            if (!savedName || !savedPhone) {
-                // If no profile data locally exists, block screen with auth modal
-                document.getElementById('customerLoginModal').classList.remove('hidden');
-            } else {
-                // Set fields auto-presets inside checkout modals
-                document.getElementById('custName').value = savedName;
-                document.getElementById('custPhone').value = savedPhone;
-                listenToCustomerOrdersLive(savedPhone); // Auto sync order list history
+        const langData = {
+            hinglish: {
+                sellerLogin: "Seller Login", welcomeSeller: "Welcome Back, Seller!", manageStore: "Manage Online Store",
+                storeSettings: "Store Profile Settings", addNewItem: "Naya Product Add Karein", clickPhoto: "Click Product Photo",
+                liveOnStore: "Store Par Live Karein", availProducts: "Available Products", checkoutBtn: "Checkout Order"
+            },
+            english: {
+                sellerLogin: "Merchant Portal", welcomeSeller: "Hello Respected Vendor,", manageStore: "Store Operations Panel",
+                storeSettings: "Vendor Configurations", addNewItem: "Publish New Catalog Item", clickPhoto: "Upload Inventory Image",
+                liveOnStore: "Publish to Catalog", availProducts: "Digital Storefront Catalog", checkoutBtn: "Proceed to Checkout"
+            },
+            gujarati: {
+                sellerLogin: "વેપારી લોગીન", welcomeSeller: "સ્વાગત છે, વેપારી મિત્ર!", manageStore: "ઓનલાઇન દુકાન મેનેજ કરો",
+                storeSettings: "દુકાન પ્રોફાઇલ સેટિંગ્સ", addNewItem: "નવો સામાન ઉમેરો", clickPhoto: "પ્રોડક્ટ નો ફોટો પાડો",
+                liveOnStore: "દુકાન પર લાઈવ કરો", availProducts: "દુકાન નો ઉપલબ્ધ સામાન", checkoutBtn: "ઓર્ડર કન્ફર્મ કરો"
             }
+        };
+
+        window.changeLanguage = function() {
+            const currentSelectedLang = document.getElementById('langSelector').value;
+            const dictionary = langData[currentSelectedLang];
+            document.querySelectorAll("[data-key]").forEach(element => {
+                const translationKey = element.getAttribute("data-key");
+                if (dictionary[translationKey]) element.innerText = dictionary[translationKey];
+            });
+        }
+
+        const fileToDataUri = (file) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => resolve(event.target.result);
+            reader.onerror = (error) => reject(error);
+            reader.readAsDataURL(file);
+        });
+
+        window.processStoreLogo = async function() {
+            const logoInput = document.getElementById('storeLogoInput');
+            if(logoInput.files.length > 0) { storeLogoBase64 = await fileToDataUri(logoInput.files[0]); document.getElementById('logoFileName').innerText = "✓ Logo Attached"; }
+        }
+
+        window.displayMultiFileNames = function() {
+            const files = document.getElementById('productImagesInput').files; const statusLabel = document.getElementById('multiFileStatus');
+            if(files.length > 3) { alert("Max 3 photos permitted!"); return; }
+            if(files.length > 0) { statusLabel.innerText = `✓ ${files.length} Photos Selected`; statusLabel.classList.remove('hidden'); }
+        }
+
+        window.runParchiOcrParser = async function() {
+            const fileInput = document.getElementById('ocrInput'); const statusLabel = document.getElementById('ocrStatusText');
+            if (fileInput.files.length === 0) return;
+            statusLabel.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Reading...`;
+            try {
+                const file = fileInput.files[0]; const base64Img = await fileToDataUri(file);
+                const result = await Tesseract.recognize(base64Img, 'eng+hin');
+                const cleanLines = result.data.text.toLowerCase().split('\n');
+                let matchedItemsCount = 0;
+                cleanLines.forEach(line => {
+                    if(line.trim().length < 3) return;
+                    const foundProduct = allProducts.find(p => line.includes(p.name.toLowerCase()));
+                    if(foundProduct) {
+                        if(!cart[foundProduct.id]) cart[foundProduct.id] = { product: foundProduct, qty: 1 };
+                        else cart[foundProduct.id].qty += 1;
+                        matchedItemsCount++;
+                    }
+                });
+                if(matchedItemsCount > 0) { alert(`✓ Scanned! ${matchedItemsCount} items add ho gaye.`); renderProducts(allProducts); updateCartUI(); }
+                else { alert("No product matched."); }
+            } catch (err) { alert("OCR Rejection."); }
+            finally { statusLabel.innerHTML = `<i class="fa-solid fa-camera mr-1"></i> Scan List`; fileInput.value = ""; }
+        }
+
+        function checkCustomerSession() {
+            const savedName = localStorage.getItem("c_name"); const savedPhone = localStorage.getItem("c_phone");
+            if (!savedName || !savedPhone) { document.getElementById('customerLoginModal').classList.remove('hidden'); }
+            else { document.getElementById('custName').value = savedName; document.getElementById('custPhone').value = savedPhone; listenToCustomerOrdersLive(savedPhone); }
         }
 
         window.saveCustomerSession = function() {
-            const name = document.getElementById('cLoginName').value.trim();
-            const phone = document.getElementById('cLoginPhone').value.trim();
-
-            if(!name || phone.length < 10) return alert("Kripya apna sahi naam aur 10-digit phone number likhein!");
-
-            localStorage.setItem("c_name", name);
-            localStorage.setItem("c_phone", phone);
-            
-            document.getElementById('customerLoginModal').classList.add('hidden');
-            checkCustomerSession();
+            const name = document.getElementById('cLoginName').value.trim(); const phone = document.getElementById('cLoginPhone').value.trim();
+            if(!name || phone.length < 10) return alert("Fill data completely!");
+            localStorage.setItem("c_name", name); localStorage.setItem("c_phone", phone);
+            document.getElementById('customerLoginModal').classList.add('hidden'); checkCustomerSession();
         }
 
-        // 📦 REALTIME SYNC: LISTEN TO CUSTOMER ORDERS BY PHONE NUMBER
         function listenToCustomerOrdersLive(phone) {
             const container = document.getElementById('customerOrdersTrackList');
             const q = query(collection(db, "orders"), where("storeId", "==", currentStoreId), where("customerPhone", "==", phone));
-
             onSnapshot(q, (snapshot) => {
-                container.innerHTML = "";
-                if(snapshot.empty) {
-                    container.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">Aapne abhi tak koi order nahi kiya hai.</p>`;
-                    return;
-                }
-
+                container.innerHTML = ""; if(snapshot.empty) { container.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">No order entries yet.</p>`; return; }
                 snapshot.forEach((docSnapshot) => {
-                    const order = docSnapshot.data();
-                    
-                    let statusColor = "text-amber-500 bg-amber-50";
-                    let stepIndex = 0;
+                    const order = docSnapshot.data(); let statusColor = "text-amber-500 bg-amber-50"; let stepIndex = 0;
                     if(order.status === 'accepted') { statusColor = "text-emerald-600 bg-emerald-50"; stepIndex = 1; }
                     if(order.status === 'shipped') { statusColor = "text-blue-600 bg-blue-50"; stepIndex = 2; }
                     if(order.status === 'delivered') { statusColor = "text-purple-600 bg-purple-50"; stepIndex = 3; }
-
-                    container.innerHTML += `
-                        <div class="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl text-xs space-y-3 shadow-xs">
-                            <div class="flex justify-between items-center font-bold">
-                                <span class="text-slate-400 font-mono text-[10px]">ID: ${docSnapshot.id.substring(0,8)}...</span>
-                                <span class="${statusColor} px-2 py-0.5 rounded-md uppercase text-[9px] font-black">${order.status}</span>
-                            </div>
-                            <div class="bg-white border border-slate-100 p-2 rounded-xl text-slate-600 font-semibold space-y-0.5">
-                                ${order.items.map(i => `<div>• ${i.name} x${i.qty} = ₹${i.price * i.qty}</div>`).join('')}
-                            </div>
-                            <!-- Micro Pipeline Bar inside list row -->
-                            <div class="flex justify-between text-[9px] text-slate-300 font-bold pt-1 border-t border-slate-100">
-                                <span class="${stepIndex >= 0 ? 'text-emerald-600' : ''}">Placed</span>
-                                <span class="${stepIndex >= 1 ? 'text-emerald-600' : ''}">Packed</span>
-                                <span class="${stepIndex >= 2 ? 'text-blue-600' : ''}">OnWay</span>
-                                <span class="${stepIndex >= 3 ? 'text-purple-600' : ''}">Delivered</span>
-                                <span class="text-slate-800 font-black ml-auto">Total: ₹${order.totalAmount}</span>
-                            </div>
-                        </div>
-                    `;
+                    container.innerHTML += `<div class="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl text-xs space-y-3 shadow-sm"><div class="flex justify-between items-center font-bold"><span class="text-slate-400 font-mono text-[10px]">ID: ${docSnapshot.id.substring(0,8)}...</span><span class="${statusColor} px-2 py-0.5 rounded-md uppercase text-[9px] font-black">${order.status}</span></div><div class="bg-white border border-slate-100 p-2 rounded-xl text-slate-600 font-semibold space-y-0.5">${order.items.map(i => `<div>• ${i.name} x${i.qty} = ₹${i.price * i.qty}</div>`).join('')}</div><div class="flex justify-between text-[9px] text-slate-300 font-bold pt-1 border-t border-slate-100"><span class="${stepIndex >= 0 ? 'text-emerald-600' : ''}">Placed</span><span class="${stepIndex >= 1 ? 'text-emerald-600' : ''}">Packed</span><span class="${stepIndex >= 2 ? 'text-blue-600' : ''}">OnWay</span><span class="${stepIndex >= 3 ? 'text-purple-600' : ''}">Delivered</span><span class="text-slate-800 font-black ml-auto">Total: ₹${order.totalAmount}</span></div></div>`;
                 });
             });
         }
 
-        // ORDER SUBMIT ENGINE (AUTO POPULATES DATA FROM SAVED SESSION)
         window.submitOrderToDatabase = async function() {
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const addr = document.getElementById('custAddress').value.trim();
-            const selectedPayment = document.querySelector('input[name="payMethod"]:checked').value;
-
+            const name = document.getElementById('custName').value.trim(); const phone = document.getElementById('custPhone').value.trim();
+            const addr = document.getElementById('custAddress').value.trim(); const selectedPayment = document.querySelector('input[name="payMethod"]:checked').value;
             if(!addr) return alert("Pehle delivery address likh lijiye!");
 
-            let itemsList = [];
-            let total = 0;
-            
+            let itemsList = []; let total = 0;
             Object.keys(cart).forEach(key => {
-                const item = cart[key];
-                itemsList.push({ productId: key, name: item.product.name, unit: item.product.unit, price: item.product.price, qty: item.qty });
+                const item = cart[key]; itemsList.push({ productId: key, name: item.product.name, unit: item.product.unit, price: item.product.price, qty: item.qty });
                 total += (item.product.price * item.qty);
             });
 
             try {
-                await addDoc(collection(db, "orders"), {
-                    storeId: currentStoreId, customerName: name, customerPhone: phone, customerAddress: addr, paymentMode: selectedPayment, items: itemsList, totalAmount: total, status: "pending", createdAt: Date.now()
-                });
-
-                alert(`🎉 Order Placed Successfully!\n\nAap apna live status upar 'My Orders' tab me check kar sakte hain.`);
-
+                await addDoc(collection(db, "orders"), { storeId: currentStoreId, customerName: name, customerPhone: phone, customerAddress: addr, paymentMode: selectedPayment, items: itemsList, totalAmount: total, status: "pending", createdAt: Date.now() });
+                alert(`🎉 Order Placed Successfully!`);
                 if(selectedPayment === "UPI" && merchantUpiId) {
-                    const upiIntentUrl = `upi://pay?pa=${merchantUpiId}&pn=${encodeURIComponent(document.getElementById('navStoreName').innerText)}&am=${total}&cu=INR`;
-                    window.open(upiIntentUrl, '_blank');
+                    const upiIntentUrl = `upi://pay?pa=${merchantUpiId}&pn=${encodeURIComponent(document.getElementById('navStoreName').innerText)}&am=${total}&cu=INR`; window.open(upiIntentUrl, '_blank');
                 }
-
-                cart = {};
-                document.getElementById('customerCartBar').classList.add('hidden');
-                renderProducts(allProducts);
-                closeCheckoutModal();
-                openCustomerOrdersModal();
-
-            } catch (e) { alert("Database save error."); }
+                cart = {}; document.getElementById('customerCartBar').classList.add('hidden'); closeSideCart(); renderProducts(allProducts); closeCheckoutModal(); openCustomerOrdersModal();
+            } catch (e) { alert("Database error."); }
         }
 
-        // SELLER DASHBOARD INCOMING WATCH ENGINE LOOP
+        // SLIDE CART PANEL LAYOUT GENERATOR RULE
+        window.renderSideCartPanelItems = function() {
+            const container = document.getElementById('sideCartItemsList');
+            const totalLabel = document.getElementById('sideCartTotalPriceLabel');
+            container.innerHTML = "";
+
+            const cartKeys = Object.keys(cart);
+            if(cartKeys.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-12 font-medium">Aapka cart abhi khali hai bhai.</p>`;
+                totalLabel.innerText = "₹0";
+                return;
+            }
+
+            let computedGrandTotal = 0;
+            cartKeys.forEach(key => {
+                const item = cart[key];
+                const costSum = item.product.price * item.qty;
+                computedGrandTotal += costSum;
+
+                const targetThumb = item.product.images ? item.product.images[0] : "https://placehold.co/150?text=Product";
+
+                container.innerHTML += `
+                    <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-2xl text-xs border border-slate-100/60 shadow-sm animate-fadeIn">
+                        <div class="flex items-center gap-3">
+                            <img src="${targetThumb}" class="w-10 h-10 object-cover rounded-xl shadow-sm">
+                            <div>
+                                <span class="font-extrabold text-slate-800 block tracking-tight">${item.product.name}</span>
+                                <span class="text-slate-400 text-[10px] font-bold">₹${item.product.price} • ${item.product.unit}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center bg-white border border-slate-200/80 rounded-xl text-[11px] font-black text-slate-700 shadow-sm">
+                            <button onclick="modifyCartQty('${key}', -1); renderSideCartPanelItems();" class="px-2 py-1 text-slate-400 hover:text-red-500"><i class="fa-solid fa-minus text-[9px]"></i></button>
+                            <span class="px-1.5 select-none text-slate-800">${item.qty}</span>
+                            <button onclick="modifyCartQty('${key}', 1); renderSideCartPanelItems();" class="px-2 py-1 text-slate-400 hover:text-emerald-500"><i class="fa-solid fa-plus text-[9px]"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            totalLabel.innerText = `₹${computedGrandTotal}`;
+        }
+
+        // SELLER INCOMING ORDERS WATCH ENGINE
         function listenToIncomingOrders() {
             const ordersListContainer = document.getElementById('sellerIncomingOrdersList');
             const q = query(collection(db, "orders"), where("storeId", "==", currentStoreId));
-
             onSnapshot(q, (snapshot) => {
-                ordersListContainer.innerHTML = "";
-                if(snapshot.empty) {
-                    ordersListContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No live orders pending.</p>`; return;
-                }
+                ordersListContainer.innerHTML = ""; if(snapshot.empty) { ordersListContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No pending orders.</p>`; return; }
                 snapshot.forEach((docSnapshot) => {
                     const order = docSnapshot.data(); const orderId = docSnapshot.id;
                     let orderItemsHtml = order.items.map(item => `<div>• ${item.name} (${item.unit}) x ${item.qty} = ₹${item.price * item.qty}</div>`).join('');
@@ -476,9 +544,7 @@
             });
         }
 
-        window.updateOrderStatus = async function(orderId, nextStatus) {
-            await updateDoc(doc(db, "orders", orderId), { status: nextStatus });
-        }
+        window.updateOrderStatus = async function(orderId, nextStatus) { await updateDoc(doc(db, "orders", orderId), { status: nextStatus }); }
 
         window.printThermalInvoiceDirect = async function(id) {
             const orderSnap = await getDoc(doc(db, "orders", id)); if(!orderSnap.exists()) return;
@@ -612,6 +678,20 @@
             renderProducts(allProducts); updateCartUI();
         }
 
+        function updateCartUI() {
+            const cartBar = document.getElementById('customerCartBar');
+            const cartCount = document.getElementById('cartCount');
+            const cartKeys = Object.keys(cart);
+            if(cartKeys.length > 0) {
+                let totalItemsCount = 0; let totalBillingValue = 0;
+                cartKeys.forEach(key => {
+                    totalItemsCount += cart[key].qty; totalBillingValue += (cart[key].product.price * cart[key].qty);
+                });
+                cartBar.classList.remove('hidden');
+                cartCount.innerText = `${totalItemsCount} Items • Total: ₹${totalBillingValue}`;
+            } else { cartBar.classList.add('hidden'); closeSideCart(); }
+        }
+
         window.openDetailsModal = function(id) {
             const p = allProducts.find(item => item.id === id); if(!p) return;
             document.getElementById('modalProductName').innerText = p.name; document.getElementById('modalProductPrice').innerText = `₹${p.price}`; document.getElementById('modalProductUnit').innerText = p.unit; document.getElementById('modalProductDesc').innerText = p.description || "No details provided.";
@@ -635,14 +715,13 @@
 
         window.filterCategory = function(cat) { if(cat === "All") renderProducts(allProducts); else renderProducts(allProducts.filter(p => p.category === cat)); }
 
-        // Start initialization threads
         loadMerchantProfile(); 
         listenToLiveStoreCatalog();
         listenToIncomingOrders();
-        checkCustomerSession(); // 👈 Verifies localStorage gate instantly on boot
+        checkCustomerSession();
     </script>
 
-    <!-- WINDOW MODAL CONTROLLERS -->
+    <!-- WINDOW MODAL & SIDE CART INTERACTION CONTROLLERS -->
     <script>
         function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
         function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
@@ -652,6 +731,16 @@
         function closeInfoModal() { document.getElementById('infoModal').classList.add('hidden'); }
         function openCustomerOrdersModal() { document.getElementById('customerOrdersModal').classList.remove('hidden'); }
         function closeCustomerOrdersModal() { document.getElementById('customerOrdersModal').classList.add('hidden'); }
+        function closeDetailsModal() { document.getElementById('detailsModal').classList.add('hidden'); }
+        
+        // 🛒 SLIDE CART SIDE PANEL TRIGGERS
+        function openSideCart() {
+            window.renderSideCartPanelItems(); // Trigger inner dynamic rendering engine
+            document.getElementById('sideCartPanel').style.transform = "translateX(0)";
+        }
+        function closeSideCart() {
+            document.getElementById('sideCartPanel').style.transform = "translateX(100%)";
+        }
     </script>
 </body>
 </html>
