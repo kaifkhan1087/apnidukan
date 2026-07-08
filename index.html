@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApniDukan - Multi-Vendor Hyperlocal Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- TOP NAVIGATION BAR -->
+    <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50 px-4 py-3 flex justify-between items-center max-w-md mx-auto">
+        <div class="flex items-center gap-2">
+            <div class="bg-green-600 text-white p-2 rounded-xl shadow-md">
+                <i class="fa-solid fa-shop text-lg"></i>
+            </div>
+            <div>
+                <span class="text-[10px] text-gray-400 block font-medium uppercase tracking-wider" id="navStoreLocation">Live Store</span>
+                <h1 class="text-md font-bold text-gray-800 tracking-tight" id="navStoreName">Loading Store...</h1>
+            </div>
+        </div>
+        <!-- Lock Button for Seller Login -->
+        <button onclick="openLoginModal()" id="sellerModeBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-2 rounded-lg transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-lock text-green-600" id="lockIcon"></i> <span id="loginBtnText">Seller Login</span>
+        </button>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- MAIN INTERFACE CONTAINER -->
+    <!-- ========================================== -->
+    <div class="max-w-md mx-auto p-4 space-y-5">
+
+        <!-- 1. SELLER DASHBOARD (HIDDEN BY DEFAULT) -->
+        <div id="sellerPanel" class="hidden space-y-4">
+            <div class="bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl p-4 text-white shadow-lg flex justify-between items-center">
+                <div>
+                    <p class="text-xs text-green-100 font-semibold">Welcome Back, Seller!</p>
+                    <h3 class="text-lg font-bold">Manage Your Online Store</h3>
+                </div>
+                <button onclick="logoutSeller()" class="bg-red-500/20 hover:bg-red-500/40 text-white text-xs px-2.5 py-1.5 rounded-lg font-medium transition-all">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+
+            <!-- Add Product Form -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-3">
+                <h2 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-plus text-green-600"></i> Naya Product Add Karein
+                </h2>
+                
+                <div class="flex items-center justify-center w-full">
+                    <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-gray-200 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all">
+                        <div class="flex flex-col items-center justify-center pt-4 pb-4">
+                            <i class="fa-solid fa-camera text-xl text-gray-400 mb-1"></i>
+                            <p class="text-xs text-gray-500 font-medium">Click Product Photo</p>
+                            <p id="fileName" class="text-[10px] text-green-600 font-semibold mt-1"></p>
+                        </div>
+                        <input type="file" id="productImage" accept="image/*" class="hidden" onchange="displayFileName()" />
+                    </label>
+                </div>
+
+                <input type="text" id="pName" placeholder="Product Ka Naam (e.g., Amul Butter)" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500">
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="number" id="pPrice" placeholder="Price (₹)" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500">
+                    <input type="text" id="pUnit" placeholder="Unit (e.g., 500g, 1 Litre)" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500">
+                </div>
+
+                <select id="pCategory" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:border-green-500 text-gray-600">
+                    <option value="Groceries">Groceries / Kirana</option>
+                    <option value="Dairy">Dairy & Milk Products</option>
+                    <option value="Fruits">Fruits & Vegetables</option>
+                    <option value="Snacks">Snacks & Beverages</option>
+                    <option value="Others">Others / Electronics / Mobile</option>
+                </select>
+                
+                <button onclick="addProductToFirebase()" id="uploadBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> Store Par Live Karein
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. CUSTOMER VIEW -->
+        <div id="customerPanel" class="space-y-4">
+            <!-- Category Filter Buttons -->
+            <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none" id="categoryTabs">
+                <button onclick="filterCategory('All')" class="bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap shadow-sm">All Items</button>
+                <button onclick="filterCategory('Groceries')" class="bg-white border border-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap">Groceries</button>
+                <button onclick="filterCategory('Dairy')" class="bg-white border border-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap">Dairy</button>
+                <button onclick="filterCategory('Fruits')" class="bg-white border border-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap">Fruits</button>
+                <button onclick="filterCategory('Snacks')" class="bg-white border border-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap">Snacks</button>
+            </div>
+
+            <!-- Live Catalog Grid -->
+            <div class="space-y-3">
+                <h3 class="text-sm font-bold text-gray-800 px-1">Available Products</h3>
+                <div id="productsContainer" class="grid grid-cols-2 gap-3">
+                    <p class="text-xs text-gray-400 col-span-2 text-center py-8">Loading digital catalog...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELLER LOGIN MODAL -->
+    <div id="loginModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-gray-800">Merchant Security Login</h3>
+                <button onclick="closeLoginModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3">
+                <input type="email" id="loginEmail" placeholder="Registered Email (e.g., store@mail.com)" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500">
+                <input type="password" id="loginPassword" placeholder="Secret Password" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500">
+                <button onclick="loginSeller()" id="loginSubmitBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md">
+                    Verify & Unlock Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIXED BOTTOM BAR FOR CUSTOMER CART VIEW -->
+    <div id="customerCartBar" class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-gray-100 p-4 shadow-[0_-4px_12px_rgba(0,0,0,0.03)] z-40 hidden">
+        <div class="bg-green-600 rounded-xl p-3 flex justify-between items-center text-white shadow-md">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-basket-shopping"></i>
+                <div class="text-xs">
+                    <span id="cartCount" class="font-bold block">0 Items • ₹0</span>
+                </div>
+            </div>
+            <button onclick="sendWhatsAppOrder()" class="bg-white text-green-700 text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-1 hover:bg-green-50 transition-all">
+                Send Order via WhatsApp <i class="fa-brands fa-whatsapp text-sm text-green-600"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- FIREBASE SYSTEM MODULES -->
+    <!-- ========================================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDModwog0Tdj0avtqHJX0Qrj6XyEacuPD4",
+            authDomain: "apnidukan-249fb.firebaseapp.com",
+            projectId: "apnidukan-249fb",
+            storageBucket: "apnidukan-249fb.firebasestorage.app",
+            messagingSenderId: "288152844481",
+            appId: "1:288152844481:web:ffc1667141a568f0f7dee0",
+            measurementId: "G-1XZ6NSYDB7"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Parse Multi-Vendor URL Store Identifier
+        const urlParams = new URLSearchParams(window.location.search);
+        // Default dynamically falls back to "demo-store" if no variable present
+        let currentStoreId = urlParams.get('store') || "demo-store"; 
+        
+        let cart = [];
+        let allProducts = [];
+
+        // Set Store Titles Dynamically based on URL Parameter
+        document.getElementById('navStoreName').innerText = currentStoreId.replace('-', ' ').toUpperCase();
+
+        window.displayFileName = function() {
+            const fileInput = document.getElementById('productImage');
+            const fileNameDisplay = document.getElementById('fileName');
+            if(fileInput.files.length > 0) fileNameDisplay.innerText = "✓ Photo Selected";
+        }
+
+        const fileToDataUri = (file) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => resolve(event.target.result);
+            reader.onerror = (error) => reject(error);
+            reader.readAsDataURL(file);
+        });
+
+        // 1. SELLER CONTROLS
+        window.loginSeller = async function() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPassword').value.trim();
+            const btn = document.getElementById('loginSubmitBtn');
+
+            if(!email || !pass) return alert("Email aur Password dono likho bhai!");
+
+            btn.innerText = "Verifying Credentials...";
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                closeLoginModal();
+            } catch(e) {
+                alert("Login Failed! Email ya Password galat hai.");
+            } finally {
+                btn.innerText = "Verify & Unlock Dashboard";
+            }
+        }
+
+        window.logoutSeller = function() {
+            signOut(auth).then(() => {
+                document.getElementById('sellerPanel').classList.add('hidden');
+                alert("Dashboard Locked Successfully!");
+            });
+        }
+
+        // Monitor Auth State State-Change
+        onAuthStateChanged(auth, (user) => {
+            if(user) {
+                document.getElementById('sellerPanel').classList.remove('hidden');
+                document.getElementById('loginBtnText').innerText = "Dashboard Active";
+                document.getElementById('lockIcon').className = "fa-solid fa-unlock text-green-600";
+            } else {
+                document.getElementById('sellerPanel').classList.add('hidden');
+                document.getElementById('loginBtnText').innerText = "Seller Login";
+                document.getElementById('lockIcon').className = "fa-solid fa-lock text-green-600";
+            }
+        });
+
+        window.addProductToFirebase = async function() {
+            const name = document.getElementById('pName').value.trim();
+            const price = document.getElementById('pPrice').value.trim();
+            const unit = document.getElementById('pUnit').value.trim();
+            const cat = document.getElementById('pCategory').value;
+            const fileInput = document.getElementById('productImage');
+            const uploadBtn = document.getElementById('uploadBtn');
+
+            if(!name || !price || !unit) return alert("Poori details bharo pehle!");
+
+            uploadBtn.innerText = "Saving to Database...";
+            uploadBtn.disabled = true;
+
+            let base64Img = "https://placehold.co/150?text=Product";
+
+            try {
+                if(fileInput.files.length > 0) base64Img = await fileToDataUri(fileInput.files[0]);
+
+                await addDoc(collection(db, "products"), {
+                    storeId: currentStoreId, // Scope product exclusively to specific url parameter store
+                    name: name,
+                    price: parseFloat(price),
+                    unit: unit,
+                    category: cat,
+                    image: base64Img,
+                    createdAt: Date.now()
+                });
+
+                alert("Product live ho gaya aapki digital dukan par!");
+                document.getElementById('pName').value = "";
+                document.getElementById('pPrice').value = "";
+                document.getElementById('pUnit').value = "";
+                fileInput.value = "";
+                document.getElementById('fileName').innerText = "";
+            } catch (e) {
+                alert("Data save karne me error aaya.");
+            } finally {
+                uploadBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Store Par Live Karein';
+                uploadBtn.disabled = false;
+            }
+        }
+
+        // 2. DYNAMIC REALTIME CUSTOMER CATALOG READ
+        function listenToLiveStoreCatalog() {
+            const container = document.getElementById('productsContainer');
+            const q = query(collection(db, "products"), where("storeId", "==", currentStoreId));
+
+            onSnapshot(q, (snapshot) => {
+                allProducts = [];
+                container.innerHTML = "";
+
+                if(snapshot.empty) {
+                    container.innerHTML = `<p class="text-xs text-gray-400 col-span-2 text-center py-8">Is store par abhi koi saman live nahi hai.</p>`;
+                    return;
+                }
+
+                snapshot.forEach((doc) => {
+                    allProducts.push(doc.data());
+                });
+
+                renderProducts(allProducts);
+            });
+        }
+
+        function renderProducts(items) {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = "";
+
+            if(items.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 col-span-2 text-center py-4">Is category me koi product nahi mila.</p>`;
+                return;
+            }
+
+            items.forEach((product) => {
+                container.innerHTML += `
+                    <div class="bg-white border border-gray-100 rounded-xl p-3 shadow-sm flex flex-col justify-between space-y-2">
+                        <div class="bg-gray-50 rounded-lg p-1 flex items-center justify-center aspect-square overflow-hidden">
+                            <img src="${product.image}" alt="${product.name}" class="object-cover h-full w-full rounded-lg">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xs text-gray-800 line-clamp-1">${product.name}</h4>
+                            <p class="text-[10px] text-gray-400 mt-0.5">${product.unit} • <span class="text-green-600 font-medium">${product.category}</span></p>
+                        </div>
+                        <div class="flex justify-between items-center pt-1">
+                            <span class="font-bold text-sm text-gray-800">₹${product.price}</span>
+                            <button onclick="addToCart('${product.name}', ${product.price})" class="border border-green-600 text-green-600 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-green-50/50 hover:bg-green-600 hover:text-white transition-all">ADD</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.filterCategory = function(cat) {
+            // Style adjustment logic for horizontal scroll tab indicators
+            const tabs = document.querySelectorAll('#categoryTabs button');
+            tabs.forEach(btn => {
+                if(btn.innerText.toLowerCase().includes(cat.toLowerCase()) || (cat === 'All' && btn.innerText.includes('All'))) {
+                    btn.className = "bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap shadow-sm";
+                } else {
+                    btn.className = "bg-white border border-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap";
+                }
+            });
+
+            if(cat === "All") {
+                renderProducts(allProducts);
+            } else {
+                const filtered = allProducts.filter(p => p.category === cat);
+                renderProducts(filtered);
+            }
+        }
+
+        window.addToCart = function(name, price) {
+            cart.push({ name, price });
+            const cartBar = document.getElementById('customerCartBar');
+            const cartCount = document.getElementById('cartCount');
+            
+            if(cart.length > 0) {
+                cartBar.classList.remove('hidden');
+                const total = cart.reduce((sum, item) => sum + item.price, 0);
+                cartCount.innerText = `${cart.length} Saman • Total: ₹${total}`;
+            }
+        }
+
+        window.sendWhatsAppOrder = function() {
+            if(cart.length === 0) return;
+            let orderText = `👋 *NEW ONLINE ORDER* (${currentStoreId.replace('-', ' ').toUpperCase()})\n\nMujhe aapki dukan se ye saman chahiye:\n\n`;
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                orderText += `${index + 1}. ${item.name} - ₹${item.price}\n`;
+                total += item.price;
+            });
+            orderText += `\n*Total Billing Amount: ₹${total}*\n\nKripya order ready karke bataiye!`;
+            
+            // Redirect text seamlessly via WhatsApp Web deep links
+            const whatsappUrl = `https://wa.me/919999999999?text=${encodeURIComponent(orderText)}`;
+            window.open(whatsappUrl, '_blank');
+            cart = [];
+            document.getElementById('customerCartBar').classList.add('hidden');
+        }
+
+        listenToLiveStoreCatalog();
+    </script>
+
+    <!-- WINDOW MODAL CONTROLLERS -->
+    <script>
+        function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
+        document.windowClose = function() { document.getElementById('loginModal').classList.add('hidden'); }
+        window.closeLoginModal = document.windowClose;
+    </script>
+</body>
+</html>
