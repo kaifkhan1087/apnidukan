@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApniDukan Pro - Hyperlocal E-commerce Platform</title>
+    <title>ApniDukan Pro - Full Stack Hyperlocal Platform</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Tesseract.js Library for Parchi OCR Scanner -->
+    <!-- Tesseract.js for Parchi OCR Scanner -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
     <style>
         body { 
@@ -35,7 +35,7 @@
     <!-- TOP NAVIGATION BAR -->
     <nav class="bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100 sticky top-0 z-50 px-4 py-3.5 flex justify-between items-center max-w-md mx-auto rounded-b-2xl">
         <div class="flex items-center gap-3">
-            <div id="storeLogoContainer" class="bg-gradient-to-tr from-emerald-500 to-green-600 text-white w-10 h-10 rounded-xl shadow-lg flex items-center justify-center overflow-hidden active:scale-95 transition-transform">
+            <div id="storeLogoContainer" class="bg-gradient-to-tr from-emerald-500 to-green-600 text-white w-10 h-10 rounded-xl shadow-lg flex items-center justify-center overflow-hidden transition-transform">
                 <i id="defaultLogoIcon" class="fa-solid fa-shop text-lg"></i>
                 <img id="storeLiveLogo" class="hidden object-cover h-full w-full">
             </div>
@@ -43,9 +43,15 @@
                 <h1 class="text-md font-extrabold text-slate-800 tracking-tight flex items-center gap-1">
                     <span id="navStoreName" class="font-bold">Loading Store...</span>
                 </h1>
-                <button onclick="openInfoModal()" class="text-[10px] text-emerald-600 font-bold flex items-center gap-1 hover:underline">
-                    <i class="fa-solid fa-circle-check"></i> View Store Info & GST
-                </button>
+                <div class="flex items-center gap-2 mt-0.5">
+                    <button onclick="openInfoModal()" class="text-[10px] text-emerald-600 font-bold flex items-center gap-0.5 hover:underline">
+                        <i class="fa-solid fa-circle-check"></i> Store Info
+                    </button>
+                    <!-- 📦 UPGRADED CUSTOMER PROFILE TRACKER -->
+                    <button onclick="openCustomerOrdersModal()" class="text-[10px] text-blue-600 font-bold flex items-center gap-0.5 hover:underline">
+                        <i class="fa-solid fa-bag-shopping"></i> My Orders
+                    </button>
+                </div>
             </div>
         </div>
         
@@ -55,7 +61,7 @@
                 <option value="english">English</option>
                 <option value="gujarati">ગુજરાતી</option>
             </select>
-            <button onclick="openLoginModal()" id="sellerModeBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold p-2.5 rounded-xl transition-all">
+            <button onclick="openLoginModal()" id="sellerModeBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold p-2.5 rounded-xl">
                 <i class="fa-solid fa-lock text-emerald-600" id="lockIcon"></i>
             </button>
         </div>
@@ -72,8 +78,18 @@
                     <h3 class="text-lg font-extrabold" data-key="manageStore">Manage Online Store</h3>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <button onclick="logoutSeller()" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition-all">Logout</button>
-                    <button onclick="shareStoreLink()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition-all"><i class="fa-solid fa-share-nodes"></i> Share Link</button>
+                    <button onclick="logoutSeller()" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-[11px] font-bold px-2.5 py-1.5 rounded-xl">Logout</button>
+                    <button onclick="shareStoreLink()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-[11px] font-bold px-2.5 py-1.5 rounded-xl"><i class="fa-solid fa-share-nodes"></i> Share Link</button>
+                </div>
+            </div>
+
+            <!-- LIVE INCOMING ORDERS PANEL FOR SELLER -->
+            <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-3">
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2 text-amber-600">
+                    <i class="fa-solid fa-bell animate-bounce"></i> Naye Orders (Live Dashboard)
+                </h2>
+                <div id="sellerIncomingOrdersList" class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                    <p class="text-xs text-slate-400 text-center py-4">Koi pending orders nahi hain abhi.</p>
                 </div>
             </div>
 
@@ -83,7 +99,7 @@
                 <div class="space-y-3">
                     <div class="grid grid-cols-2 gap-3">
                         <input type="text" id="mDukanName" placeholder="Dukan Ka Naam" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
-                        <input type="text" id="mWhatsapp" placeholder="WhatsApp Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
+                        <input type="text" id="mWorkspace" placeholder="WhatsApp Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <input type="text" id="mGst" placeholder="GSTIN Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
@@ -102,7 +118,7 @@
                 <button onclick="saveStoreProfile()" class="w-full bg-slate-800 text-white text-xs font-extrabold py-3 rounded-2xl shadow-md">Save Profile Configurations</button>
             </div>
 
-            <!-- Add Product Form (With Explicit Description Engine Input Box) -->
+            <!-- Add Product Form -->
             <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-4">
                 <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-square-plus text-emerald-500"></i> <span data-key="addNewItem">Naya Product Add Karein</span></h2>
                 <div class="space-y-2">
@@ -118,9 +134,7 @@
                     <input type="number" id="pPrice" placeholder="Price (₹)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white">
                     <input type="text" id="pUnit" placeholder="Unit (e.g., 1kg, 500ml)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white">
                 </div>
-                <!-- 🎯 VERIFIED DESCRIPTION TEXTAREA -->
-                <textarea id="pDesc" placeholder="Product Details / Description (Benefits, Expiry, Brand Info, etc.)" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white h-20 resize-none focus:outline-none focus:border-emerald-500 shadow-inner"></textarea>
-                
+                <textarea id="pDesc" placeholder="Product Details / Description" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white h-20 resize-none focus:outline-none focus:border-emerald-500"></textarea>
                 <select id="pCategory" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white text-slate-600 font-medium">
                     <option value="Groceries">Groceries / Kirana</option>
                     <option value="Dairy">Dairy & Milk Products</option>
@@ -131,13 +145,7 @@
                 <button onclick="addProductToFirebase()" id="uploadBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg"><i class="fa-solid fa-paper-plane"></i> <span data-key="liveOnStore">Store Par Live Karein</span></button>
             </div>
 
-            <!-- Thermal Receipt Manager -->
-            <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-3">
-                <h2 class="text-sm font-extrabold text-slate-800"><i class="fa-solid fa-print text-emerald-500 mr-1"></i> Quick Thermal Billing Counter</h2>
-                <button onclick="printBlankReceipt()" class="w-full border border-slate-800 text-slate-800 text-xs font-bold py-2.5 rounded-xl hover:bg-slate-50 transition-all"><i class="fa-solid fa-file-invoice-dollar mr-1"></i> Print Last Cart Bill Mock</button>
-            </div>
-
-            <!-- Inventory List -->
+            <!-- Live Inventory Items List -->
             <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-3">
                 <h2 class="text-sm font-extrabold text-slate-800"><i class="fa-solid fa-boxes-stacked text-emerald-500"></i> Live Inventory Items</h2>
                 <div id="sellerInventoryList" class="space-y-2.5 max-h-64 overflow-y-auto pr-1"></div>
@@ -146,7 +154,7 @@
 
         <!-- 2. CUSTOMER VIEW MODULE -->
         <div id="customerPanel" class="space-y-5">
-            <!-- Parchi Scanner Block -->
+            <!-- Written Parchi Scanner -->
             <div class="bg-gradient-to-r from-emerald-500/10 to-green-600/10 border border-emerald-500/20 rounded-3xl p-4 flex items-center justify-between">
                 <div class="space-y-0.5">
                     <h4 class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i> Upload Written Parchi</h4>
@@ -180,7 +188,37 @@
         </div>
     </div>
 
-    <!-- PRODUCT DETAILS DESCRIPTION MODAL (UPGRADED PRESET) -->
+    <!-- 👤 CUSTOMER ENTRY/LOGIN GATE MODAL (STAYS PERSISTENT) -->
+    <div id="customerLoginModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100">
+            <div class="text-center space-y-1">
+                <div class="bg-emerald-100 text-emerald-600 w-12 h-12 rounded-full flex items-center justify-center mx-auto text-xl font-bold"><i class="fa-solid fa-user-check"></i></div>
+                <h3 class="font-extrabold text-lg text-slate-800">Welcome to ApniDukan</h3>
+                <p class="text-xs text-slate-400">Dukan me enter karne ke liye apna naam aur number likhein</p>
+            </div>
+            <div class="space-y-3">
+                <input type="text" id="cLoginName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:outline-none">
+                <input type="number" id="cLoginPhone" placeholder="Mobile Number" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:outline-none">
+                <button onclick="saveCustomerSession()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-2xl text-xs shadow-md transition-all">Start Shopping <i class="fa-solid fa-circle-arrow-right ml-1"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📦 CUSTOMER MY ORDERS HISTORY POPUP -->
+    <div id="customerOrdersModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-extrabold text-slate-800 flex items-center gap-2 text-sm"><i class="fa-solid fa-clock-history text-blue-500"></i> My Order History</h3>
+                <button onclick="closeCustomerOrdersModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <!-- Dynamic Realtime Customer Orders go here -->
+            <div id="customerOrdersTrackList" class="space-y-4">
+                <p class="text-xs text-slate-400 text-center py-8">Aapne abhi tak koi order nahi kiya hai.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCT DETAILS DESCRIPTION MODAL -->
     <div id="detailsModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl border border-slate-100 max-h-[85vh] overflow-y-auto">
             <div class="flex justify-between items-center pb-2 border-b border-slate-100">
@@ -193,7 +231,6 @@
                     <span id="modalProductPrice" class="text-lg font-black text-slate-800">₹0</span>
                     <span id="modalProductUnit" class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-bold">-</span>
                 </div>
-                <!-- 🎯 LIVE INJECTED DESCRIPTION BOX -->
                 <div class="bg-slate-50 border border-slate-100 rounded-2xl p-3.5 text-xs space-y-1">
                     <span class="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider block">Product Description</span>
                     <p id="modalProductDesc" class="text-slate-600 font-medium leading-relaxed whitespace-pre-line">-</p>
@@ -210,21 +247,10 @@
                 <button onclick="closeInfoModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="space-y-3 text-xs">
-                <div>
-                    <span class="text-slate-400 block font-bold uppercase tracking-wider text-[9px]">Store Name</span>
-                    <p id="infoDukanName" class="font-bold text-slate-800 mt-0.5">-</p>
-                </div>
-                <div>
-                    <span class="text-slate-400 block font-bold uppercase tracking-wider text-[9px]">GSTIN Registration</span>
-                    <p id="infoGst" class="font-mono bg-slate-50 px-2 py-1 rounded-lg text-slate-700 inline-block font-semibold mt-0.5">Not Provided</p>
-                </div>
-                <div>
-                    <span class="text-slate-400 block font-bold uppercase tracking-wider text-[9px]">Official Store Address</span>
-                    <p id="infoAddress" class="text-slate-600 font-medium mt-0.5">Address setup pending.</p>
-                </div>
-                <div id="mapsActionContainer" class="hidden pt-1">
-                    <a id="infoMapsLink" target="_blank" class="bg-slate-900 text-white font-bold p-2.5 rounded-xl block text-center"><i class="fa-solid fa-location-dot text-emerald-400 mr-1"></i> Navigate via Google Maps</a>
-                </div>
+                <div><span class="text-slate-400 block font-bold uppercase tracking-wider text-[9px]">Store Name</span><p id="infoDukanName" class="font-bold text-slate-800 mt-0.5">-</p></div>
+                <div><span class="text-slate-400 block font-bold uppercase tracking-wider text-[9px]">GSTIN Registration</span><p id="infoGst" class="font-mono bg-slate-50 px-2 py-1 rounded-lg text-slate-700 inline-block font-semibold mt-0.5">Not Provided</p></div>
+                <div><span class="text-slate-400 block font-bold uppercase tracking-wider text-[9px]">Official Store Address</span><p id="infoAddress" class="text-slate-600 font-medium mt-0.5">Address setup pending.</p></div>
+                <div id="mapsActionContainer" class="hidden pt-1"><a id="infoMapsLink" target="_blank" class="bg-slate-900 text-white font-bold p-2.5 rounded-xl block text-center"><i class="fa-solid fa-location-dot text-emerald-400 mr-1"></i> Navigate via Google Maps</a></div>
             </div>
         </div>
     </div>
@@ -249,9 +275,9 @@
                 <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="space-y-3">
-                <input type="text" id="custName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50">
-                <input type="text" id="custPhone" placeholder="Mobile Number" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50">
-                <textarea id="custAddress" placeholder="Pura Address" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 h-16 resize-none"></textarea>
+                <input type="text" id="custName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50" readonly>
+                <input type="text" id="custPhone" placeholder="Mobile Number" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50" readonly>
+                <textarea id="custAddress" placeholder="Pura Delivery Address" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 h-16 resize-none"></textarea>
                 
                 <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-xs font-bold text-slate-700 space-y-2">
                     <span class="text-[9px] tracking-wider text-slate-400 block uppercase">Select Payment Mode</span>
@@ -259,7 +285,7 @@
                     <label id="upiRadioLabel" class="hidden items-center gap-2 cursor-pointer"><input type="radio" name="payMethod" value="UPI" class="accent-emerald-600"> Online Pay via UPI Apps</label>
                 </div>
 
-                <button onclick="confirmAndRouteWhatsApp()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg">Confirm & Send Order</button>
+                <button onclick="submitOrderToDatabase()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg">Place Order on Website</button>
             </div>
         </div>
     </div>
@@ -274,7 +300,7 @@
             </div>
         </div>
         <button onclick="openCheckoutModal()" class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-900 text-xs font-extrabold px-4 py-2.5 rounded-xl flex items-center gap-1.5 active:scale-95">
-            <span data-key="checkoutBtn">Checkout Order</span> <i class="fa-brands fa-whatsapp text-sm"></i>
+            <span>Checkout Order</span> <i class="fa-solid fa-circle-arrow-right"></i>
         </button>
     </div>
 
@@ -283,7 +309,7 @@
     <!-- FIREBASE SYSTEM ENGINE MODULES -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, where, doc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where, doc, deleteDoc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDModwog0Tdj0avtqHJX0Qrj6XyEacuPD4",
@@ -307,66 +333,179 @@
         let merchantUpiId = ""; 
         let storeLogoBase64 = "";
 
-        const langData = {
-            hinglish: {
-                sellerLogin: "Seller Login", welcomeSeller: "Welcome Back, Seller!", manageStore: "Manage Online Store",
-                storeSettings: "Store Profile Settings", addNewItem: "Naya Product Add Karein", clickPhoto: "Click Product Photo",
-                liveOnStore: "Store Par Live Karein", availProducts: "Available Products", checkoutBtn: "Checkout Order"
-            },
-            english: {
-                sellerLogin: "Merchant Portal", welcomeSeller: "Hello Respected Vendor,", manageStore: "Store Operations Panel",
-                storeSettings: "Vendor Configurations", addNewItem: "Publish New Catalog Item", clickPhoto: "Upload Inventory Image",
-                liveOnStore: "Publish to Catalog", availProducts: "Digital Storefront Catalog", checkoutBtn: "Proceed to Checkout"
-            },
-            gujarati: {
-                sellerLogin: "વેપારી લોગીન", welcomeSeller: "સ્વાગત છે, વેપારી મિત્ર!", manageStore: "ઓનલાઇન દુકાન મેનેજ કરો",
-                storeSettings: "દુકાન પ્રોફાઇલ સેટિંગ્સ", addNewItem: "નવો સામાન ઉમેરો", clickPhoto: "પ્રોડક્ટ નો ફોટો પાડો",
-                liveOnStore: "દુકાન પર લાઈવ કરો", availProducts: "દુકાન નો ઉપલબ્ધ સામાન", checkoutBtn: "ઓર્ડર કન્ફર્મ કરો"
-            }
-        };
+        // 👤 SMART LOCAL CUSTOMER SESSION LOGIC
+        function checkCustomerSession() {
+            const savedName = localStorage.getItem("c_name");
+            const savedPhone = localStorage.getItem("c_phone");
 
-        window.changeLanguage = function() {
-            const currentSelectedLang = document.getElementById('langSelector').value;
-            const dictionary = langData[currentSelectedLang];
-            document.querySelectorAll("[data-key]").forEach(element => {
-                const translationKey = element.getAttribute("data-key");
-                if (dictionary[translationKey]) element.innerText = dictionary[translationKey];
+            if (!savedName || !savedPhone) {
+                // If no profile data locally exists, block screen with auth modal
+                document.getElementById('customerLoginModal').classList.remove('hidden');
+            } else {
+                // Set fields auto-presets inside checkout modals
+                document.getElementById('custName').value = savedName;
+                document.getElementById('custPhone').value = savedPhone;
+                listenToCustomerOrdersLive(savedPhone); // Auto sync order list history
+            }
+        }
+
+        window.saveCustomerSession = function() {
+            const name = document.getElementById('cLoginName').value.trim();
+            const phone = document.getElementById('cLoginPhone').value.trim();
+
+            if(!name || phone.length < 10) return alert("Kripya apna sahi naam aur 10-digit phone number likhein!");
+
+            localStorage.setItem("c_name", name);
+            localStorage.setItem("c_phone", phone);
+            
+            document.getElementById('customerLoginModal').classList.add('hidden');
+            checkCustomerSession();
+        }
+
+        // 📦 REALTIME SYNC: LISTEN TO CUSTOMER ORDERS BY PHONE NUMBER
+        function listenToCustomerOrdersLive(phone) {
+            const container = document.getElementById('customerOrdersTrackList');
+            const q = query(collection(db, "orders"), where("storeId", "==", currentStoreId), where("customerPhone", "==", phone));
+
+            onSnapshot(q, (snapshot) => {
+                container.innerHTML = "";
+                if(snapshot.empty) {
+                    container.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">Aapne abhi tak koi order nahi kiya hai.</p>`;
+                    return;
+                }
+
+                snapshot.forEach((docSnapshot) => {
+                    const order = docSnapshot.data();
+                    
+                    let statusColor = "text-amber-500 bg-amber-50";
+                    let stepIndex = 0;
+                    if(order.status === 'accepted') { statusColor = "text-emerald-600 bg-emerald-50"; stepIndex = 1; }
+                    if(order.status === 'shipped') { statusColor = "text-blue-600 bg-blue-50"; stepIndex = 2; }
+                    if(order.status === 'delivered') { statusColor = "text-purple-600 bg-purple-50"; stepIndex = 3; }
+
+                    container.innerHTML += `
+                        <div class="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl text-xs space-y-3 shadow-xs">
+                            <div class="flex justify-between items-center font-bold">
+                                <span class="text-slate-400 font-mono text-[10px]">ID: ${docSnapshot.id.substring(0,8)}...</span>
+                                <span class="${statusColor} px-2 py-0.5 rounded-md uppercase text-[9px] font-black">${order.status}</span>
+                            </div>
+                            <div class="bg-white border border-slate-100 p-2 rounded-xl text-slate-600 font-semibold space-y-0.5">
+                                ${order.items.map(i => `<div>• ${i.name} x${i.qty} = ₹${i.price * i.qty}</div>`).join('')}
+                            </div>
+                            <!-- Micro Pipeline Bar inside list row -->
+                            <div class="flex justify-between text-[9px] text-slate-300 font-bold pt-1 border-t border-slate-100">
+                                <span class="${stepIndex >= 0 ? 'text-emerald-600' : ''}">Placed</span>
+                                <span class="${stepIndex >= 1 ? 'text-emerald-600' : ''}">Packed</span>
+                                <span class="${stepIndex >= 2 ? 'text-blue-600' : ''}">OnWay</span>
+                                <span class="${stepIndex >= 3 ? 'text-purple-600' : ''}">Delivered</span>
+                                <span class="text-slate-800 font-black ml-auto">Total: ₹${order.totalAmount}</span>
+                            </div>
+                        </div>
+                    `;
+                });
             });
         }
 
-        const fileToDataUri = (file) => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = (event) => resolve(event.target.result);
-            reader.onerror = (error) => reject(error);
-            reader.readAsDataURL(file);
-        });
+        // ORDER SUBMIT ENGINE (AUTO POPULATES DATA FROM SAVED SESSION)
+        window.submitOrderToDatabase = async function() {
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const addr = document.getElementById('custAddress').value.trim();
+            const selectedPayment = document.querySelector('input[name="payMethod"]:checked').value;
+
+            if(!addr) return alert("Pehle delivery address likh lijiye!");
+
+            let itemsList = [];
+            let total = 0;
+            
+            Object.keys(cart).forEach(key => {
+                const item = cart[key];
+                itemsList.push({ productId: key, name: item.product.name, unit: item.product.unit, price: item.product.price, qty: item.qty });
+                total += (item.product.price * item.qty);
+            });
+
+            try {
+                await addDoc(collection(db, "orders"), {
+                    storeId: currentStoreId, customerName: name, customerPhone: phone, customerAddress: addr, paymentMode: selectedPayment, items: itemsList, totalAmount: total, status: "pending", createdAt: Date.now()
+                });
+
+                alert(`🎉 Order Placed Successfully!\n\nAap apna live status upar 'My Orders' tab me check kar sakte hain.`);
+
+                if(selectedPayment === "UPI" && merchantUpiId) {
+                    const upiIntentUrl = `upi://pay?pa=${merchantUpiId}&pn=${encodeURIComponent(document.getElementById('navStoreName').innerText)}&am=${total}&cu=INR`;
+                    window.open(upiIntentUrl, '_blank');
+                }
+
+                cart = {};
+                document.getElementById('customerCartBar').classList.add('hidden');
+                renderProducts(allProducts);
+                closeCheckoutModal();
+                openCustomerOrdersModal();
+
+            } catch (e) { alert("Database save error."); }
+        }
+
+        // SELLER DASHBOARD INCOMING WATCH ENGINE LOOP
+        function listenToIncomingOrders() {
+            const ordersListContainer = document.getElementById('sellerIncomingOrdersList');
+            const q = query(collection(db, "orders"), where("storeId", "==", currentStoreId));
+
+            onSnapshot(q, (snapshot) => {
+                ordersListContainer.innerHTML = "";
+                if(snapshot.empty) {
+                    ordersListContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No live orders pending.</p>`; return;
+                }
+                snapshot.forEach((docSnapshot) => {
+                    const order = docSnapshot.data(); const orderId = docSnapshot.id;
+                    let orderItemsHtml = order.items.map(item => `<div>• ${item.name} (${item.unit}) x ${item.qty} = ₹${item.price * item.qty}</div>`).join('');
+                    let controlsHtml = '';
+                    if(order.status === 'pending') controlsHtml = `<button onclick="updateOrderStatus('${orderId}', 'accepted')" class="bg-emerald-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg">Accept & Pack</button>`;
+                    else if(order.status === 'accepted') controlsHtml = `<button onclick="updateOrderStatus('${orderId}', 'shipped')" class="bg-blue-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg">Out for Delivery</button>`;
+                    else if(order.status === 'shipped') controlsHtml = `<button onclick="updateOrderStatus('${orderId}', 'delivered')" class="bg-purple-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg">Mark Delivered</button>`;
+                    else controlsHtml = `<span class="text-xs text-slate-400 font-bold"><i class="fa-solid fa-circle-check text-green-500"></i> Completed</span>`;
+
+                    ordersListContainer.innerHTML += `
+                        <div class="bg-slate-50 border border-slate-200/60 rounded-2xl p-4 text-xs space-y-3 shadow-sm">
+                            <div class="flex justify-between font-bold text-slate-800"><span>ID: <span class="font-mono text-emerald-600">${orderId.substring(0,8)}...</span></span><span class="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded-md uppercase">${order.status}</span></div>
+                            <div class="text-slate-600 font-medium space-y-0.5"><p><b>Client:</b> ${order.customerName} (${order.customerPhone})</p><p><b>Address:</b> ${order.customerAddress}</p><p><b>Pay Mode:</b> ${order.paymentMode}</p></div>
+                            <div class="bg-white border border-slate-100 rounded-xl p-2.5 font-semibold text-slate-500 space-y-1">${orderItemsHtml}</div>
+                            <div class="flex justify-between items-center pt-1 border-t border-slate-100"><span class="font-black text-slate-800 text-sm">₹${order.totalAmount}</span><div class="flex gap-1.5">${controlsHtml} <button onclick="printThermalInvoiceDirect('${orderId}')" class="bg-slate-200 text-slate-800 font-bold text-[10px] px-2.5 py-1.5 rounded-lg"><i class="fa-solid fa-print"></i></button></div></div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        window.updateOrderStatus = async function(orderId, nextStatus) {
+            await updateDoc(doc(db, "orders", orderId), { status: nextStatus });
+        }
+
+        window.printThermalInvoiceDirect = async function(id) {
+            const orderSnap = await getDoc(doc(db, "orders", id)); if(!orderSnap.exists()) return;
+            const order = orderSnap.data(); const printArea = document.getElementById('thermalPrintArea');
+            let receiptHtml = `<div style="text-align:center; font-size:12px; font-weight:bold;">${document.getElementById('navStoreName').innerText}</div><div style="text-align:center; font-size:9px;">Order Invoice Slip</div><div>--------------------------------</div><div style="font-size:9px; word-break:break-all;"><b>ID:</b> ${id}</div><div style="font-size:9px;"><b>Cust:</b> ${order.customerName}</div><div style="font-size:9px;"><b>Addr:</b> ${order.customerAddress}</div><div>--------------------------------</div>`;
+            order.items.forEach(item => { receiptHtml += `<div style="font-size:10px;">${item.name} x${item.qty} = ₹${item.price * item.qty}</div>`; });
+            receiptHtml += `<div>--------------------------------</div><div style="font-size:11px; font-weight:bold;">TOTAL AMOUNT: ₹${order.totalAmount}</div><div style="text-align:center; font-size:9px; margin-top:4px; font-weight:bold; color:white; background:black;">PAY: ${order.paymentMode}</div>`;
+            printArea.innerHTML = receiptHtml; window.print();
+        }
 
         window.processStoreLogo = async function() {
             const logoInput = document.getElementById('storeLogoInput');
-            if(logoInput.files.length > 0) {
-                storeLogoBase64 = await fileToDataUri(logoInput.files[0]);
-                document.getElementById('logoFileName').innerText = "✓ Logo Attached";
-            }
+            if(logoInput.files.length > 0) { storeLogoBase64 = await fileToDataUri(logoInput.files[0]); document.getElementById('logoFileName').innerText = "✓ Logo Attached"; }
         }
 
         window.displayMultiFileNames = function() {
-            const files = document.getElementById('productImagesInput').files;
-            const statusLabel = document.getElementById('multiFileStatus');
+            const files = document.getElementById('productImagesInput').files; const statusLabel = document.getElementById('multiFileStatus');
             if(files.length > 3) { alert("Max 3 photos permitted!"); return; }
-            if(files.length > 0) {
-                statusLabel.innerText = `✓ ${files.length} Photos Selected`;
-                statusLabel.classList.remove('hidden');
-            }
+            if(files.length > 0) { statusLabel.innerText = `✓ ${files.length} Photos Selected`; statusLabel.classList.remove('hidden'); }
         }
 
         window.runParchiOcrParser = async function() {
-            const fileInput = document.getElementById('ocrInput');
-            const statusLabel = document.getElementById('ocrStatusText');
+            const fileInput = document.getElementById('ocrInput'); const statusLabel = document.getElementById('ocrStatusText');
             if (fileInput.files.length === 0) return;
-            statusLabel.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Reading List...`;
+            statusLabel.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Reading...`;
             try {
-                const file = fileInput.files[0];
-                const base64Img = await fileToDataUri(file);
+                const file = fileInput.files[0]; const base64Img = await fileToDataUri(file);
                 const result = await Tesseract.recognize(base64Img, 'eng+hin');
                 const cleanLines = result.data.text.toLowerCase().split('\n');
                 let matchedItemsCount = 0;
@@ -379,320 +518,128 @@
                         matchedItemsCount++;
                     }
                 });
-                if(matchedItemsCount > 0) {
-                    alert(`✓ Parchi scanned! ${matchedItemsCount} items automatically cart me add ho gaye hain.`);
-                    renderProducts(allProducts); updateCartUI();
-                } else { alert("Parchi se koi product match nahi hua."); }
-            } catch (err) { alert("OCR parsing engine error."); }
+                if(matchedItemsCount > 0) { alert(`✓ Scanned! ${matchedItemsCount} items add ho gaye.`); renderProducts(allProducts); updateCartUI(); }
+                else { alert("No product matched."); }
+            } catch (err) { alert("OCR Rejection."); }
             finally { statusLabel.innerHTML = `<i class="fa-solid fa-camera mr-1"></i> Scan List`; fileInput.value = ""; }
         }
 
         async function loadMerchantProfile() {
-            const profileRef = doc(db, "stores", currentStoreId);
-            const profileSnap = await getDoc(profileRef);
+            const profileRef = doc(db, "stores", currentStoreId); const profileSnap = await getDoc(profileRef);
             if(profileSnap.exists()) {
-                const data = profileSnap.data();
-                const resolvedName = data.dukanName || currentStoreId;
+                const data = profileSnap.data(); const resolvedName = data.dukanName || currentStoreId;
                 document.getElementById('navStoreName').innerText = resolvedName.toUpperCase();
                 document.getElementById('infoDukanName').innerText = resolvedName;
-                merchantConfigNumber = data.whatsappNumber || "919999999999";
-                merchantUpiId = data.upiId || "";
-                if(merchantUpiId) {
-                    document.getElementById('upiRadioLabel').classList.remove('hidden');
-                    document.getElementById('upiRadioLabel').classList.add('flex');
-                }
-                document.getElementById('mDukanName').value = data.dukanName || "";
-                document.getElementById('mWhatsapp').value = data.whatsappNumber || "";
-                document.getElementById('mGst').value = data.gstNumber || "";
-                document.getElementById('mUpi').value = data.upiId || "";
-                document.getElementById('mMaps').value = data.mapsLink || "";
-                document.getElementById('mAddress').value = data.address || "";
+                merchantConfigNumber = data.whatsappNumber || "919999999999"; merchantUpiId = data.upiId || "";
+                if(merchantUpiId) { document.getElementById('upiRadioLabel').className = "flex items-center gap-2 cursor-pointer"; }
+                document.getElementById('mDukanName').value = data.dukanName || ""; document.getElementById('mWorkspace').value = data.whatsappNumber || "";
+                document.getElementById('mGst').value = data.gstNumber || ""; document.getElementById('mUpi').value = data.upiId || "";
+                document.getElementById('mMaps').value = data.mapsLink || ""; document.getElementById('mAddress').value = data.address || "";
                 if(data.gstNumber) document.getElementById('infoGst').innerText = data.gstNumber;
                 if(data.address) document.getElementById('infoAddress').innerText = data.address;
-                if(data.mapsLink) {
-                    document.getElementById('infoMapsLink').href = data.mapsLink;
-                    document.getElementById('mapsActionContainer').classList.remove('hidden');
-                }
-                if(data.logo) {
-                    storeLogoBase64 = data.logo;
-                    document.getElementById('defaultLogoIcon').classList.add('hidden');
-                    const img = document.getElementById('storeLiveLogo');
-                    img.src = data.logo; img.classList.remove('hidden');
-                }
+                if(data.mapsLink) { document.getElementById('infoMapsLink').href = data.mapsLink; document.getElementById('mapsActionContainer').classList.remove('hidden'); }
+                if(data.logo) { storeLogoBase64 = data.logo; document.getElementById('defaultLogoIcon').classList.add('hidden'); const img = document.getElementById('storeLiveLogo'); img.src = data.logo; img.classList.remove('hidden'); }
             }
         }
 
         window.saveStoreProfile = async function() {
-            const dName = document.getElementById('mDukanName').value.trim();
-            const wNum = document.getElementById('mWhatsapp').value.trim();
-            if(!dName || !wNum) return alert("Dukan ka naam aur number mandatory hai!");
+            const dName = document.getElementById('mDukanName').value.trim(); const wNum = document.getElementById('mWorkspace').value.trim();
+            if(!dName || !wNum) return alert("Fields required!");
             await setDoc(doc(db, "stores", currentStoreId), {
-                dukanName: dName, whatsappNumber: wNum, gstNumber: document.getElementById('mGst').value.trim(),
-                upiId: document.getElementById('mUpi').value.trim(),
-                mapsLink: document.getElementById('mMaps').value.trim(), address: document.getElementById('mAddress').value.trim(), logo: storeLogoBase64 || ""
+                dukanName: dName, whatsappNumber: wNum, gstNumber: document.getElementById('mGst').value.trim(), upiId: document.getElementById('mUpi').value.trim(), mapsLink: document.getElementById('mMaps').value.trim(), address: document.getElementById('mAddress').value.trim(), logo: storeLogoBase64 || ""
             });
             alert("Profile Saved!"); loadMerchantProfile();
         }
 
         window.loginSeller = function() {
             if(document.getElementById('loginPassword').value.trim() === "786786") {
-                document.getElementById('sellerPanel').classList.remove('hidden');
-                sessionStorage.setItem("seller_logged_in", "true"); closeLoginModal();
+                document.getElementById('sellerPanel').classList.remove('hidden'); sellerPanel.scrollIntoView(); sessionStorage.setItem("seller_logged_in", "true"); closeLoginModal();
             } else { alert("Access Denied!"); }
         }
 
-        window.logoutSeller = function() {
-            sessionStorage.removeItem("seller_logged_in"); document.getElementById('sellerPanel').classList.add('hidden');
-        }
-
+        window.logoutSeller = function() { sessionStorage.removeItem("seller_logged_in"); document.getElementById('sellerPanel').classList.add('hidden'); }
         if(sessionStorage.getItem("seller_logged_in") === "true") document.getElementById('sellerPanel').classList.remove('hidden');
 
         window.shareStoreLink = function() {
-            const shareUrl = window.location.href.split('?')[0] + `?store=${currentStoreId}`;
-            navigator.clipboard.writeText(shareUrl); alert("Link copied!");
+            const shareUrl = window.location.href.split('?')[0] + `?store=${currentStoreId}`; navigator.clipboard.writeText(shareUrl); alert("Link copied!");
         }
 
-        // 🎯 FIXED DATA MAPPING ATTACHING DESCRIPTION ON UPLOAD
         window.addProductToFirebase = async function() {
-            const name = document.getElementById('pName').value.trim();
-            const price = document.getElementById('pPrice').value.trim();
-            const unit = document.getElementById('pUnit').value.trim();
-            const desc = document.getElementById('pDesc').value.trim(); // Reads value perfectly from text block
-            const cat = document.getElementById('pCategory').value;
-            const filesInput = document.getElementById('productImagesInput');
+            const name = document.getElementById('pName').value.trim(); const price = document.getElementById('pPrice').value.trim();
+            const unit = document.getElementById('pUnit').value.trim(); const desc = document.getElementById('pDesc').value.trim();
+            const cat = document.getElementById('pCategory').value; const filesInput = document.getElementById('productImagesInput');
             const uploadBtn = document.getElementById('uploadBtn');
-
             if(!name || !price || !unit) return alert("Fill mandatory fields!");
             uploadBtn.innerText = "Syncing...";
-
             let imageArray = [];
             try {
                 if(filesInput.files.length > 0) {
-                    for(let i=0; i<filesInput.files.length; i++) {
-                        let dataUri = await fileToDataUri(filesInput.files[i]); imageArray.push(dataUri);
-                    }
+                    for(let i=0; i<filesInput.files.length; i++) { let dataUri = await fileToDataUri(filesInput.files[i]); imageArray.push(dataUri); }
                 } else { imageArray.push("https://placehold.co/150?text=Product"); }
-
-                // 🎯 Added description field mapping right into firestore dataset package
-                await addDoc(collection(db, "products"), {
-                    storeId: currentStoreId, 
-                    name: name, 
-                    price: parseFloat(price), 
-                    unit: unit, 
-                    description: desc, // 👈 Saved completely now
-                    category: cat, 
-                    images: imageArray, 
-                    createdAt: Date.now()
-                });
-
-                alert("Product multi-photos aur details ke sath live ho gaya!");
-                document.getElementById('pName').value = ""; document.getElementById('pPrice').value = "";
-                document.getElementById('pUnit').value = ""; document.getElementById('pDesc').value = "";
-                filesInput.value = ""; document.getElementById('multiFileStatus').classList.add('hidden');
+                await addDoc(collection(db, "products"), { storeId: currentStoreId, name, price: parseFloat(price), unit, description: desc, category: cat, images: imageArray, createdAt: Date.now() });
+                alert("Product live!");
+                document.getElementById('pName').value = ""; document.getElementById('pPrice').value = ""; document.getElementById('pUnit').value = ""; document.getElementById('pDesc').value = ""; filesInput.value = ""; document.getElementById('multiFileStatus').classList.add('hidden');
             } catch (e) { alert("Write failed."); }
             finally { uploadBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Store Par Live Karein'; }
         }
 
-        window.deleteProduct = async function(id) {
-            if(confirm("Delete item?")) await deleteDoc(doc(db, "products", id));
-        }
+        window.deleteProduct = async function(id) { if(confirm("Delete item?")) await deleteDoc(doc(db, "products", id)); }
 
         function listenToLiveStoreCatalog() {
-            const container = document.getElementById('productsContainer');
-            const invList = document.getElementById('sellerInventoryList');
+            const container = document.getElementById('productsContainer'); const invList = document.getElementById('sellerInventoryList');
             const q = query(collection(db, "products"), where("storeId", "==", currentStoreId));
-
             onSnapshot(q, (snapshot) => {
-                allProducts = [];
-                snapshot.forEach((doc) => {
-                    let pData = doc.data(); pData.id = doc.id; allProducts.push(pData);
-                });
+                allProducts = []; snapshot.forEach((doc) => { let pData = doc.data(); pData.id = doc.id; allProducts.push(pData); });
                 renderProducts(allProducts); renderInventoryManager(allProducts);
             });
         }
 
         function renderProducts(items) {
             const container = document.getElementById('productsContainer'); container.innerHTML = "";
-            if(items.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-12 font-medium">Catalog is currently empty.</p>`; return;
-            }
+            if(items.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-12 font-medium">Catalog empty.</p>`; return; }
             items.forEach((product) => {
-                const imgList = product.images || ["https://placehold.co/150?text=Product"];
-                const currentQty = cart[product.id] ? cart[product.id].qty : 0;
-                
-                let imagesHtml = '';
-                imgList.forEach((imgUrl) => {
-                    imagesHtml += `<img src="${imgUrl}" onclick="openDetailsModal('${product.id}')" class="snap-center object-cover h-full w-full rounded-lg min-w-full inline-block cursor-pointer">`;
-                });
-
-                let actionBtnHtml = `
-                    <button onclick="modifyCartQty('${product.id}', 1)" class="border border-emerald-500 text-emerald-600 text-[11px] font-extrabold px-3 py-1.5 rounded-xl bg-emerald-50/30 hover:bg-emerald-500 hover:text-white transition-all shadow-sm active:scale-90">ADD</button>
-                `;
-                if(currentQty > 0) {
-                    actionBtnHtml = `
-                        <div class="flex items-center bg-emerald-500 text-white rounded-xl text-xs font-extrabold shadow-sm">
-                            <button onclick="modifyCartQty('${product.id}', -1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-l-xl"><i class="fa-solid fa-minus text-[10px]"></i></button>
-                            <span class="px-2 font-black select-none text-slate-900">${currentQty}</span>
-                            <button onclick="modifyCartQty('${product.id}', 1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-r-xl"><i class="fa-solid fa-plus text-[10px]"></i></button>
-                        </div>
-                    `;
-                }
-
-                container.innerHTML += `
-                    <div class="bg-white border border-slate-100/80 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between space-y-3">
-                        <div class="bg-slate-50/50 rounded-xl p-1 flex overflow-x-auto snap-x h-32 scrollbar-none shadow-inner relative">
-                            ${imagesHtml}
-                            ${imgList.length > 1 ? '<span class="absolute bottom-1 right-2 bg-black/40 text-[8px] text-white font-bold px-1.5 py-0.5 rounded-full backdrop-blur-xs"><i class="fa-solid fa-images"></i> Swipe</span>' : ''}
-                        </div>
-                        <div onclick="openDetailsModal('${product.id}')" class="space-y-0.5 cursor-pointer">
-                            <h4 class="font-extrabold text-xs text-slate-800 line-clamp-1 tracking-tight">${product.name}</h4>
-                            <p class="text-[10px] text-slate-400 font-bold">${product.unit}</p>
-                        </div>
-                        <div class="flex justify-between items-center pt-0.5">
-                            <span class="font-black text-sm text-slate-800">₹${product.price}</span>
-                            <div id="action-wrapper-${product.id}">${actionBtnHtml}</div>
-                        </div>
-                    </div>
-                `;
+                const imgList = product.images || ["https://placehold.co/150?text=Product"]; const currentQty = cart[product.id] ? cart[product.id].qty : 0;
+                let imagesHtml = ''; imgList.forEach((imgUrl) => { imagesHtml += `<img src="${imgUrl}" onclick="openDetailsModal('${product.id}')" class="snap-center object-cover h-full w-full rounded-lg min-w-full inline-block cursor-pointer">`; });
+                let actionBtnHtml = `<button onclick="modifyCartQty('${product.id}', 1)" class="border border-emerald-500 text-emerald-600 text-[11px] font-extrabold px-3 py-1.5 rounded-xl bg-emerald-50/30 hover:bg-emerald-500 hover:text-white transition-all shadow-sm active:scale-90">ADD</button>`;
+                if(currentQty > 0) { actionBtnHtml = `<div class="flex items-center bg-emerald-500 text-white rounded-xl text-xs font-extrabold shadow-sm"><button onclick="modifyCartQty('${product.id}', -1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-l-xl"><i class="fa-solid fa-minus text-[10px]"></i></button><span class="px-2 font-black select-none text-slate-900">${currentQty}</span><button onclick="modifyCartQty('${product.id}', 1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-r-xl"><i class="fa-solid fa-plus text-[10px]"></i></button></div>`; }
+                container.innerHTML += `<div class="bg-white border border-slate-100/80 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between space-y-3"><div class="bg-slate-50/50 rounded-xl p-1 flex overflow-x-auto snap-x h-32 scrollbar-none shadow-inner relative">${imagesHtml}${imgList.length > 1 ? '<span class="absolute bottom-1 right-2 bg-black/40 text-[8px] text-white font-bold px-1.5 py-0.5 rounded-full backdrop-blur-xs"><i class="fa-solid fa-images"></i> Swipe</span>' : ''}</div><div onclick="openDetailsModal('${product.id}')" class="space-y-0.5 cursor-pointer"><h4 class="font-extrabold text-xs text-slate-800 line-clamp-1 tracking-tight">${product.name}</h4><p class="text-[10px] text-slate-400 font-bold">${product.unit}</p></div><div class="flex justify-between items-center pt-0.5"><span class="font-black text-sm text-slate-800">₹${product.price}</span><div id="action-wrapper-${product.id}">${actionBtnHtml}</div></div></div>`;
             });
         }
 
         window.modifyCartQty = function(id, countDelta) {
             const product = allProducts.find(p => p.id === id); if(!product) return;
-            if(!cart[id]) cart[id] = { product, qty: 0 };
-            cart[id].qty += countDelta;
-            if(cart[id].qty <= 0) delete cart[id];
+            if(!cart[id]) cart[id] = { product, qty: 0 }; cart[id].qty += countDelta; if(cart[id].qty <= 0) delete cart[id];
             renderProducts(allProducts); updateCartUI();
         }
 
-        function updateCartUI() {
-            const cartBar = document.getElementById('customerCartBar');
-            const cartCount = document.getElementById('cartCount');
-            const cartKeys = Object.keys(cart);
-            if(cartKeys.length > 0) {
-                let totalItemsCount = 0; let totalBillingValue = 0;
-                cartKeys.forEach(key => {
-                    totalItemsCount += cart[key].qty; totalBillingValue += (cart[key].product.price * cart[key].qty);
-                });
-                cartBar.classList.remove('hidden');
-                cartCount.innerText = `${totalItemsCount} Items • Total: ₹${totalBillingValue}`;
-            } else { cartBar.classList.add('hidden'); }
-        }
-
-        // 🎯 FIXED CLIENT SIDE DESCRIPTION POPUP INJECTOR
         window.openDetailsModal = function(id) {
             const p = allProducts.find(item => item.id === id); if(!p) return;
-            document.getElementById('modalProductName').innerText = p.name;
-            document.getElementById('modalProductPrice').innerText = `₹${p.price}`;
-            document.getElementById('modalProductUnit').innerText = p.unit;
-            
-            // 🎯 Reads and maps description field right into inner text box safely
-            document.getElementById('modalProductDesc').innerText = p.description || "Is product ke liye koi extra details nahi di gayi hain.";
-            
-            const imgList = p.images || ["https://placehold.co/150?text=Product"];
-            const imgContainer = document.getElementById('modalImageContainer'); imgContainer.innerHTML = "";
-            imgList.forEach(imgUrl => {
-                imgContainer.innerHTML += `<img src="${imgUrl}" class="snap-center object-contain h-full w-full rounded-xl min-w-full inline-block">`;
-            });
+            document.getElementById('modalProductName').innerText = p.name; document.getElementById('modalProductPrice').innerText = `₹${p.price}`; document.getElementById('modalProductUnit').innerText = p.unit; document.getElementById('modalProductDesc').innerText = p.description || "No details provided.";
+            const imgList = p.images || ["https://placehold.co/150?text=Product"]; const imgContainer = document.getElementById('modalImageContainer'); imgContainer.innerHTML = "";
+            imgList.forEach(imgUrl => { imgContainer.innerHTML += `<img src="${imgUrl}" class="snap-center object-contain h-full w-full rounded-xl min-w-full inline-block">`; });
             document.getElementById('detailsModal').classList.remove('hidden');
-        }
-
-        window.closeDetailsModal = function() { document.getElementById('detailsModal').classList.add('hidden'); }
-
-        window.printBlankReceipt = function() {
-            const printArea = document.getElementById('thermalPrintArea'); let total = 0;
-            let receiptHtml = `
-                <div style="text-align:center; font-size:12px; font-weight:bold;">${document.getElementById('navStoreName').innerText}</div>
-                <div style="text-align:center; font-size:9px;">Ahmedabad, Hyperlocal Live</div>
-                <div>--------------------------------</div>
-                <div style="font-size:10px;"><b>ITEMS LIST RECEIPT</b></div>
-                <div>--------------------------------</div>
-            `;
-            Object.keys(cart).forEach(key => {
-                const item = cart[key]; const cost = item.product.price * item.qty;
-                receiptHtml += `<div style="font-size:10px;">${item.product.name} x${item.qty} = ₹${cost}</div>`;
-                total += cost;
-            });
-            receiptHtml += `
-                <div>--------------------------------</div>
-                <div style="font-size:11px; font-weight:bold;">TOTAL AMOUNT: ₹${total}</div>
-                <div style="text-align:center; font-size:9px; margin-top:4px;">Thank You for Shopping!</div>
-            `;
-            if(total === 0) return alert("Print block! Cart empty hai.");
-            printArea.innerHTML = receiptHtml; window.print();
-        }
-
-        window.confirmAndRouteWhatsApp = function() {
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const addr = document.getElementById('custAddress').value.trim();
-            const selectedPayment = document.querySelector('input[name="payMethod"]:checked').value;
-
-            if(!name || !phone || !addr) return alert("Delivery details mandatory!");
-
-            let total = 0;
-            let msg = `🛒 *NEW DIGITAL DUKAN ORDER*\n`;
-            msg += `────────────────────\n`;
-            msg += `👤 *Customer:* ${name}\n`;
-            msg += `📞 *Phone:* ${phone}\n`;
-            msg += `📍 *Address:* ${addr}\n`;
-            msg += `💳 *Payment Mode:* ${selectedPayment}\n`;
-            msg += `────────────────────\n`;
-            msg += `📦 *Order Items List:*\n`;
-
-            Object.keys(cart).forEach(key => {
-                const item = cart[key]; const itemCost = item.product.price * item.qty;
-                msg += `• ${item.product.name} x ${item.qty} = ₹${itemCost}\n`;
-                total += itemCost;
-            });
-
-            msg += `────────────────────\n`;
-            msg += `💰 *Total Bill: ₹${total}*\n`;
-
-            if(selectedPayment === "UPI" && merchantUpiId) {
-                const upiIntentUrl = `upi://pay?pa=${merchantUpiId}&pn=${encodeURIComponent(document.getElementById('navStoreName').innerText)}&am=${total}&cu=INR`;
-                msg += `\n🔗 *UPI Payment Link:* Checked Paid Live\n`;
-                window.open(upiIntentUrl, '_blank');
-            }
-
-            msg += `\nKripya mera order accept karke updates bhejiye!`;
-            const parsedWhatsAppUrl = `https://wa.me/${merchantConfigNumber}?text=${encodeURIComponent(msg)}`;
-            
-            setTimeout(() => {
-                window.open(parsedWhatsAppUrl, '_blank');
-                cart = {}; document.getElementById('customerCartBar').classList.add('hidden');
-                renderProducts(allProducts); closeCheckoutModal();
-            }, 1000);
         }
 
         function renderInventoryManager(items) {
             const invList = document.getElementById('sellerInventoryList'); invList.innerHTML = "";
             items.forEach(p => {
                 const thumb = p.images ? p.images[0] : "https://placehold.co/150?text=Product";
-                invList.innerHTML += `
-                    <div class="flex items-center justify-between bg-slate-50 p-2 rounded-2xl border border-slate-100">
-                        <div class="flex items-center gap-3">
-                            <img src="${thumb}" class="w-9 h-9 object-cover rounded-xl shadow-sm">
-                            <div><span class="font-extrabold text-slate-800 block tracking-tight">${p.name}</span><span class="text-slate-400 text-[10px] font-bold">₹${p.price}</span></div>
-                        </div>
-                        <button onclick="deleteProduct('${p.id}')" class="text-slate-400 hover:text-red-500 p-2 bg-white rounded-xl shadow-sm"><i class="fa-solid fa-trash-can"></i></button>
-                    </div>
-                `;
+                invList.innerHTML += `<div class="flex items-center justify-between bg-slate-50 p-2 rounded-2xl border border-slate-100"><div class="flex items-center gap-3"><img src="${thumb}" class="w-9 h-9 object-cover rounded-xl shadow-sm"><div><span class="font-extrabold text-slate-800 block tracking-tight">${p.name}</span><span class="text-slate-400 text-[10px] font-bold">₹${p.price}</span></div></div><button onclick="deleteProduct('${p.id}')" class="text-slate-400 hover:text-red-500 p-2 bg-white rounded-xl shadow-sm"><i class="fa-solid fa-trash-can"></i></button></div>`;
             });
         }
 
         window.triggerLocalSearch = function() {
-            const stringKeyword = document.getElementById('storeSearchBar').value.trim().toLowerCase();
-            if(!stringKeyword) renderProducts(allProducts);
-            else renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(stringKeyword)));
+            const k = document.getElementById('storeSearchBar').value.trim().toLowerCase();
+            if(!k) renderProducts(allProducts); else renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(k)));
         }
 
-        window.filterCategory = function(cat) {
-            if(cat === "All") renderProducts(allProducts);
-            else renderProducts(allProducts.filter(p => p.category === cat));
-        }
+        window.filterCategory = function(cat) { if(cat === "All") renderProducts(allProducts); else renderProducts(allProducts.filter(p => p.category === cat)); }
 
-        loadMerchantProfile(); listenToLiveStoreCatalog();
+        // Start initialization threads
+        loadMerchantProfile(); 
+        listenToLiveStoreCatalog();
+        listenToIncomingOrders();
+        checkCustomerSession(); // 👈 Verifies localStorage gate instantly on boot
     </script>
 
     <!-- WINDOW MODAL CONTROLLERS -->
@@ -703,6 +650,8 @@
         function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
         function openInfoModal() { document.getElementById('infoModal').classList.remove('hidden'); }
         function closeInfoModal() { document.getElementById('infoModal').classList.add('hidden'); }
+        function openCustomerOrdersModal() { document.getElementById('customerOrdersModal').classList.remove('hidden'); }
+        function closeCustomerOrdersModal() { document.getElementById('customerOrdersModal').classList.add('hidden'); }
     </script>
 </body>
 </html>
