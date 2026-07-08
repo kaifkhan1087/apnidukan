@@ -3,40 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApniDukan - Professional Retail Platform</title>
+    <title>ApniDukan - Premium Retail Platform</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Google Fonts & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); 
+            min-height: 100vh;
+        }
         .scrollbar-none::-webkit-scrollbar { display: none; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
     </style>
 </head>
-<body class="pb-24">
+<body class="pb-28">
 
     <!-- TOP NAVIGATION BAR -->
-    <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50 px-4 py-3 flex justify-between items-center max-w-md mx-auto">
-        <div class="flex items-center gap-2">
-            <div class="bg-green-600 text-white p-2.5 rounded-xl shadow-md shadow-green-100">
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100 sticky top-0 z-50 px-4 py-3.5 flex justify-between items-center max-w-md mx-auto rounded-b-2xl">
+        <div class="flex items-center gap-3">
+            <div class="bg-gradient-to-tr from-emerald-500 to-green-600 text-white p-2.5 rounded-2xl shadow-lg shadow-emerald-100 active:scale-95 transition-transform">
                 <i class="fa-solid fa-shop text-lg"></i>
             </div>
             <div>
-                <span class="text-[10px] text-gray-400 block font-medium uppercase tracking-wider" id="navStoreLocation">Ahmedabad, Live</span>
-                <h1 class="text-md font-bold text-gray-800 tracking-tight" id="navStoreName">Loading Store...</h1>
+                <span class="text-[9px] text-slate-400 block font-bold uppercase tracking-widest" id="navStoreLocation">Ahmedabad, Live</span>
+                <h1 class="text-md font-extbbold text-slate-800 tracking-tight flex items-center gap-1">
+                    <span id="navStoreName" class="font-bold">Loading Store...</span>
+                </h1>
             </div>
         </div>
         
         <div class="flex items-center gap-2">
-            <!-- Language Selector Option Toggle -->
-            <select id="langSelector" onchange="changeLanguage()" class="bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-lg p-1.5 focus:outline-none">
+            <select id="langSelector" onchange="changeLanguage()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl p-2 font-medium focus:outline-none focus:border-emerald-500 cursor-pointer transition-colors">
                 <option value="hinglish">Hinglish</option>
                 <option value="english">English</option>
                 <option value="gujarati">ગુજરાતી</option>
             </select>
-            <button onclick="openLoginModal()" id="sellerModeBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-2.5 py-2 rounded-lg transition-all flex items-center gap-1.5">
-                <i class="fa-solid fa-lock text-green-600" id="lockIcon"></i> <span id="loginBtnText" data-key="sellerLogin">Seller Login</span>
+            <button onclick="openLoginModal()" id="sellerModeBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 active:scale-95">
+                <i class="fa-solid fa-lock text-emerald-600" id="lockIcon"></i> <span id="loginBtnText" data-key="sellerLogin">Seller Login</span>
             </button>
         </div>
     </nav>
@@ -44,57 +54,64 @@
     <!-- ========================================== -->
     <!-- MAIN INTERFACE CONTAINER -->
     <!-- ========================================== -->
-    <div class="max-w-md mx-auto p-4 space-y-5">
+    <div class="max-w-md mx-auto p-4 space-y-6">
 
         <!-- 1. PRO SELLER DASHBOARD -->
-        <div id="sellerPanel" class="hidden space-y-4">
-            <div class="bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl p-4 text-white shadow-lg flex justify-between items-center">
-                <div>
-                    <p class="text-xs text-green-100 font-semibold" data-key="welcomeSeller">Welcome Back, Seller!</p>
-                    <h3 class="text-lg font-bold" data-key="manageStore">Manage Online Store</h3>
+        <div id="sellerPanel" class="hidden space-y-5 animate-fadeIn">
+            <div class="bg-gradient-to-br from-slate-800 via-slate-900 to-emerald-950 rounded-3xl p-5 text-white shadow-xl flex justify-between items-center relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 text-white/5 text-9xl font-black pointer-events-none"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="relative z-10 space-y-0.5">
+                    <p class="text-xs text-emerald-400 font-bold tracking-wider uppercase" data-key="welcomeSeller">Welcome Back, Seller!</p>
+                    <h3 class="text-lg font-extrabold" data-key="manageStore">Manage Online Store</h3>
                 </div>
-                <button onclick="logoutSeller()" class="bg-red-500/20 hover:bg-red-500/40 text-white text-xs px-2.5 py-1.5 rounded-lg font-medium transition-all">
-                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                <button onclick="logoutSeller()" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-xs font-bold px-3 py-2 rounded-xl transition-all active:scale-95">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
                 </button>
             </div>
 
             <!-- Merchant Store Settings Setup Bundle -->
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-3">
-                <h2 class="text-sm font-bold text-gray-800 flex items-center gap-2">
-                    <i class="fa-solid fa-gear text-green-600"></i> <span data-key="storeSettings">Store Profile Settings</span>
+            <div class="glass-card rounded-3xl p-5 shadow-xl shadow-slate-100/50 border border-white/60 space-y-4">
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-emerald-500 text-base"></i> <span data-key="storeSettings">Store Profile Settings</span>
                 </h2>
-                <div class="grid grid-cols-2 gap-2">
-                    <input type="text" id="mDukanName" placeholder="Dukan Ka Naam" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-green-500">
-                    <input type="text" id="mWhatsapp" placeholder="WhatsApp Number (e.g., 91999...)" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-green-500">
+                <div class="space-y-3">
+                    <div class="relative">
+                        <i class="fa-solid fa-signature absolute left-3 top-3.5 text-slate-400 text-xs"></i>
+                        <input type="text" id="mDukanName" placeholder="Dukan Ka Naam" class="w-full pl-9 pr-3 py-3 border border-slate-200/80 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all shadow-inner">
+                    </div>
+                    <div class="relative">
+                        <i class="fa-brands fa-whatsapp absolute left-3 top-3.5 text-slate-400 text-sm"></i>
+                        <input type="text" id="mWhatsapp" placeholder="WhatsApp Number (e.g., 91999...)" class="w-full pl-9 pr-3 py-3 border border-slate-200/80 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all shadow-inner">
+                    </div>
                 </div>
-                <button onclick="saveStoreProfile()" class="w-full bg-gray-800 text-white text-xs font-bold py-2 rounded-xl transition-all">Save Profile Configurations</button>
+                <button onclick="saveStoreProfile()" class="w-full bg-slate-800 hover:bg-slate-900 text-white text-xs font-extrabold py-3 rounded-2xl transition-all shadow-md active:scale-[0.99]">Save Profile Configurations</button>
             </div>
 
             <!-- Add Product Form -->
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-3">
-                <h2 class="text-sm font-bold text-gray-800 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-plus text-green-600"></i> <span data-key="addNewItem">Naya Product Add Karein</span>
+            <div class="glass-card rounded-3xl p-5 shadow-xl shadow-slate-100/50 border border-white/60 space-y-4">
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-square-plus text-emerald-500 text-base"></i> <span data-key="addNewItem">Naya Product Add Karein</span>
                 </h2>
                 
                 <div class="flex items-center justify-center w-full">
-                    <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-200 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all">
-                        <div class="flex flex-col items-center justify-center pt-3 pb-3">
-                            <i class="fa-solid fa-camera text-xl text-gray-400 mb-1"></i>
-                            <p class="text-xs text-gray-500 font-medium" data-key="clickPhoto">Click Product Photo</p>
-                            <p id="fileName" class="text-[10px] text-green-600 font-semibold mt-1"></p>
+                    <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-slate-50/50 hover:bg-emerald-50/20 hover:border-emerald-400 transition-all group">
+                        <div class="flex flex-col items-center justify-center pt-3 pb-3 text-center">
+                            <i class="fa-solid fa-cloud-arrow-up text-xl text-slate-400 group-hover:text-emerald-500 group-hover:scale-110 transition-all mb-1.5"></i>
+                            <p class="text-xs text-slate-600 font-semibold" data-key="clickPhoto">Click Product Photo</p>
+                            <p id="fileName" class="text-[10px] text-emerald-600 font-bold mt-1 bg-emerald-50 px-2 py-0.5 rounded-full hidden"></p>
                         </div>
                         <input type="file" id="productImage" accept="image/*" class="hidden" onchange="displayFileName()" />
                     </label>
                 </div>
 
-                <input type="text" id="pName" placeholder="Product Name" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500">
+                <input type="text" id="pName" placeholder="Product Name" class="w-full px-4 py-3 border border-slate-200/80 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all bg-white shadow-inner">
                 
                 <div class="grid grid-cols-2 gap-3">
-                    <input type="number" id="pPrice" placeholder="Price (₹)" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500">
-                    <input type="text" id="pUnit" placeholder="Unit (e.g., 1kg, 500ml)" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500">
+                    <input type="number" id="pPrice" placeholder="Price (₹)" class="w-full px-4 py-3 border border-slate-200/80 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all bg-white shadow-inner">
+                    <input type="text" id="pUnit" placeholder="Unit (e.g., 1kg, 500ml)" class="w-full px-4 py-3 border border-slate-200/80 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all bg-white shadow-inner">
                 </div>
 
-                <select id="pCategory" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:border-green-500 text-gray-600">
+                <select id="pCategory" class="w-full px-4 py-3 border border-slate-200/80 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500 text-slate-600 font-medium shadow-sm cursor-pointer">
                     <option value="Groceries">Groceries / Kirana</option>
                     <option value="Dairy">Dairy & Milk Products</option>
                     <option value="Fruits">Fruits & Vegetables</option>
@@ -102,80 +119,91 @@
                     <option value="Others">Others</option>
                 </select>
                 
-                <button onclick="addProductToFirebase()" id="uploadBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2">
+                <button onclick="addProductToFirebase()" id="uploadBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-extrabold py-3.5 rounded-2xl text-xs transition-all shadow-lg shadow-emerald-100 flex items-center justify-center gap-2 active:scale-[0.99]">
                     <i class="fa-solid fa-paper-plane"></i> <span data-key="liveOnStore">Store Par Live Karein</span>
                 </button>
             </div>
 
             <!-- Inventory Live Editor Grid Component -->
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-3">
-                <h2 class="text-sm font-bold text-gray-800"><i class="fa-solid fa-list-check text-green-600 mr-1"></i> Live Inventory Items</h2>
-                <div id="sellerInventoryList" class="space-y-2 max-h-64 overflow-y-auto">
-                    <!-- Current live store items with live action delete items go here -->
+            <div class="glass-card rounded-3xl p-5 shadow-xl shadow-slate-100/50 border border-white/60 space-y-3">
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-boxes-stacked text-emerald-500"></i> Live Inventory Items
+                </h2>
+                <div id="sellerInventoryList" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                    <!-- Current live store items go here -->
                 </div>
             </div>
         </div>
 
         <!-- 2. CUSTOMER VIEW MODULE -->
-        <div id="customerPanel" class="space-y-4">
-            <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none" id="categoryTabs">
-                <button onclick="filterCategory('All')" class="bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap shadow-sm">All Items</button>
-                <button onclick="filterCategory('Groceries')" class="bg-white border border-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap">Groceries</button>
-                <button onclick="filterCategory('Dairy')" class="bg-white border border-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap">Dairy</button>
-                <button onclick="filterCategory('Fruits')" class="bg-white border border-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap">Fruits</button>
-                <button onclick="filterCategory('Snacks')" class="bg-white border border-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap">Snacks</button>
+        <div id="customerPanel" class="space-y-5">
+            <!-- Category Filter Buttons -->
+            <div class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-none snap-x" id="categoryTabs">
+                <button onclick="filterCategory('All')" class="bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-md shadow-emerald-100 transition-all snap-center">All Items</button>
+                <button onclick="filterCategory('Groceries')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm hover:bg-slate-50 transition-all snap-center">Groceries</button>
+                <button onclick="filterCategory('Dairy')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm hover:bg-slate-50 transition-all snap-center">Dairy</button>
+                <button onclick="filterCategory('Fruits')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm hover:bg-slate-50 transition-all snap-center">Fruits</button>
+                <button onclick="filterCategory('Snacks')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm hover:bg-slate-50 transition-all snap-center">Snacks</button>
             </div>
 
             <div class="space-y-3">
-                <h3 class="text-sm font-bold text-gray-800 px-1" data-key="availProducts">Available Products</h3>
-                <div id="productsContainer" class="grid grid-cols-2 gap-3">
-                    <p class="text-xs text-gray-400 col-span-2 text-center py-8">Loading digital catalog...</p>
+                <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-widest px-1" data-key="availProducts">Available Products</h3>
+                <div id="productsContainer" class="grid grid-cols-2 gap-3.5">
+                    <p class="text-xs text-slate-400 col-span-2 text-center py-12 font-medium">Loading digital catalog...</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- SELLER MASTER SECURITY LOGIN MODAL -->
-    <div id="loginModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-xl">
+    <div id="loginModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100 animate-scaleUp">
             <div class="flex justify-between items-center">
-                <h3 class="font-bold text-md text-gray-800">Merchant Access Lock</h3>
-                <button onclick="closeLoginModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h3 class="font-extrabold text-md text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-emerald-500"></i> Merchant Access Lock
+                </h3>
+                <button onclick="closeLoginModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-2 rounded-full h-8 w-8 flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <input type="password" id="loginPassword" placeholder="Enter Security Password" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500">
-            <button onclick="loginSeller()" id="loginSubmitBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md">Verify Password</button>
+            <div class="relative">
+                <i class="fa-solid fa-key absolute left-3 top-3.5 text-slate-400 text-xs"></i>
+                <input type="password" id="loginPassword" placeholder="Enter Security Password" class="w-full pl-9 pr-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all shadow-inner bg-slate-50/50">
+            </div>
+            <button onclick="loginSeller()" id="loginSubmitBtn" class="w-full bg-slate-900 hover:bg-black text-white font-extrabold py-3.5 rounded-2xl text-xs transition-all shadow-md active:scale-[0.99]">Verify Password</button>
         </div>
     </div>
 
     <!-- CLIENT DETAILS CHECKOUT MODAL WINDOW -->
-    <div id="checkoutModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-xl">
+    <div id="checkoutModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100 animate-scaleUp">
             <div class="flex justify-between items-center">
-                <h3 class="font-bold text-md text-gray-800"><i class="fa-solid fa-truck text-green-600 mr-1"></i> Enter Delivery Details</h3>
-                <button onclick="closeCheckoutModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h3 class="font-extrabold text-md text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-map-pin text-emerald-500"></i> Enter Delivery Details
+                </h3>
+                <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-2 rounded-full h-8 w-8 flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="space-y-3">
-                <input type="text" id="custName" placeholder="Aapka Naam / Your Name" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none">
-                <input type="text" id="custPhone" placeholder="Mobile Number" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none">
-                <textarea id="custAddress" placeholder="Pura Address / Delivery Location Details" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none h-20"></textarea>
-                <button onclick="confirmAndRouteWhatsApp()" class="w-full bg-green-600 text-white font-bold py-2.5 rounded-xl text-xs tracking-wide">Confirm Order via WhatsApp</button>
+                <input type="text" id="custName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50 shadow-inner">
+                <input type="text" id="custPhone" placeholder="Mobile Number" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50 shadow-inner">
+                <textarea id="custAddress" placeholder="Pura Address / Delivery Location Details" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50 shadow-inner h-20 resize-none"></textarea>
+                <button onclick="confirmAndRouteWhatsApp()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-extrabold py-3.5 rounded-2xl text-xs tracking-wide shadow-lg shadow-emerald-100 active:scale-[0.99]">Confirm Order via WhatsApp</button>
             </div>
         </div>
     </div>
 
     <!-- FIXED BOTTOM BAR FOR CUSTOMER CART VIEW -->
-    <div id="customerCartBar" class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-gray-100 p-4 shadow-[0_-4px_12px_rgba(0,0,0,0.03)] z-40 hidden">
-        <div class="bg-green-600 rounded-xl p-3 flex justify-between items-center text-white shadow-md">
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-basket-shopping"></i>
-                <div class="text-xs">
-                    <span id="cartCount" class="font-bold block">0 Items • ₹0</span>
-                </div>
+    <div id="customerCartBar" class="fixed bottom-4 left-4 right-4 max-w-sm mx-auto bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 flex justify-between items-center text-white shadow-xl shadow-slate-900/20 z-40 hidden border border-white/10 animate-slideUp">
+        <div class="flex items-center gap-3 pl-2">
+            <div class="bg-emerald-500 text-white p-2 rounded-xl">
+                <i class="fa-solid fa-basket-shopping text-sm"></i>
             </div>
-            <button onclick="openCheckoutModal()" class="bg-white text-green-700 text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-1 hover:bg-green-50 transition-all">
-                <span data-key="checkoutBtn">Checkout Order</span> <i class="fa-brands fa-whatsapp text-sm text-green-600"></i>
-            </button>
+            <div class="text-xs">
+                <span id="cartCount" class="font-extrabold block text-slate-100">0 Items • ₹0</span>
+                <span class="text-[9px] text-emerald-400 font-bold block uppercase tracking-wider">Ready to bag</span>
+            </div>
         </div>
+        <button onclick="openCheckoutModal()" class="bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-slate-900 text-xs font-extrabold px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-md active:scale-95">
+            <span data-key="checkoutBtn">Checkout Order</span> <i class="fa-brands fa-whatsapp text-sm"></i>
+        </button>
     </div>
 
     <!-- ========================================== -->
@@ -203,9 +231,8 @@
         
         let cart = [];
         let allProducts = [];
-        let merchantConfigNumber = "919999999999"; // Fallback static value
+        let merchantConfigNumber = "919999999999"; 
 
-        // Language Localization Dictionary Translation Blocks
         const langData = {
             hinglish: {
                 sellerLogin: "Seller Login", welcomeSeller: "Welcome Back, Seller!", manageStore: "Manage Online Store",
@@ -233,7 +260,6 @@
             });
         }
 
-        // Realtime loading of merchant customizable configuration profile
         async function loadMerchantProfile() {
             const profileRef = doc(db, "stores", currentStoreId);
             const profileSnap = await getDoc(profileRef);
@@ -265,7 +291,10 @@
         window.displayFileName = function() {
             const fileInput = document.getElementById('productImage');
             const fileNameDisplay = document.getElementById('fileName');
-            if(fileInput.files.length > 0) fileNameDisplay.innerText = "✓ Photo Attached";
+            if(fileInput.files.length > 0) {
+                fileNameDisplay.innerText = "✓ Photo Attached";
+                fileNameDisplay.classList.remove('hidden');
+            }
         }
 
         const fileToDataUri = (file) => new Promise((resolve, reject) => {
@@ -275,13 +304,12 @@
             reader.readAsDataURL(file);
         });
 
-        // LOCK CONTROLS
         window.loginSeller = function() {
             const pass = document.getElementById('loginPassword').value.trim();
             if(pass === "786786") {
                 document.getElementById('sellerPanel').classList.remove('hidden');
                 document.getElementById('loginBtnText').innerText = "Dashboard Active";
-                document.getElementById('lockIcon').className = "fa-solid fa-unlock text-green-600";
+                document.getElementById('lockIcon').className = "fa-solid fa-unlock text-emerald-600";
                 sessionStorage.setItem("seller_logged_in", "true");
                 closeLoginModal();
             } else {
@@ -293,7 +321,7 @@
             sessionStorage.removeItem("seller_logged_in");
             document.getElementById('sellerPanel').classList.add('hidden');
             document.getElementById('loginBtnText').innerText = "Seller Login";
-            document.getElementById('lockIcon').className = "fa-solid fa-lock text-green-600";
+            document.getElementById('lockIcon').className = "fa-solid fa-lock text-emerald-600";
         }
 
         if(sessionStorage.getItem("seller_logged_in") === "true") {
@@ -323,12 +351,11 @@
                 document.getElementById('pPrice').value = "";
                 document.getElementById('pUnit').value = "";
                 fileInput.value = "";
-                document.getElementById('fileName').innerText = "";
+                fileName.classList.add('hidden');
             } catch (e) { alert("Write rejection caught."); }
             finally { uploadBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Store Par Live Karein'; }
         }
 
-        // REMOVE FROM INVENTORY ENGINE FUNCTION
         window.deleteProduct = async function(id) {
             if(confirm("Kya aap sach me is item ko catalog se hatana chahte ho?")) {
                 await deleteDoc(doc(db, "products", id));
@@ -348,7 +375,7 @@
 
                 snapshot.forEach((doc) => {
                     let pData = doc.data();
-                    pData.id = doc.id; // Inject unique internal cloud identifier
+                    pData.id = doc.id; 
                     allProducts.push(pData);
                 });
 
@@ -361,43 +388,42 @@
             const container = document.getElementById('productsContainer');
             container.innerHTML = "";
             if(items.length === 0) {
-                container.innerHTML = `<p class="text-xs text-gray-400 col-span-2 text-center py-8">Catalog is currently empty.</p>`;
+                container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-12 font-medium">Catalog is currently empty.</p>`;
                 return;
             }
             items.forEach((product) => {
                 container.innerHTML += `
-                    <div class="bg-white border border-gray-100 rounded-xl p-3 shadow-sm flex flex-col justify-between space-y-2">
-                        <div class="bg-gray-50 rounded-lg p-1 flex items-center justify-center aspect-square overflow-hidden">
-                            <img src="${product.image}" alt="${product.name}" class="object-cover h-full w-full rounded-lg">
+                    <div class="bg-white border border-slate-100/80 rounded-2xl p-3.5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-3 relative group">
+                        <div class="bg-slate-50/50 rounded-xl p-1 flex items-center justify-center aspect-square overflow-hidden relative shadow-inner">
+                            <img src="${product.image}" alt="${product.name}" class="object-cover h-full w-full rounded-lg group-hover:scale-105 transition-transform duration-300">
                         </div>
-                        <div>
-                            <h4 class="font-bold text-xs text-gray-800 line-clamp-1">${product.name}</h4>
-                            <p class="text-[10px] text-gray-400 mt-0.5">${product.unit}</p>
+                        <div class="space-y-0.5">
+                            <h4 class="font-extrabold text-xs text-slate-800 line-clamp-1 tracking-tight">${product.name}</h4>
+                            <p class="text-[10px] text-slate-400 font-bold">${product.unit}</p>
                         </div>
-                        <div class="flex justify-between items-center pt-1">
-                            <span class="font-bold text-sm text-gray-800">₹${product.price}</span>
-                            <button onclick="addToCart('${product.name}', ${product.price})" class="border border-green-600 text-green-600 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-green-50/50 hover:bg-green-600 hover:text-white transition-all">ADD</button>
+                        <div class="flex justify-between items-center pt-0.5">
+                            <span class="font-black text-sm text-slate-800">₹${product.price}</span>
+                            <button onclick="addToCart('${product.name}', ${product.price})" class="border border-emerald-500 text-emerald-600 text-[11px] font-extrabold px-3 py-1.5 rounded-xl bg-emerald-50/30 hover:bg-emerald-500 hover:text-white transition-all shadow-sm active:scale-90">ADD</button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        // Live Seller Inventory Control Dashboard Panel List View Renderer
         function renderInventoryManager(items) {
             const invList = document.getElementById('sellerInventoryList');
-            if(items.length === 0) { invList.innerHTML = `<p class="text-xs text-gray-400 text-center py-2">No active database entries.</p>`; return; }
+            if(items.length === 0) { invList.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No active database entries.</p>`; return; }
             items.forEach(p => {
                 invList.innerHTML += `
-                    <div class="flex items-center justify-between bg-gray-50 p-2 rounded-xl text-xs border border-gray-100">
-                        <div class="flex items-center gap-2">
-                            <img src="${p.image}" class="w-8 h-8 object-cover rounded-lg">
+                    <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-2xl text-xs border border-slate-100/60 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <img src="${p.image}" class="w-9 h-9 object-cover rounded-xl shadow-sm">
                             <div>
-                                <span class="font-bold text-gray-800 block">${p.name}</span>
-                                <span class="text-gray-400 text-[10px]">₹${p.price} • ${p.unit}</span>
+                                <span class="font-extrabold text-slate-800 block tracking-tight">${p.name}</span>
+                                <span class="text-slate-400 text-[10px] font-bold">₹${p.price} • ${p.unit}</span>
                             </div>
                         </div>
-                        <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:text-red-700 p-2"><i class="fa-solid fa-trash-can"></i></button>
+                        <button onclick="deleteProduct('${p.id}')" class="text-slate-400 hover:text-red-500 p-2 bg-white rounded-xl shadow-sm transition-colors"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
             });
@@ -407,9 +433,9 @@
             const tabs = document.querySelectorAll('#categoryTabs button');
             tabs.forEach(btn => {
                 if(btn.innerText.toLowerCase().includes(cat.toLowerCase()) || (cat === 'All' && btn.innerText.includes('All'))) {
-                    btn.className = "bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap shadow-sm";
+                    btn.className = "bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-md shadow-emerald-100 transition-all snap-center";
                 } else {
-                    btn.className = "bg-white border border-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap";
+                    btn.className = "bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm hover:bg-slate-50 transition-all snap-center";
                 }
             });
             if(cat === "All") renderProducts(allProducts);
@@ -424,7 +450,6 @@
             }
         }
 
-        // WHATSAPP OUTBOUND STRING ROUTING LOGIC ENGINE
         window.confirmAndRouteWhatsApp = function() {
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
