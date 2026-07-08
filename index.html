@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApniDukan - Premium Multi-Vendor Platform</title>
+    <title>ApniDukan Pro - Ultimate Hyperlocal Enterprise</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tesseract.js for Parchi OCR List Scanning -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
@@ -21,6 +23,12 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
+        /* Thermal Receipt Styling for Printer Action Window */
+        @media print {
+            body * { display: none; }
+            #thermalPrintArea, #thermalPrintArea * { display: block !important; font-family: monospace !important; color: black !important; }
+            #thermalPrintArea { width: 58mm; padding: 2mm; background: white; position: absolute; left: 0; top: 0; }
+        }
     </style>
 </head>
 <body class="pb-28">
@@ -28,7 +36,6 @@
     <!-- TOP NAVIGATION BAR -->
     <nav class="bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100 sticky top-0 z-50 px-4 py-3.5 flex justify-between items-center max-w-md mx-auto rounded-b-2xl">
         <div class="flex items-center gap-3">
-            <!-- Dynamic Store Logo Placeholder -->
             <div id="storeLogoContainer" class="bg-gradient-to-tr from-emerald-500 to-green-600 text-white w-10 h-10 rounded-xl shadow-lg flex items-center justify-center overflow-hidden active:scale-95 transition-transform">
                 <i id="defaultLogoIcon" class="fa-solid fa-shop text-lg"></i>
                 <img id="storeLiveLogo" class="hidden object-cover h-full w-full">
@@ -37,7 +44,6 @@
                 <h1 class="text-md font-extrabold text-slate-800 tracking-tight flex items-center gap-1">
                     <span id="navStoreName" class="font-bold">Loading Store...</span>
                 </h1>
-                <!-- Trust Trigger Link -->
                 <button onclick="openInfoModal()" class="text-[10px] text-emerald-600 font-bold flex items-center gap-1 hover:underline">
                     <i class="fa-solid fa-circle-check"></i> View Store Info & GST
                 </button>
@@ -50,15 +56,13 @@
                 <option value="english">English</option>
                 <option value="gujarati">ગુજરાતી</option>
             </select>
-            <button onclick="openLoginModal()" id="sellerModeBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold p-2.5 rounded-xl transition-all active:scale-95">
+            <button onclick="openLoginModal()" id="sellerModeBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold p-2.5 rounded-xl transition-all">
                 <i class="fa-solid fa-lock text-emerald-600" id="lockIcon"></i>
             </button>
         </div>
     </nav>
 
-    <!-- ========================================== -->
     <!-- MAIN INTERFACE CONTAINER -->
-    <!-- ========================================== -->
     <div class="max-w-md mx-auto p-4 space-y-5">
 
         <!-- 1. PRO SELLER DASHBOARD -->
@@ -69,81 +73,71 @@
                     <h3 class="text-lg font-extrabold" data-key="manageStore">Manage Online Store</h3>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <button onclick="logoutSeller()" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition-all">
-                        Logout
-                    </button>
-                    <button onclick="shareStoreLink()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition-all">
-                        <i class="fa-solid fa-share-nodes"></i> Share Link
-                    </button>
+                    <button onclick="logoutSeller()" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition-all">Logout</button>
+                    <button onclick="shareStoreLink()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition-all"><i class="fa-solid fa-share-nodes"></i> Share Link</button>
                 </div>
             </div>
 
-            <!-- Merchant Store Settings Setup Bundle (Upgraded with Logo, GST & Maps) -->
-            <div class="glass-card rounded-3xl p-5 shadow-xl shadow-slate-100/50 border border-white/60 space-y-4">
-                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-sliders text-emerald-500"></i> <span data-key="storeSettings">Store Profile Settings</span>
-                </h2>
+            <!-- Merchant Store Settings Upgraded for Payments -->
+            <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-4">
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-sliders text-emerald-500"></i> <span data-key="storeSettings">Store Profile Settings</span></h2>
                 <div class="space-y-3">
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="mDukanName" placeholder="Dukan Ka Naam" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white">
-                        <input type="text" id="mWhatsapp" placeholder="WhatsApp Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white">
+                        <input type="text" id="mDukanName" placeholder="Dukan Ka Naam" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
+                        <input type="text" id="mWhatsapp" placeholder="WhatsApp Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="mGst" placeholder="GSTIN Number (Optional)" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white">
-                        <input type="text" id="mMaps" placeholder="Google Maps Location Link" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white">
+                        <input type="text" id="mGst" placeholder="GSTIN Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
+                        <input type="text" id="mUpi" placeholder="UPI ID (e.g. dukan@ybl) for Payments" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white font-semibold text-emerald-700">
                     </div>
-                    <textarea id="mAddress" placeholder="Full Store Address" class="w-full px-3 py-2 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white h-16 resize-none"></textarea>
-                    
-                    <!-- Store Logo Picker -->
+                    <input type="text" id="mMaps" placeholder="Google Maps Link" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
+                    <textarea id="mAddress" placeholder="Full Store Address" class="w-full px-3 py-2 border border-slate-200 rounded-2xl text-xs bg-white h-14 resize-none"></textarea>
                     <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200/60">
-                        <label class="bg-slate-800 hover:bg-black text-white text-[11px] font-bold px-3 py-2 rounded-xl cursor-pointer transition-all">
+                        <label class="bg-slate-800 hover:bg-black text-white text-[11px] font-bold px-3 py-2 rounded-xl cursor-pointer">
                             Upload Logo
                             <input type="file" id="storeLogoInput" accept="image/*" class="hidden" onchange="processStoreLogo()" />
                         </label>
                         <span id="logoFileName" class="text-[10px] text-slate-400 font-semibold">No logo selected</span>
                     </div>
                 </div>
-                <button onclick="saveStoreProfile()" class="w-full bg-slate-800 hover:bg-slate-900 text-white text-xs font-extrabold py-3 rounded-2xl transition-all shadow-md">Save Profile Configurations</button>
+                <button onclick="saveStoreProfile()" class="w-full bg-slate-800 text-white text-xs font-extrabold py-3 rounded-2xl shadow-md">Save Profile Configurations</button>
             </div>
 
-            <!-- Add Product Form (Upgraded for Multiple Photos) -->
-            <div class="glass-card rounded-3xl p-5 shadow-xl shadow-slate-100/50 border border-white/60 space-y-4">
-                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-square-plus text-emerald-500"></i> <span data-key="addNewItem">Naya Product Add Karein</span>
-                </h2>
-                
-                <!-- Multi-image File Upload Selection slot -->
+            <!-- Add Product Form -->
+            <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-4">
+                <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-square-plus text-emerald-500"></i> <span data-key="addNewItem">Naya Product Add Karein</span></h2>
                 <div class="space-y-2">
-                    <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-slate-50/50 hover:bg-emerald-50/10 hover:border-emerald-400 transition-all text-center">
+                    <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-slate-50/50 hover:border-emerald-400 transition-all text-center">
                         <i class="fa-solid fa-images text-xl text-slate-400 mb-1"></i>
                         <p class="text-xs text-slate-600 font-semibold">Upload Product Photos (Up to 3)</p>
                         <input type="file" id="productImagesInput" accept="image/*" multiple class="hidden" onchange="displayMultiFileNames()" />
                     </label>
                     <p id="multiFileStatus" class="text-[10px] text-emerald-600 font-bold text-center hidden"></p>
                 </div>
-
-                <input type="text" id="pName" placeholder="Product Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white shadow-inner">
-                
+                <input type="text" id="pName" placeholder="Product Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white">
                 <div class="grid grid-cols-2 gap-3">
-                    <input type="number" id="pPrice" placeholder="Price (₹)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white shadow-inner">
-                    <input type="text" id="pUnit" placeholder="Unit (e.g., 1kg, 500ml)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-white shadow-inner">
+                    <input type="number" id="pPrice" placeholder="Price (₹)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white">
+                    <input type="text" id="pUnit" placeholder="Unit (e.g., 1kg, 500ml)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white">
                 </div>
-
-                <select id="pCategory" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white focus:outline-none focus:border-emerald-500 text-slate-600 font-medium">
+                <textarea id="pDesc" placeholder="Product Details / Description" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs bg-white h-16 resize-none focus:outline-none"></textarea>
+                <select id="pCategory" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white text-slate-600 font-medium">
                     <option value="Groceries">Groceries / Kirana</option>
                     <option value="Dairy">Dairy & Milk Products</option>
                     <option value="Fruits">Fruits & Vegetables</option>
                     <option value="Snacks">Snacks & Beverages</option>
                     <option value="Others">Others</option>
                 </select>
-                
-                <button onclick="addProductToFirebase()" id="uploadBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-extrabold py-3.5 rounded-2xl text-xs transition-all shadow-lg shadow-emerald-100 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-paper-plane"></i> <span data-key="liveOnStore">Store Par Live Karein</span>
-                </button>
+                <button onclick="addProductToFirebase()" id="uploadBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg"><i class="fa-solid fa-paper-plane"></i> <span data-key="liveOnStore">Store Par Live Karein</span></button>
             </div>
 
-            <!-- Inventory Live Editor Component -->
-            <div class="glass-card rounded-3xl p-5 shadow-xl shadow-slate-100/50 border border-white/60 space-y-3">
+            <!-- Thermal Receipt Invoicing Trigger Panel Inside Dashboard -->
+            <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-3">
+                <h2 class="text-sm font-extrabold text-slate-800"><i class="fa-solid fa-print text-emerald-500 mr-1"></i> Quick Thermal Billing Counter</h2>
+                <button onclick="printBlankReceipt()" class="w-full border border-slate-800 text-slate-800 text-xs font-bold py-2.5 rounded-xl hover:bg-slate-50 transition-all"><i class="fa-solid fa-file-invoice-dollar mr-1"></i> Print Last Cart Bill Mock</button>
+            </div>
+
+            <!-- Inventory List -->
+            <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-3">
                 <h2 class="text-sm font-extrabold text-slate-800"><i class="fa-solid fa-boxes-stacked text-emerald-500"></i> Live Inventory Items</h2>
                 <div id="sellerInventoryList" class="space-y-2.5 max-h-64 overflow-y-auto pr-1"></div>
             </div>
@@ -151,19 +145,29 @@
 
         <!-- 2. CUSTOMER VIEW MODULE -->
         <div id="customerPanel" class="space-y-5">
-            <!-- Dynamic Live Filter Search Module -->
-            <div class="relative max-w-md mx-auto">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
-                <input type="text" id="storeSearchBar" oninput="triggerLocalSearch()" placeholder="Search products in this mart..." class="w-full pl-10 pr-4 py-3 bg-white shadow-sm border border-slate-100 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 transition-all">
+            <!-- Smart Parchi OCR Upload Scanner Hub -->
+            <div class="bg-gradient-to-r from-emerald-500/10 to-green-600/10 border border-emerald-500/20 rounded-3xl p-4 flex items-center justify-between">
+                <div class="space-y-0.5">
+                    <h4 class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i> Upload Written Parchi</h4>
+                    <p class="text-[10px] text-slate-500 font-medium">List scan karke automatic cart me items search karein!</p>
+                </div>
+                <label class="bg-emerald-600 text-white text-xs font-extrabold px-3 py-2.5 rounded-xl cursor-pointer shadow-md shadow-emerald-100 whitespace-nowrap">
+                    <span id="ocrStatusText"><i class="fa-solid fa-camera mr-1"></i> Scan List</span>
+                    <input type="file" id="ocrInput" accept="image/*" class="hidden" onchange="runParchiOcrParser()" />
+                </label>
             </div>
 
-            <!-- Category Filter Horizontal Scroll Tabs -->
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                <input type="text" id="storeSearchBar" oninput="triggerLocalSearch()" placeholder="Search products in this mart..." class="w-full pl-10 pr-4 py-3 bg-white shadow-sm border border-slate-100 rounded-2xl text-xs focus:outline-none focus:border-emerald-500">
+            </div>
+
             <div class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-none snap-x" id="categoryTabs">
-                <button onclick="filterCategory('All')" class="bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-md snap-center">All Items</button>
-                <button onclick="filterCategory('Groceries')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm snap-center">Groceries</button>
-                <button onclick="filterCategory('Dairy')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm snap-center">Dairy</button>
-                <button onclick="filterCategory('Fruits')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm snap-center">Fruits</button>
-                <button onclick="filterCategory('Snacks')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm snap-center">Snacks</button>
+                <button onclick="filterCategory('All')" class="bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-bold px-5 py-2.5 rounded-full shadow-md">All Items</button>
+                <button onclick="filterCategory('Groceries')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Groceries</button>
+                <button onclick="filterCategory('Dairy')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Dairy</button>
+                <button onclick="filterCategory('Fruits')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Fruits</button>
+                <button onclick="filterCategory('Snacks')" class="bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full shadow-sm">Snacks</button>
             </div>
 
             <div class="space-y-3">
@@ -175,13 +179,32 @@
         </div>
     </div>
 
-    <!-- STORE TRUST INFO DISPLAY POPUP MODAL -->
+    <!-- PRODUCT DETAILS MODAL -->
+    <div id="detailsModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl border border-slate-100 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <h3 id="modalProductName" class="font-extrabold text-slate-800 text-sm tracking-tight">-</h3>
+                <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="modalImageContainer" class="bg-slate-50 rounded-2xl p-1 flex overflow-x-auto snap-x h-48 scrollbar-none relative shadow-inner"></div>
+            <div class="space-y-2">
+                <div class="flex justify-between items-center">
+                    <span id="modalProductPrice" class="text-lg font-black text-slate-800">₹0</span>
+                    <span id="modalProductUnit" class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-bold">-</span>
+                </div>
+                <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-3.5 text-xs space-y-1">
+                    <span class="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider block">Product Details</span>
+                    <p id="modalProductDesc" class="text-slate-600 font-medium leading-relaxed whitespace-pre-line">-</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STORE TRUST INFO POPUP MODAL -->
     <div id="infoModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-extrabold text-slate-800 flex items-center gap-2 text-sm">
-                    <i class="fa-solid fa-building-shield text-emerald-500"></i> Store Verification Details
-                </h3>
+                <h3 class="font-extrabold text-slate-800 flex items-center gap-2 text-sm"><i class="fa-solid fa-building-shield text-emerald-500"></i> Store Verification Details</h3>
                 <button onclick="closeInfoModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="space-y-3 text-xs">
@@ -195,24 +218,20 @@
                 </div>
                 <div>
                     <span class="text-slate-400 block font-bold uppercase tracking-wider text-[9px]">Official Store Address</span>
-                    <p id="infoAddress" class="text-slate-600 font-medium mt-0.5">Address setup pending by merchant.</p>
+                    <p id="infoAddress" class="text-slate-600 font-medium mt-0.5">Address setup pending.</p>
                 </div>
                 <div id="mapsActionContainer" class="hidden pt-1">
-                    <a id="infoMapsLink" target="_blank" class="bg-slate-900 text-white font-bold p-2.5 rounded-xl block text-center transition-all hover:bg-black">
-                        <i class="fa-solid fa-location-dot text-emerald-400 mr-1"></i> Navigate via Google Maps
-                    </a>
+                    <a id="infoMapsLink" target="_blank" class="bg-slate-900 text-white font-bold p-2.5 rounded-xl block text-center"><i class="fa-solid fa-location-dot text-emerald-400 mr-1"></i> Navigate via Google Maps</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SELLER SECURITY LOGIN MODAL -->
+    <!-- SELLER LOGIN MODAL -->
     <div id="loginModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl">
             <div class="flex justify-between items-center">
-                <h3 class="font-extrabold text-md text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-shield-halved text-emerald-500"></i> Merchant Access Lock
-                </h3>
+                <h3 class="font-extrabold text-md text-slate-800 flex items-center gap-2"><i class="fa-solid fa-shield-halved text-emerald-500"></i> Merchant Access Lock</h3>
                 <button onclick="closeLoginModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <input type="password" id="loginPassword" placeholder="Enter Security Password" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-emerald-500 bg-slate-50/50">
@@ -220,20 +239,25 @@
         </div>
     </div>
 
-    <!-- CLIENT DETAILS CHECKOUT MODAL WINDOW -->
+    <!-- CLIENT DETAILS CHECKOUT MODAL (Upgraded with UPI Choice) -->
     <div id="checkoutModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl">
             <div class="flex justify-between items-center">
-                <h3 class="font-extrabold text-md text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-map-pin text-emerald-500"></i> Enter Delivery Details
-                </h3>
+                <h3 class="font-extrabold text-md text-slate-800 flex items-center gap-2"><i class="fa-solid fa-map-pin text-emerald-500"></i> Enter Delivery Details</h3>
                 <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="space-y-3">
-                <input type="text" id="custName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50">
-                <input type="text" id="custPhone" placeholder="Mobile Number" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50">
-                <textarea id="custAddress" placeholder="Pura Address / Delivery Location Details" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:border-emerald-500 bg-slate-50/50 h-20 resize-none"></textarea>
-                <button onclick="confirmAndRouteWhatsApp()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg active:scale-[0.99]">Confirm Order via WhatsApp</button>
+                <input type="text" id="custName" placeholder="Aapka Naam / Your Name" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50">
+                <input type="text" id="custPhone" placeholder="Mobile Number" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50">
+                <textarea id="custAddress" placeholder="Pura Address" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 h-16 resize-none"></textarea>
+                
+                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-xs font-bold text-slate-700 space-y-2">
+                    <span class="text-[9px] tracking-wider text-slate-400 block uppercase">Select Payment Mode</span>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="payMethod" value="COD" checked class="accent-emerald-600"> Cash on Delivery (COD)</label>
+                    <label id="upiRadioLabel" class="hidden items-center gap-2 cursor-pointer"><input type="radio" name="payMethod" value="UPI" class="accent-emerald-600"> Online Pay via UPI Apps</label>
+                </div>
+
+                <button onclick="confirmAndRouteWhatsApp()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg">Confirm & Send Order</button>
             </div>
         </div>
     </div>
@@ -252,9 +276,10 @@
         </button>
     </div>
 
-    <!-- ========================================== -->
+    <!-- HIDDEN THERMAL PRINTER WINDOW OBJECT BLOCKS -->
+    <div id="thermalPrintArea" class="hidden"></div>
+
     <!-- FIREBASE SYSTEM ENGINE MODULES -->
-    <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, where, doc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -275,9 +300,10 @@
         const urlParams = new URLSearchParams(window.location.search);
         let currentStoreId = urlParams.get('store') || "demo-store"; 
         
-        let cart = [];
+        let cart = {}; 
         let allProducts = [];
         let merchantConfigNumber = "919999999999"; 
+        let merchantUpiId = ""; 
         let storeLogoBase64 = "";
 
         const langData = {
@@ -314,161 +340,171 @@
             reader.readAsDataURL(file);
         });
 
-        // 1. MERCHANT LOGO PROCESSING
         window.processStoreLogo = async function() {
             const logoInput = document.getElementById('storeLogoInput');
             if(logoInput.files.length > 0) {
                 storeLogoBase64 = await fileToDataUri(logoInput.files[0]);
-                document.getElementById('logoFileName').innerText = "✓ Logo Attached Ready";
+                document.getElementById('logoFileName').innerText = "✓ Logo Attached";
             }
         }
 
         window.displayMultiFileNames = function() {
             const files = document.getElementById('productImagesInput').files;
             const statusLabel = document.getElementById('multiFileStatus');
-            if(files.length > 3) {
-                alert("Bhai, maximum 3 photos hi allow hain!");
-                document.getElementById('productImagesInput').value = "";
-                statusLabel.classList.add('hidden');
-                return;
-            }
+            if(files.length > 3) { alert("Max 3 photos permitted!"); return; }
             if(files.length > 0) {
-                statusLabel.innerText = `✓ ${files.length} Photos Attached Ready`;
+                statusLabel.innerText = `✓ ${files.length} Photos Selected`;
                 statusLabel.classList.remove('hidden');
             }
         }
 
-        // 2. LOAD MERCHANT IDENTITY CARD PROFILE DATA
+        // SMART PARCHI OCR LIST SCANNER LOGIC
+        window.runParchiOcrParser = async function() {
+            const fileInput = document.getElementById('ocrInput');
+            const statusLabel = document.getElementById('ocrStatusText');
+            if (fileInput.files.length === 0) return;
+
+            statusLabel.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Reading List...`;
+            
+            try {
+                const file = fileInput.files[0];
+                const base64Img = await fileToDataUri(file);
+                
+                // Fire Tesseract core recognition process
+                const result = await Tesseract.recognize(base64Img, 'eng+hin');
+                const cleanLines = result.data.text.toLowerCase().split('\n');
+
+                let matchedItemsCount = 0;
+                cleanLines.forEach(line => {
+                    if(line.trim().length < 3) return;
+                    
+                    // Fuzzy filter matches locally matching keywords
+                    const foundProduct = allProducts.find(p => line.includes(p.name.toLowerCase()));
+                    if(foundProduct) {
+                        if(!cart[foundProduct.id]) cart[foundProduct.id] = { product: foundProduct, qty: 1 };
+                        else cart[foundProduct.id].qty += 1;
+                        matchedItemsCount++;
+                    }
+                });
+
+                if(matchedItemsCount > 0) {
+                    alert(`✓ Parchi scanned! Catalog me se ${matchedItemsCount} items automatically cart me add ho gaye hain.`);
+                    renderProducts(allProducts);
+                    updateCartUI();
+                } else {
+                    alert("Parchi se koi product inventory catalog se match nahi hua bhai.");
+                }
+
+            } catch (err) {
+                console.error(err); alert("OCR parsing engine error.");
+            } finally {
+                statusLabel.innerHTML = `<i class="fa-solid fa-camera mr-1"></i> Scan List`;
+                fileInput.value = "";
+            }
+        }
+
         async function loadMerchantProfile() {
             const profileRef = doc(db, "stores", currentStoreId);
             const profileSnap = await getDoc(profileRef);
-            
             if(profileSnap.exists()) {
                 const data = profileSnap.data();
                 const resolvedName = data.dukanName || currentStoreId;
-                
                 document.getElementById('navStoreName').innerText = resolvedName.toUpperCase();
                 document.getElementById('infoDukanName').innerText = resolvedName;
                 merchantConfigNumber = data.whatsappNumber || "919999999999";
+                merchantUpiId = data.upiId || "";
+
+                if(merchantUpiId) {
+                    document.getElementById('upiRadioLabel').classList.remove('hidden');
+                    document.getElementById('upiRadioLabel').classList.add('flex');
+                }
                 
-                // Form setup field presets
                 document.getElementById('mDukanName').value = data.dukanName || "";
                 document.getElementById('mWhatsapp').value = data.whatsappNumber || "";
                 document.getElementById('mGst').value = data.gstNumber || "";
+                document.getElementById('mUpi').value = data.upiId || "";
                 document.getElementById('mMaps').value = data.mapsLink || "";
                 document.getElementById('mAddress').value = data.address || "";
 
-                // Trust modal assignments
                 if(data.gstNumber) document.getElementById('infoGst').innerText = data.gstNumber;
                 if(data.address) document.getElementById('infoAddress').innerText = data.address;
                 if(data.mapsLink) {
                     document.getElementById('infoMapsLink').href = data.mapsLink;
                     document.getElementById('mapsActionContainer').classList.remove('hidden');
                 }
-
-                // Inject brand identity logo elements dynamically
                 if(data.logo) {
                     storeLogoBase64 = data.logo;
                     document.getElementById('defaultLogoIcon').classList.add('hidden');
                     const img = document.getElementById('storeLiveLogo');
-                    img.src = data.logo;
-                    img.classList.remove('hidden');
+                    img.src = data.logo; img.classList.remove('hidden');
                 }
-            } else {
-                document.getElementById('navStoreName').innerText = currentStoreId.replace('-', ' ').toUpperCase();
             }
         }
 
         window.saveStoreProfile = async function() {
             const dName = document.getElementById('mDukanName').value.trim();
             const wNum = document.getElementById('mWhatsapp').value.trim();
-            const gst = document.getElementById('mGst').value.trim();
-            const maps = document.getElementById('mMaps').value.trim();
-            const addr = document.getElementById('mAddress').value.trim();
-
-            if(!dName || !wNum) return alert("Dukan ka naam aur whatsapp number mandatory hai!");
+            if(!dName || !wNum) return alert("Dukan ka naam aur number mandatory hai!");
             
             await setDoc(doc(db, "stores", currentStoreId), {
-                dukanName: dName,
-                whatsappNumber: wNum,
-                gstNumber: gst,
-                mapsLink: maps,
-                address: addr,
-                logo: storeLogoBase64 || ""
+                dukanName: dName, whatsappNumber: wNum, gstNumber: document.getElementById('mGst').value.trim(),
+                upiId: document.getElementById('mUpi').value.trim(),
+                mapsLink: document.getElementById('mMaps').value.trim(), address: document.getElementById('mAddress').value.trim(), logo: storeLogoBase64 || ""
             });
-            alert("Store Identity Details Saved!");
-            loadMerchantProfile();
+            alert("Profile Saved!"); loadMerchantProfile();
         }
 
         window.loginSeller = function() {
-            const pass = document.getElementById('loginPassword').value.trim();
-            if(pass === "786786") {
+            if(document.getElementById('loginPassword').value.trim() === "786786") {
                 document.getElementById('sellerPanel').classList.remove('hidden');
-                sessionStorage.setItem("seller_logged_in", "true");
-                closeLoginModal();
-            } else {
-                alert("Access Denied!");
-            }
+                sessionStorage.setItem("seller_logged_in", "true"); closeLoginModal();
+            } else { alert("Access Denied!"); }
         }
 
         window.logoutSeller = function() {
-            sessionStorage.removeItem("seller_logged_in");
-            document.getElementById('sellerPanel').classList.add('hidden');
+            sessionStorage.removeItem("seller_logged_in"); document.getElementById('sellerPanel').classList.add('hidden');
         }
 
-        if(sessionStorage.getItem("seller_logged_in") === "true") {
-            document.getElementById('sellerPanel').classList.remove('hidden');
-        }
+        if(sessionStorage.getItem("seller_logged_in") === "true") document.getElementById('sellerPanel').classList.remove('hidden');
 
         window.shareStoreLink = function() {
             const shareUrl = window.location.href.split('?')[0] + `?store=${currentStoreId}`;
-            navigator.clipboard.writeText(shareUrl);
-            alert("Dukan ka sharing link copy ho gaya hai! WhatsApp par customer ko bhej do.");
+            navigator.clipboard.writeText(shareUrl); alert("Link copied!");
         }
 
-        // 3. MULTI PHOTO PRODUCT ADD INGESTION
         window.addProductToFirebase = async function() {
             const name = document.getElementById('pName').value.trim();
             const price = document.getElementById('pPrice').value.trim();
             const unit = document.getElementById('pUnit').value.trim();
+            const desc = document.getElementById('pDesc').value.trim();
             const cat = document.getElementById('pCategory').value;
             const filesInput = document.getElementById('productImagesInput');
             const uploadBtn = document.getElementById('uploadBtn');
 
             if(!name || !price || !unit) return alert("Fill mandatory fields!");
-            uploadBtn.innerText = "Processing Catalog Carousel...";
+            uploadBtn.innerText = "Syncing...";
 
             let imageArray = [];
-
             try {
                 if(filesInput.files.length > 0) {
                     for(let i=0; i<filesInput.files.length; i++) {
-                        let dataUri = await fileToDataUri(filesInput.files[i]);
-                        imageArray.push(dataUri);
+                        let dataUri = await fileToDataUri(filesInput.files[i]); imageArray.push(dataUri);
                     }
-                } else {
-                    imageArray.push("https://placehold.co/150?text=Product");
-                }
+                } else { imageArray.push("https://placehold.co/150?text=Product"); }
 
                 await addDoc(collection(db, "products"), {
-                    storeId: currentStoreId,
-                    name, price: parseFloat(price), unit, category: cat,
-                    images: imageArray, // Save full structured images index array inside document fields
-                    createdAt: Date.now()
+                    storeId: currentStoreId, name, price: parseFloat(price), unit, description: desc, category: cat, images: imageArray, createdAt: Date.now()
                 });
-
-                alert("Product multi-photos ke sath live ho gaya!");
-                document.getElementById('pName').value = "";
-                document.getElementById('pPrice').value = "";
-                document.getElementById('pUnit').value = "";
-                filesInput.value = "";
-                document.getElementById('multiFileStatus').classList.add('hidden');
-            } catch (e) { alert("Write rejection caught."); }
+                alert("Product live!");
+                document.getElementById('pName').value = ""; document.getElementById('pPrice').value = "";
+                document.getElementById('pUnit').value = ""; document.getElementById('pDesc').value = "";
+                filesInput.value = ""; document.getElementById('multiFileStatus').classList.add('hidden');
+            } catch (e) { alert("Write failed."); }
             finally { uploadBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Store Par Live Karein'; }
         }
 
         window.deleteProduct = async function(id) {
-            if(confirm("Catalog asset delete karein?")) await deleteDoc(doc(db, "products", id));
+            if(confirm("Delete item?")) await deleteDoc(doc(db, "products", id));
         }
 
         function listenToLiveStoreCatalog() {
@@ -479,65 +515,184 @@
             onSnapshot(q, (snapshot) => {
                 allProducts = [];
                 snapshot.forEach((doc) => {
-                    let pData = doc.data(); pData.id = doc.id;
-                    allProducts.push(pData);
+                    let pData = doc.data(); pData.id = doc.id; allProducts.push(pData);
                 });
-                renderProducts(allProducts);
-                renderInventoryManager(allProducts);
+                renderProducts(allProducts); renderInventoryManager(allProducts);
             });
         }
 
-        // 4. DISPLAY REAL-TIME CAROUSEL MULTI-PHOTOS SYSTEM
         function renderProducts(items) {
-            const container = document.getElementById('productsContainer');
-            container.innerHTML = "";
+            const container = document.getElementById('productsContainer'); container.innerHTML = "";
             if(items.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-12 font-medium">Catalog is currently empty.</p>`;
-                return;
+                container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-12 font-medium">Catalog is currently empty.</p>`; return;
             }
             items.forEach((product) => {
-                const imgList = product.images || [product.image || "https://placehold.co/150?text=Product"];
+                const imgList = product.images || ["https://placehold.co/150?text=Product"];
+                const currentQty = cart[product.id] ? cart[product.id].qty : 0;
                 
-                // Active generation of inner micro carousel view layout configuration
                 let imagesHtml = '';
-                imgList.forEach((imgUrl, idx) => {
-                    imagesHtml += `<img src="${imgUrl}" class="snap-center object-cover h-full w-full rounded-lg min-w-full inline-block">`;
+                imgList.forEach((imgUrl) => {
+                    imagesHtml += `<img src="${imgUrl}" onclick="openDetailsModal('${product.id}')" class="snap-center object-cover h-full w-full rounded-lg min-w-full inline-block cursor-pointer">`;
                 });
 
+                let actionBtnHtml = `
+                    <button onclick="modifyCartQty('${product.id}', 1)" class="border border-emerald-500 text-emerald-600 text-[11px] font-extrabold px-3 py-1.5 rounded-xl bg-emerald-50/30 hover:bg-emerald-500 hover:text-white transition-all shadow-sm active:scale-90">ADD</button>
+                `;
+                if(currentQty > 0) {
+                    actionBtnHtml = `
+                        <div class="flex items-center bg-emerald-500 text-white rounded-xl text-xs font-extrabold shadow-sm">
+                            <button onclick="modifyCartQty('${product.id}', -1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-l-xl"><i class="fa-solid fa-minus text-[10px]"></i></button>
+                            <span class="px-2 font-black select-none text-slate-900">${currentQty}</span>
+                            <button onclick="modifyCartQty('${product.id}', 1)" class="px-2.5 py-1.5 hover:bg-emerald-600 rounded-r-xl"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                        </div>
+                    `;
+                }
+
                 container.innerHTML += `
-                    <div class="bg-white border border-slate-100/80 rounded-2xl p-3.5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-3">
-                        <!-- Horizontal Scrollable Inner Product Image Carousel component block -->
+                    <div class="bg-white border border-slate-100/80 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between space-y-3">
                         <div class="bg-slate-50/50 rounded-xl p-1 flex overflow-x-auto snap-x h-32 scrollbar-none shadow-inner relative">
                             ${imagesHtml}
                             ${imgList.length > 1 ? '<span class="absolute bottom-1 right-2 bg-black/40 text-[8px] text-white font-bold px-1.5 py-0.5 rounded-full backdrop-blur-xs"><i class="fa-solid fa-images"></i> Swipe</span>' : ''}
                         </div>
-                        <div class="space-y-0.5">
+                        <div onclick="openDetailsModal('${product.id}')" class="space-y-0.5 cursor-pointer">
                             <h4 class="font-extrabold text-xs text-slate-800 line-clamp-1 tracking-tight">${product.name}</h4>
                             <p class="text-[10px] text-slate-400 font-bold">${product.unit}</p>
                         </div>
                         <div class="flex justify-between items-center pt-0.5">
                             <span class="font-black text-sm text-slate-800">₹${product.price}</span>
-                            <button onclick="addToCart('${product.name}', ${product.price})" class="border border-emerald-500 text-emerald-600 text-[11px] font-extrabold px-3 py-1.5 rounded-xl bg-emerald-50/30 hover:bg-emerald-500 hover:text-white transition-all shadow-sm active:scale-90">ADD</button>
+                            <div id="action-wrapper-${product.id}">${actionBtnHtml}</div>
                         </div>
                     </div>
                 `;
             });
         }
 
+        window.modifyCartQty = function(id, countDelta) {
+            const product = allProducts.find(p => p.id === id);
+            if(!product) return;
+            if(!cart[id]) cart[id] = { product, qty: 0 };
+            cart[id].qty += countDelta;
+            if(cart[id].qty <= 0) delete cart[id];
+            renderProducts(allProducts); updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartBar = document.getElementById('customerCartBar');
+            const cartCount = document.getElementById('cartCount');
+            const cartKeys = Object.keys(cart);
+            if(cartKeys.length > 0) {
+                let totalItemsCount = 0; let totalBillingValue = 0;
+                cartKeys.forEach(key => {
+                    totalItemsCount += cart[key].qty; totalBillingValue += (cart[key].product.price * cart[key].qty);
+                });
+                cartBar.classList.remove('hidden');
+                cartCount.innerText = `${totalItemsCount} Items • Total: ₹${totalBillingValue}`;
+            } else { cartBar.classList.add('hidden'); }
+        }
+
+        window.openDetailsModal = function(id) {
+            const p = allProducts.find(item => item.id === id); if(!p) return;
+            document.getElementById('modalProductName').innerText = p.name;
+            document.getElementById('modalProductPrice').innerText = `₹${p.price}`;
+            document.getElementById('modalProductUnit').innerText = p.unit;
+            document.getElementById('modalProductDesc').innerText = p.description || "No details provided.";
+            const imgList = p.images || ["https://placehold.co/150?text=Product"];
+            const imgContainer = document.getElementById('modalImageContainer'); imgContainer.innerHTML = "";
+            imgList.forEach(imgUrl => {
+                imgContainer.innerHTML += `<img src="${imgUrl}" class="snap-center object-contain h-full w-full rounded-xl min-w-full inline-block">`;
+            });
+            document.getElementById('detailsModal').classList.remove('hidden');
+        }
+
+        window.closeDetailsModal = function() { document.getElementById('detailsModal').classList.add('hidden'); }
+
+        // DYNAMIC THERMAL RECEIPT PRINTER MODULE
+        window.printBlankReceipt = function() {
+            const printArea = document.getElementById('thermalPrintArea');
+            let total = 0;
+            let receiptHtml = `
+                <div style="text-align:center; font-size:12px; font-weight:bold;">${document.getElementById('navStoreName').innerText}</div>
+                <div style="text-align:center; font-size:9px;">Ahmedabad, Hyperlocal Live</div>
+                <div>--------------------------------</div>
+                <div style="font-size:10px;"><b>ITEMS LIST RECEIPT</b></div>
+                <div>--------------------------------</div>
+            `;
+
+            Object.keys(cart).forEach(key => {
+                const item = cart[key];
+                const cost = item.product.price * item.qty;
+                receiptHtml += `<div style="font-size:10px;">${item.product.name} x${item.qty} = ₹${cost}</div>`;
+                total += cost;
+            });
+
+            receiptHtml += `
+                <div>--------------------------------</div>
+                <div style="font-size:11px; font-weight:bold;">TOTAL AMOUNT: ₹${total}</div>
+                <div style="text-align:center; font-size:9px; margin-top:4px;">Thank You for Shopping!</div>
+            `;
+
+            if(total === 0) return alert("Print block! Cart empty hai.");
+            printArea.innerHTML = receiptHtml;
+            window.print();
+        }
+
+        // SMART INBOUND REDIRECTION WITH UPI PAYMENTS DEEP LINKING
+        window.confirmAndRouteWhatsApp = function() {
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const addr = document.getElementById('custAddress').value.trim();
+            const selectedPayment = document.querySelector('input[name="payMethod"]:checked').value;
+
+            if(!name || !phone || !addr) return alert("Delivery details mandatory!");
+
+            let total = 0;
+            let msg = `🛒 *NEW DIGITAL DUKAN ORDER*\n`;
+            msg += `────────────────────\n`;
+            msg += `👤 *Customer:* ${name}\n`;
+            msg += `📞 *Phone:* ${phone}\n`;
+            msg += `📍 *Address:* ${addr}\n`;
+            msg += `💳 *Payment Mode:* ${selectedPayment}\n`;
+            msg += `────────────────────\n`;
+            msg += `📦 *Order Items List:*\n`;
+
+            Object.keys(cart).forEach(key => {
+                const item = cart[key];
+                const itemCost = item.product.price * item.qty;
+                msg += `• ${item.product.name} x ${item.qty} = ₹${itemCost}\n`;
+                total += itemCost;
+            });
+
+            msg += `────────────────────\n`;
+            msg += `💰 *Total Bill: ₹${total}*\n`;
+
+            // Condition matching rule for instant UPI intent push
+            if(selectedPayment === "UPI" && merchantUpiId) {
+                const upiIntentUrl = `upi://pay?pa=${merchantUpiId}&pn=${encodeURIComponent(document.getElementById('navStoreName').innerText)}&am=${total}&cu=INR`;
+                msg += `\n🔗 *UPI Payment Link:* Clicked Paid Live\n`;
+                
+                // Fire instant application wrapper redirection
+                window.open(upiIntentUrl, '_blank');
+            }
+
+            msg += `\nKripya mera order accept karke updates bhejiye!`;
+            const parsedWhatsAppUrl = `https://wa.me/${merchantConfigNumber}?text=${encodeURIComponent(msg)}`;
+            
+            setTimeout(() => {
+                window.open(parsedWhatsAppUrl, '_blank');
+                cart = {}; document.getElementById('customerCartBar').classList.add('hidden');
+                renderProducts(allProducts); closeCheckoutModal();
+            }, 1000);
+        }
+
         function renderInventoryManager(items) {
-            const invList = document.getElementById('sellerInventoryList');
-            invList.innerHTML = "";
-            if(items.length === 0) { invList.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No inventory entries.</p>`; return; }
+            const invList = document.getElementById('sellerInventoryList'); invList.innerHTML = "";
             items.forEach(p => {
-                const targetDisplayThumb = p.images ? p.images[0] : (p.image || "https://placehold.co/150?text=Product");
+                const thumb = p.images ? p.images[0] : "https://placehold.co/150?text=Product";
                 invList.innerHTML += `
                     <div class="flex items-center justify-between bg-slate-50 p-2 rounded-2xl border border-slate-100">
                         <div class="flex items-center gap-3">
-                            <img src="${targetDisplayThumb}" class="w-9 h-9 object-cover rounded-xl shadow-sm">
-                            <div>
-                                <span class="font-extrabold text-slate-800 block tracking-tight">${p.name}</span>
-                                <span class="text-slate-400 text-[10px] font-bold">₹${p.price} • ${p.unit}</span>
-                            </div>
+                            <img src="${thumb}" class="w-9 h-9 object-cover rounded-xl shadow-sm">
+                            <div><span class="font-extrabold text-slate-800 block tracking-tight">${p.name}</span><span class="text-slate-400 text-[10px] font-bold">₹${p.price}</span></div>
                         </div>
                         <button onclick="deleteProduct('${p.id}')" class="text-slate-400 hover:text-red-500 p-2 bg-white rounded-xl shadow-sm"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
@@ -545,73 +700,18 @@
             });
         }
 
-        // Live Dynamic Filtering Search Engine Rule
         window.triggerLocalSearch = function() {
             const stringKeyword = document.getElementById('storeSearchBar').value.trim().toLowerCase();
-            if(!stringKeyword) {
-                renderProducts(allProducts);
-            } else {
-                const matches = allProducts.filter(p => p.name.toLowerCase().includes(stringKeyword) || p.category.toLowerCase().includes(stringKeyword));
-                renderProducts(matches);
-            }
+            if(!stringKeyword) renderProducts(allProducts);
+            else renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(stringKeyword)));
         }
 
         window.filterCategory = function(cat) {
-            const tabs = document.querySelectorAll('#categoryTabs button');
-            tabs.forEach(btn => {
-                if(btn.innerText.toLowerCase().includes(cat.toLowerCase()) || (cat === 'All' && btn.innerText.includes('All'))) {
-                    btn.className = "bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-md shadow-emerald-100 transition-all snap-center";
-                } else {
-                    btn.className = "bg-white border border-slate-100 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm hover:bg-slate-50 transition-all snap-center";
-                }
-            });
             if(cat === "All") renderProducts(allProducts);
             else renderProducts(allProducts.filter(p => p.category === cat));
         }
 
-        window.addToCart = function(name, price) {
-            cart.push({ name, price });
-            if(cart.length > 0) {
-                document.getElementById('customerCartBar').classList.remove('hidden');
-                document.getElementById('cartCount').innerText = `${cart.length} Items • Total: ₹${cart.reduce((sum, item) => sum + item.price, 0)}`;
-            }
-        }
-
-        window.confirmAndRouteWhatsApp = function() {
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const addr = document.getElementById('custAddress').value.trim();
-
-            if(!name || !phone || !addr) return alert("Delivery details form completion required!");
-
-            let total = 0;
-            let msg = `🛒 *NEW DIGITAL DUKAN ORDER*\n`;
-            msg += `────────────────────\n`;
-            msg += `👤 *Customer:* ${name}\n`;
-            msg += `📞 *Phone:* ${phone}\n`;
-            msg += `📍 *Delivery Address:* ${addr}\n`;
-            msg += `────────────────────\n`;
-            msg += `📦 *Order Items List:*\n`;
-
-            cart.forEach((item, i) => {
-                msg += `${i+1}. ${item.name} - ₹${item.price}\n`;
-                total += item.price;
-            });
-
-            msg += `────────────────────\n`;
-            msg += `💰 *Total Bill: ₹${total}*\n\n`;
-            msg += `Kripya mera order accept karke dispatch processing update bhejiye!`;
-
-            const parsedWhatsAppUrl = `https://wa.me/${merchantConfigNumber}?text=${encodeURIComponent(msg)}`;
-            window.open(parsedWhatsAppUrl, '_blank');
-            
-            cart = [];
-            document.getElementById('customerCartBar').classList.add('hidden');
-            closeCheckoutModal();
-        }
-
-        loadMerchantProfile();
-        listenToLiveStoreCatalog();
+        loadMerchantProfile(); listenToLiveStoreCatalog();
     </script>
 
     <!-- WINDOW MODAL CONTROLLERS -->
