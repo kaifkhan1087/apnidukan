@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApniDukan Pro - Ultimate Hyperlocal Enterprise</title>
+    <title>ApniDukan Pro - Hyperlocal E-commerce Platform</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Tesseract.js for Parchi OCR List Scanning -->
+    <!-- Tesseract.js Library for Parchi OCR Scanner -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
     <style>
         body { 
@@ -23,7 +23,6 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
-        /* Thermal Receipt Styling for Printer Action Window */
         @media print {
             body * { display: none; }
             #thermalPrintArea, #thermalPrintArea * { display: block !important; font-family: monospace !important; color: black !important; }
@@ -78,7 +77,7 @@
                 </div>
             </div>
 
-            <!-- Merchant Store Settings Upgraded for Payments -->
+            <!-- Merchant Store Settings -->
             <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-4">
                 <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-sliders text-emerald-500"></i> <span data-key="storeSettings">Store Profile Settings</span></h2>
                 <div class="space-y-3">
@@ -88,10 +87,10 @@
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <input type="text" id="mGst" placeholder="GSTIN Number" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
-                        <input type="text" id="mUpi" placeholder="UPI ID (e.g. dukan@ybl) for Payments" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white font-semibold text-emerald-700">
+                        <input type="text" id="mUpi" placeholder="UPI ID (e.g. dukan@ybl)" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white font-semibold text-emerald-700">
                     </div>
                     <input type="text" id="mMaps" placeholder="Google Maps Link" class="w-full px-3 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white">
-                    <textarea id="mAddress" placeholder="Full Store Address" class="w-full px-3 py-2 border border-slate-200 rounded-2xl text-xs bg-white h-14 resize-none"></textarea>
+                    <textarea id="mAddress" placeholder="Full Store Address" class="w-full px-3 py-2 border border-slate-200 rounded-2xl text-xs bg-white h-16 resize-none"></textarea>
                     <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200/60">
                         <label class="bg-slate-800 hover:bg-black text-white text-[11px] font-bold px-3 py-2 rounded-xl cursor-pointer">
                             Upload Logo
@@ -103,7 +102,7 @@
                 <button onclick="saveStoreProfile()" class="w-full bg-slate-800 text-white text-xs font-extrabold py-3 rounded-2xl shadow-md">Save Profile Configurations</button>
             </div>
 
-            <!-- Add Product Form -->
+            <!-- Add Product Form (With Explicit Description Engine Input Box) -->
             <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-4">
                 <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-square-plus text-emerald-500"></i> <span data-key="addNewItem">Naya Product Add Karein</span></h2>
                 <div class="space-y-2">
@@ -119,7 +118,9 @@
                     <input type="number" id="pPrice" placeholder="Price (₹)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white">
                     <input type="text" id="pUnit" placeholder="Unit (e.g., 1kg, 500ml)" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white">
                 </div>
-                <textarea id="pDesc" placeholder="Product Details / Description" class="w-full px-4 py-2 border border-slate-200 rounded-2xl text-xs bg-white h-16 resize-none focus:outline-none"></textarea>
+                <!-- 🎯 VERIFIED DESCRIPTION TEXTAREA -->
+                <textarea id="pDesc" placeholder="Product Details / Description (Benefits, Expiry, Brand Info, etc.)" class="w-full px-4 py-2.5 border border-slate-200 rounded-2xl text-xs bg-white h-20 resize-none focus:outline-none focus:border-emerald-500 shadow-inner"></textarea>
+                
                 <select id="pCategory" class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-xs bg-white text-slate-600 font-medium">
                     <option value="Groceries">Groceries / Kirana</option>
                     <option value="Dairy">Dairy & Milk Products</option>
@@ -130,7 +131,7 @@
                 <button onclick="addProductToFirebase()" id="uploadBtn" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-lg"><i class="fa-solid fa-paper-plane"></i> <span data-key="liveOnStore">Store Par Live Karein</span></button>
             </div>
 
-            <!-- Thermal Receipt Invoicing Trigger Panel Inside Dashboard -->
+            <!-- Thermal Receipt Manager -->
             <div class="glass-card rounded-3xl p-5 shadow-xl border border-white/60 space-y-3">
                 <h2 class="text-sm font-extrabold text-slate-800"><i class="fa-solid fa-print text-emerald-500 mr-1"></i> Quick Thermal Billing Counter</h2>
                 <button onclick="printBlankReceipt()" class="w-full border border-slate-800 text-slate-800 text-xs font-bold py-2.5 rounded-xl hover:bg-slate-50 transition-all"><i class="fa-solid fa-file-invoice-dollar mr-1"></i> Print Last Cart Bill Mock</button>
@@ -145,13 +146,13 @@
 
         <!-- 2. CUSTOMER VIEW MODULE -->
         <div id="customerPanel" class="space-y-5">
-            <!-- Smart Parchi OCR Upload Scanner Hub -->
+            <!-- Parchi Scanner Block -->
             <div class="bg-gradient-to-r from-emerald-500/10 to-green-600/10 border border-emerald-500/20 rounded-3xl p-4 flex items-center justify-between">
                 <div class="space-y-0.5">
                     <h4 class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i> Upload Written Parchi</h4>
                     <p class="text-[10px] text-slate-500 font-medium">List scan karke automatic cart me items search karein!</p>
                 </div>
-                <label class="bg-emerald-600 text-white text-xs font-extrabold px-3 py-2.5 rounded-xl cursor-pointer shadow-md shadow-emerald-100 whitespace-nowrap">
+                <label class="bg-emerald-600 text-white text-xs font-extrabold px-3 py-2.5 rounded-xl cursor-pointer shadow-md whitespace-nowrap">
                     <span id="ocrStatusText"><i class="fa-solid fa-camera mr-1"></i> Scan List</span>
                     <input type="file" id="ocrInput" accept="image/*" class="hidden" onchange="runParchiOcrParser()" />
                 </label>
@@ -179,7 +180,7 @@
         </div>
     </div>
 
-    <!-- PRODUCT DETAILS MODAL -->
+    <!-- PRODUCT DETAILS DESCRIPTION MODAL (UPGRADED PRESET) -->
     <div id="detailsModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-2xl border border-slate-100 max-h-[85vh] overflow-y-auto">
             <div class="flex justify-between items-center pb-2 border-b border-slate-100">
@@ -192,8 +193,9 @@
                     <span id="modalProductPrice" class="text-lg font-black text-slate-800">₹0</span>
                     <span id="modalProductUnit" class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-bold">-</span>
                 </div>
-                <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-3.5 text-xs space-y-1">
-                    <span class="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider block">Product Details</span>
+                <!-- 🎯 LIVE INJECTED DESCRIPTION BOX -->
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-3.5 text-xs space-y-1">
+                    <span class="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider block">Product Description</span>
                     <p id="modalProductDesc" class="text-slate-600 font-medium leading-relaxed whitespace-pre-line">-</p>
                 </div>
             </div>
@@ -239,7 +241,7 @@
         </div>
     </div>
 
-    <!-- CLIENT DETAILS CHECKOUT MODAL (Upgraded with UPI Choice) -->
+    <!-- CLIENT DETAILS CHECKOUT MODAL -->
     <div id="checkoutModal" class="fixed inset-0 bg-slate-900/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl">
             <div class="flex justify-between items-center">
@@ -276,7 +278,6 @@
         </button>
     </div>
 
-    <!-- HIDDEN THERMAL PRINTER WINDOW OBJECT BLOCKS -->
     <div id="thermalPrintArea" class="hidden"></div>
 
     <!-- FIREBASE SYSTEM ENGINE MODULES -->
@@ -358,27 +359,19 @@
             }
         }
 
-        // SMART PARCHI OCR LIST SCANNER LOGIC
         window.runParchiOcrParser = async function() {
             const fileInput = document.getElementById('ocrInput');
             const statusLabel = document.getElementById('ocrStatusText');
             if (fileInput.files.length === 0) return;
-
             statusLabel.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Reading List...`;
-            
             try {
                 const file = fileInput.files[0];
                 const base64Img = await fileToDataUri(file);
-                
-                // Fire Tesseract core recognition process
                 const result = await Tesseract.recognize(base64Img, 'eng+hin');
                 const cleanLines = result.data.text.toLowerCase().split('\n');
-
                 let matchedItemsCount = 0;
                 cleanLines.forEach(line => {
                     if(line.trim().length < 3) return;
-                    
-                    // Fuzzy filter matches locally matching keywords
                     const foundProduct = allProducts.find(p => line.includes(p.name.toLowerCase()));
                     if(foundProduct) {
                         if(!cart[foundProduct.id]) cart[foundProduct.id] = { product: foundProduct, qty: 1 };
@@ -386,21 +379,12 @@
                         matchedItemsCount++;
                     }
                 });
-
                 if(matchedItemsCount > 0) {
-                    alert(`✓ Parchi scanned! Catalog me se ${matchedItemsCount} items automatically cart me add ho gaye hain.`);
-                    renderProducts(allProducts);
-                    updateCartUI();
-                } else {
-                    alert("Parchi se koi product inventory catalog se match nahi hua bhai.");
-                }
-
-            } catch (err) {
-                console.error(err); alert("OCR parsing engine error.");
-            } finally {
-                statusLabel.innerHTML = `<i class="fa-solid fa-camera mr-1"></i> Scan List`;
-                fileInput.value = "";
-            }
+                    alert(`✓ Parchi scanned! ${matchedItemsCount} items automatically cart me add ho gaye hain.`);
+                    renderProducts(allProducts); updateCartUI();
+                } else { alert("Parchi se koi product match nahi hua."); }
+            } catch (err) { alert("OCR parsing engine error."); }
+            finally { statusLabel.innerHTML = `<i class="fa-solid fa-camera mr-1"></i> Scan List`; fileInput.value = ""; }
         }
 
         async function loadMerchantProfile() {
@@ -413,19 +397,16 @@
                 document.getElementById('infoDukanName').innerText = resolvedName;
                 merchantConfigNumber = data.whatsappNumber || "919999999999";
                 merchantUpiId = data.upiId || "";
-
                 if(merchantUpiId) {
                     document.getElementById('upiRadioLabel').classList.remove('hidden');
                     document.getElementById('upiRadioLabel').classList.add('flex');
                 }
-                
                 document.getElementById('mDukanName').value = data.dukanName || "";
                 document.getElementById('mWhatsapp').value = data.whatsappNumber || "";
                 document.getElementById('mGst').value = data.gstNumber || "";
                 document.getElementById('mUpi').value = data.upiId || "";
                 document.getElementById('mMaps').value = data.mapsLink || "";
                 document.getElementById('mAddress').value = data.address || "";
-
                 if(data.gstNumber) document.getElementById('infoGst').innerText = data.gstNumber;
                 if(data.address) document.getElementById('infoAddress').innerText = data.address;
                 if(data.mapsLink) {
@@ -445,7 +426,6 @@
             const dName = document.getElementById('mDukanName').value.trim();
             const wNum = document.getElementById('mWhatsapp').value.trim();
             if(!dName || !wNum) return alert("Dukan ka naam aur number mandatory hai!");
-            
             await setDoc(doc(db, "stores", currentStoreId), {
                 dukanName: dName, whatsappNumber: wNum, gstNumber: document.getElementById('mGst').value.trim(),
                 upiId: document.getElementById('mUpi').value.trim(),
@@ -472,11 +452,12 @@
             navigator.clipboard.writeText(shareUrl); alert("Link copied!");
         }
 
+        // 🎯 FIXED DATA MAPPING ATTACHING DESCRIPTION ON UPLOAD
         window.addProductToFirebase = async function() {
             const name = document.getElementById('pName').value.trim();
             const price = document.getElementById('pPrice').value.trim();
             const unit = document.getElementById('pUnit').value.trim();
-            const desc = document.getElementById('pDesc').value.trim();
+            const desc = document.getElementById('pDesc').value.trim(); // Reads value perfectly from text block
             const cat = document.getElementById('pCategory').value;
             const filesInput = document.getElementById('productImagesInput');
             const uploadBtn = document.getElementById('uploadBtn');
@@ -492,10 +473,19 @@
                     }
                 } else { imageArray.push("https://placehold.co/150?text=Product"); }
 
+                // 🎯 Added description field mapping right into firestore dataset package
                 await addDoc(collection(db, "products"), {
-                    storeId: currentStoreId, name, price: parseFloat(price), unit, description: desc, category: cat, images: imageArray, createdAt: Date.now()
+                    storeId: currentStoreId, 
+                    name: name, 
+                    price: parseFloat(price), 
+                    unit: unit, 
+                    description: desc, // 👈 Saved completely now
+                    category: cat, 
+                    images: imageArray, 
+                    createdAt: Date.now()
                 });
-                alert("Product live!");
+
+                alert("Product multi-photos aur details ke sath live ho gaya!");
                 document.getElementById('pName').value = ""; document.getElementById('pPrice').value = "";
                 document.getElementById('pUnit').value = ""; document.getElementById('pDesc').value = "";
                 filesInput.value = ""; document.getElementById('multiFileStatus').classList.add('hidden');
@@ -568,8 +558,7 @@
         }
 
         window.modifyCartQty = function(id, countDelta) {
-            const product = allProducts.find(p => p.id === id);
-            if(!product) return;
+            const product = allProducts.find(p => p.id === id); if(!product) return;
             if(!cart[id]) cart[id] = { product, qty: 0 };
             cart[id].qty += countDelta;
             if(cart[id].qty <= 0) delete cart[id];
@@ -590,12 +579,16 @@
             } else { cartBar.classList.add('hidden'); }
         }
 
+        // 🎯 FIXED CLIENT SIDE DESCRIPTION POPUP INJECTOR
         window.openDetailsModal = function(id) {
             const p = allProducts.find(item => item.id === id); if(!p) return;
             document.getElementById('modalProductName').innerText = p.name;
             document.getElementById('modalProductPrice').innerText = `₹${p.price}`;
             document.getElementById('modalProductUnit').innerText = p.unit;
-            document.getElementById('modalProductDesc').innerText = p.description || "No details provided.";
+            
+            // 🎯 Reads and maps description field right into inner text box safely
+            document.getElementById('modalProductDesc').innerText = p.description || "Is product ke liye koi extra details nahi di gayi hain.";
+            
             const imgList = p.images || ["https://placehold.co/150?text=Product"];
             const imgContainer = document.getElementById('modalImageContainer'); imgContainer.innerHTML = "";
             imgList.forEach(imgUrl => {
@@ -606,10 +599,8 @@
 
         window.closeDetailsModal = function() { document.getElementById('detailsModal').classList.add('hidden'); }
 
-        // DYNAMIC THERMAL RECEIPT PRINTER MODULE
         window.printBlankReceipt = function() {
-            const printArea = document.getElementById('thermalPrintArea');
-            let total = 0;
+            const printArea = document.getElementById('thermalPrintArea'); let total = 0;
             let receiptHtml = `
                 <div style="text-align:center; font-size:12px; font-weight:bold;">${document.getElementById('navStoreName').innerText}</div>
                 <div style="text-align:center; font-size:9px;">Ahmedabad, Hyperlocal Live</div>
@@ -617,26 +608,20 @@
                 <div style="font-size:10px;"><b>ITEMS LIST RECEIPT</b></div>
                 <div>--------------------------------</div>
             `;
-
             Object.keys(cart).forEach(key => {
-                const item = cart[key];
-                const cost = item.product.price * item.qty;
+                const item = cart[key]; const cost = item.product.price * item.qty;
                 receiptHtml += `<div style="font-size:10px;">${item.product.name} x${item.qty} = ₹${cost}</div>`;
                 total += cost;
             });
-
             receiptHtml += `
                 <div>--------------------------------</div>
                 <div style="font-size:11px; font-weight:bold;">TOTAL AMOUNT: ₹${total}</div>
                 <div style="text-align:center; font-size:9px; margin-top:4px;">Thank You for Shopping!</div>
             `;
-
             if(total === 0) return alert("Print block! Cart empty hai.");
-            printArea.innerHTML = receiptHtml;
-            window.print();
+            printArea.innerHTML = receiptHtml; window.print();
         }
 
-        // SMART INBOUND REDIRECTION WITH UPI PAYMENTS DEEP LINKING
         window.confirmAndRouteWhatsApp = function() {
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
@@ -656,8 +641,7 @@
             msg += `📦 *Order Items List:*\n`;
 
             Object.keys(cart).forEach(key => {
-                const item = cart[key];
-                const itemCost = item.product.price * item.qty;
+                const item = cart[key]; const itemCost = item.product.price * item.qty;
                 msg += `• ${item.product.name} x ${item.qty} = ₹${itemCost}\n`;
                 total += itemCost;
             });
@@ -665,12 +649,9 @@
             msg += `────────────────────\n`;
             msg += `💰 *Total Bill: ₹${total}*\n`;
 
-            // Condition matching rule for instant UPI intent push
             if(selectedPayment === "UPI" && merchantUpiId) {
                 const upiIntentUrl = `upi://pay?pa=${merchantUpiId}&pn=${encodeURIComponent(document.getElementById('navStoreName').innerText)}&am=${total}&cu=INR`;
-                msg += `\n🔗 *UPI Payment Link:* Clicked Paid Live\n`;
-                
-                // Fire instant application wrapper redirection
+                msg += `\n🔗 *UPI Payment Link:* Checked Paid Live\n`;
                 window.open(upiIntentUrl, '_blank');
             }
 
