@@ -32,10 +32,10 @@
         <button id="navSellerConsoleTriggerBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2.5 rounded-xl text-xs transition-colors"><i class="fa-solid fa-lock text-emerald-600"></i></button>
     </nav>
 
-    <!-- MAIN PLATFORM CONTAINER -->
-    <div class="max-w-md mx-auto p-4 space-y-6">
+    <!-- MAIN INTERFACE CONTAINER -->
+    <div class="max-w-md mx-auto p-4 space-y-5">
 
-        <!-- 1. SELLER CENTRAL OPERATIONAL DASHBOARD (HIDDEN BY DEFAULT) -->
+        <!-- 1. PRO SELLER DASHBOARD -->
         <div id="sellerPanel" class="hidden space-y-5 animate-fadeIn">
             <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 rounded-3xl p-5 text-white shadow-xl flex justify-between items-center relative overflow-hidden">
                 <div class="space-y-0.5">
@@ -58,7 +58,7 @@
 
             <!-- PROFILE CONFIGURATION MANAGER BLOCK -->
             <div class="bg-white rounded-3xl p-5 border border-slate-100 space-y-4 shadow-sm">
-                <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-sliders text-emerald-500"></i> Store Identity Meta</h3>
+                <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-sliders text-emerald-500"></i> Store Profile Settings</h3>
                 <div class="space-y-3 text-xs">
                     <div class="grid grid-cols-2 gap-3">
                         <input type="text" id="mName" placeholder="Store Display Name" class="p-3 border border-slate-200 rounded-2xl bg-white focus:outline-none">
@@ -76,7 +76,7 @@
                         <span id="logoFileStatusText" class="text-[10px] text-slate-400 font-bold">No file uploaded</span>
                     </div>
                 </div>
-                <button id="saveStoreProfileDataBtn" class="w-full bg-slate-900 text-white text-xs font-black py-3 rounded-2xl shadow-md">Sync Profiles Layout</button>
+                <button id="saveStoreProfileDataBtn" class="w-full bg-slate-900 text-white text-xs font-black py-3 rounded-2xl shadow-md">Save Brand Config</button>
             </div>
 
             <!-- INVENTORY ASSET INGESTION BLOCK -->
@@ -106,12 +106,12 @@
             <!-- LIVE EDITABLE GRID INVENTORY PANEL -->
             <div class="bg-white rounded-3xl p-5 border border-slate-100 space-y-2 shadow-sm">
                 <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">Active Stock Catalog</h3>
-                <div id="sellerActiveStockContainer" class="space-y-2.5 max-h-60 overflow-y-auto pr-1"></div>
+                <div id="sellerActiveStockContainer" class="space-y-2.5 max-h-64 overflow-y-auto pr-1"></div>
             </div>
         </div>
 
         <!-- 2. LIVE CLIENT CUSTOMER MARKETPLACE CORE HUB -->
-        <div id="customerDashboard" class="space-y-5 animate-fadeIn">
+        <div id="customerPanel" class="space-y-5 animate-fadeIn">
             <!-- OCR List Scanning Hub Component -->
             <div class="bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-green-600/10 border border-emerald-500/20 rounded-3xl p-4 flex items-center justify-between shadow-xs">
                 <div class="space-y-0.5">
@@ -152,17 +152,16 @@
                 <h3 class="font-black text-slate-850 text-sm flex items-center gap-1.5"><i class="fa-solid fa-basket-shopping text-emerald-500"></i> Final Invoicing Check</h3>
                 <button id="closeCheckoutModalXBtn" class="text-slate-400 bg-slate-50 p-1.5 rounded-full"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <!-- Embedded review panel row -->
             <div id="checkoutModalItemsSummaryBox" class="max-h-36 overflow-y-auto space-y-2 bg-slate-50 p-3 rounded-2xl border border-slate-100 text-xs font-bold text-slate-600"></div>
             
             <div class="space-y-3 text-xs">
-                <input type="text" id="custName" class="w-full p-3 border border-slate-200 rounded-2xl bg-slate-100 text-slate-500 font-bold focus:outline-none" readonly>
-                <input type="text" id="custPhone" class="w-full p-3 border border-slate-200 rounded-2xl bg-slate-100 text-slate-500 font-bold focus:outline-none" readonly>
+                <input type="text" id="custName" class="w-full p-3 border border-slate-200 rounded-2xl text-xs bg-slate-100 text-slate-500 font-bold focus:outline-none" readonly>
+                <input type="text" id="custPhone" class="w-full p-3 border border-slate-200 rounded-2xl text-xs bg-slate-100 text-slate-500 font-bold focus:outline-none" readonly>
                 <textarea id="custAddr" placeholder="Complete Home Delivery Location Landmark Address" class="w-full p-3 border border-slate-200 rounded-2xl h-16 resize-none focus:outline-none focus:border-emerald-500 shadow-inner bg-white"></textarea>
                 
                 <div class="bg-slate-50 p-3 rounded-2xl text-xs font-bold text-slate-700 space-y-1.5 border border-slate-100">
                     <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Payment Mode Option</span>
-                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="payRadioMethod" value="COD" checked class="accent-emerald-600"> Pay Cash on Delivery</label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="payRadioMethod" value="COD" checked class="accent-emerald-600"> Cash on Delivery</label>
                     <label id="upiModeRadioLabelWrapper" class="hidden items-center gap-2 cursor-pointer"><input type="radio" name="payRadioMethod" value="UPI" class="accent-emerald-600"> Instant App UPI Pay</label>
                 </div>
             </div>
@@ -195,7 +194,7 @@
             <div class="text-xs space-y-2.5 font-bold text-slate-600 p-1">
                 <div><span class="text-[9px] block text-slate-400 uppercase font-black">GSTIN Code</span><p id="infoGstField" class="font-mono text-slate-800 mt-0.5">Not Provided</p></div>
                 <div><span class="text-[9px] block text-slate-400 uppercase font-black">Physical Address</span><p id="infoAddressField" class="text-slate-800 font-medium leading-relaxed mt-0.5">Setup pending by merchant.</p></div>
-                <div id="mapsAnchorWrapper" class="hidden pt-1"><a id="infoMapsHrefAnchor" target="_blank" class="w-full bg-slate-900 text-white font-black py-2 rounded-xl text-center block text-[11px]"><i class="fa-solid fa-map-location-dot text-emerald-400 mr-1"></i> Open Google Maps Route</a></div>
+                <div id="mapsAnchorWrapper" class="hidden pt-1"><a id="infoMapsHrefAnchor" target="_blank" class="w-full bg-slate-900 text-white font-black py-2 rounded-xl text-center block text-[11px]"><i class="fa-solid fa-map-location-dot text-emerald-400 mr-1"></i> Navigate via Google Maps</a></div>
             </div>
         </div>
     </div>
@@ -214,26 +213,27 @@
             <div class="bg-slate-100 text-slate-700 w-11 h-11 rounded-full flex items-center justify-center mx-auto text-base"><i class="fa-solid fa-shield-halved text-emerald-600"></i></div>
             <h3 class="font-black text-slate-800 text-sm">Merchant Console Key Validation</h3>
             <input type="password" id="sellerPassphraseInp" placeholder="Enter Security Password" class="w-full p-3 border border-slate-200 rounded-2xl text-xs text-center font-bold tracking-widest focus:outline-none focus:border-emerald-500 bg-slate-50/50 shadow-inner">
-            <button id="verifySellerLoginActionBtn" class="w-full bg-slate-900 text-white font-black text-xs py-3 rounded-2xl shadow-sm">Verify Passphrase</button>
+            <button id="verifySellerLoginActionBtn" class="w-full bg-slate-900 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-md">Verify Passphrase</button>
         </div>
     </div>
 
     <!-- DYNAMIC HYBRID REALTIME BASKET SCREEN ENGINE FRAME -->
-    <div id="hybridOverlayCartBar" class="fixed bottom-4 left-4 right-4 max-w-sm mx-auto bg-slate-900/95 text-white rounded-2xl p-3 flex justify-between items-center shadow-xl hidden z-40 border border-white/10">
+    <div id="hybridOverlayCartBar" class="fixed bottom-4 left-4 right-4 max-w-sm mx-auto bg-slate-900/95 text-white rounded-2xl p-3 flex justify-between items-center shadow-2xl z-40 hidden border border-white/10 animate-slideUp cursor-pointer">
         <div class="flex items-center gap-3 pl-2">
-            <div class="bg-emerald-500 text-white p-2 rounded-xl shadow-md"><i class="fa-solid fa-basket-shopping text-sm"></i></div>
-            <div class="text-xs"><span id="overlayBarTotalItemsLabel" class="font-black block text-sm">0 Items • ₹0</span><span class="text-[9px] text-emerald-400 font-extrabold block uppercase tracking-wider">Secure pipeline checkout ready</span></div>
+            <div class="bg-emerald-500 text-white p-2.5 rounded-xl shadow-lg"><i class="fa-solid fa-basket-shopping text-sm"></i></div>
+            <div class="text-xs"><span id="overlayBarTotalItemsLabel" class="font-black block text-slate-100 text-sm">0 Items • ₹0</span><span class="text-[9px] text-emerald-400 font-bold block uppercase tracking-wider">Click to view basket / cart</span></div>
         </div>
-        <button id="overlayBarCheckoutTriggerActionBtn" class="bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 text-slate-900 text-xs font-black px-5 py-2.5 rounded-xl shadow-md transform active:scale-95 transition-transform">Checkout Now</button>
+        <button id="overlayBarCheckoutTriggerActionBtn" class="bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 text-slate-900 text-xs font-black px-5 py-2.5 rounded-xl shadow-md transform active:scale-95 transition-transform">
+            Checkout Now <i class="fa-solid fa-chevron-right text-[10px]"></i>
+        </button>
     </div>
 
     <div id="thermalPrintArea" class="hidden"></div>
 
     <!-- ========================================== -->
-    <!-- DYNAMIC JS DEPLOYMENT LAYER (SCOPE IMMUNE) -->
+    <!-- DYNAMIC JS DEPLOYMENT LAYER (COMPAT STABLE) -->
     <!-- ========================================== -->
     <script>
-        // Synchronous runtime injection mechanism to explicitly avoid type="module" access blockades leaks
         const scriptUrls = [
             "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js",
             "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"
@@ -246,7 +246,7 @@
             tag.onload = () => {
                 scriptLoadsCount++;
                 if(scriptLoadsCount === scriptUrls.length) {
-                    initGlobalSystemPlatformEngine(); // Wake up engine loops once standard modules injection complete
+                    initGlobalSystemPlatformEngine();
                 }
             };
             document.head.appendChild(tag);
@@ -263,7 +263,6 @@
                 measurementId: "G-1XZ6NSYDB7"
             };
 
-            // Boot old stable backward compact database layers engine references
             firebase.initializeApp(firebaseConfig);
             const db = firebase.firestore();
 
@@ -276,7 +275,6 @@
             let activeStoreUpiId = "";
             let storeLogoBase64String = "";
 
-            // 🎯 CORE GLOBAL INTERACTION LOGIC ENGINE PIPELINES
             window.modifyCartItemQuantity = function(id, deltaValue) {
                 const targetProduct = allProducts.find(p => p.id === id);
                 if(!targetProduct) return;
@@ -348,7 +346,6 @@
                     grid.appendChild(cardNode);
                 });
 
-                // Attach isolated internal click scopes directly to DOM vectors safely
                 grid.querySelectorAll('.p-add-trigger-btn, .p-plus-trigger-btn').forEach(b => b.addEventListener('click', () => window.modifyCartItemQuantity(b.getAttribute('data-id'), 1)));
                 grid.querySelectorAll('.p-minus-trigger-btn').forEach(b => b.addEventListener('click', () => window.modifyCartItemQuantity(b.getAttribute('data-id'), -1)));
                 grid.querySelectorAll('.p-details-thumbnail-click, .p-details-text-click').forEach(el => el.addEventListener('click', () => triggerProductDescriptionPopupSheet(el.getAttribute('data-id'))));
@@ -372,8 +369,7 @@
                 showDialogWindow('detailsModal');
             }
 
-            // DYNAMIC IN-MODAL INVOICING INTERACTIVE GRID MANAGER
-            document.getElementById('overlayBarCheckoutTriggerActionBtn').addEventListener('click', () => {
+            const openCheckoutActionFlow = () => {
                 const container = document.getElementById('checkoutModalItemsSummaryBox');
                 container.innerHTML = "";
                 let billGrossTotal = 0;
@@ -387,9 +383,11 @@
 
                 document.getElementById('checkoutModalGrossTotalLabel').innerText = `₹${billGrossTotal}`;
                 showDialogWindow('checkoutDetailsModal');
-            });
+            };
 
-            // FINAL STABLE PIPELINE ORDER DEPLOYMENT BLOCK SUBMISSION
+            document.getElementById('hybridOverlayCartBar').addEventListener('click', openCheckoutActionFlow);
+            document.getElementById('overlayBarCheckoutTriggerActionBtn').addEventListener('click', (e) => { e.stopPropagation(); openCheckoutActionFlow(); });
+
             document.getElementById('placeOrderFinalActionSubmitBtn').addEventListener('click', async () => {
                 const targetHomeAddress = document.getElementById('custAddr').value.trim();
                 const targetPaymentMode = document.querySelector('input[name="payRadioMethod"]:checked').value;
@@ -411,17 +409,8 @@
                 outboundWaStringInvoice += `───────────────────\n*Gross Payable Amount: ₹${totalBillAmount}*\n\nKripya mera order ready karke updates bhejiye!`;
 
                 try {
-                    // Inject write state directly to database collection layer arrays
                     await db.collection("orders").add({
-                        storeId: currentStoreId,
-                        customerName: localStorage.getItem("c_name"),
-                        customerPhone: localStorage.getItem("c_phone"),
-                        customerAddress: targetHomeAddress,
-                        paymentMode: targetPaymentMode,
-                        items: structuralArray,
-                        totalAmount: totalBillAmount,
-                        status: "pending",
-                        createdAt: Date.now()
+                        storeId: currentStoreId, customerName: localStorage.getItem("c_name"), customerPhone: localStorage.getItem("c_phone"), customerAddress: targetHomeAddress, paymentMode: targetPaymentMode, items: structuralArray, totalAmount: totalBillAmount, status: "pending", createdAt: Date.now()
                     });
 
                     alert("🎉 Order Placed Successfully on Database!");
@@ -430,10 +419,8 @@
                         window.open(`upi://pay?pa=${activeStoreUpiId}&pn=${encodeURIComponent(document.getElementById('navStoreName').innerText)}&am=${totalBillAmount}&cu=INR`, '_blank');
                     }
 
-                    // Open direct background WhatsApp thread context
                     window.open(`https://wa.me/${targetWaNumber}?text=${encodeURIComponent(outboundWaStringInvoice)}`, '_blank');
 
-                    // Reset state environments
                     cart = {};
                     document.getElementById('hybridOverlayCartBar').classList.add('hidden');
                     renderCustomerCatalogGrid(allProducts);
@@ -442,7 +429,6 @@
                 } catch (err) { alert("Rejection thrown during write processing."); }
             });
 
-            // PLATFORM AUTH INTERACTION UTILITY GATE LOGICS
             document.getElementById('authGateConfirmBtn').addEventListener('click', () => {
                 const inputName = document.getElementById('authNameInput').value.trim();
                 const inputPhone = document.getElementById('authPhoneInput').value.trim();
@@ -506,7 +492,6 @@
                 });
             }
 
-            // MERCHANT CENTRAL OPERATIONS CONSOLE LOGICS
             document.getElementById('verifySellerLoginActionBtn').addEventListener('click', () => {
                 if(document.getElementById('sellerPassphraseInp').value.trim() === "786786") {
                     document.getElementById('sellerPanel').classList.remove('hidden');
@@ -518,30 +503,49 @@
             document.getElementById('sellerLogoutBtn').addEventListener('click', () => document.getElementById('sellerPanel').classList.add('hidden'));
             document.getElementById('sellerShareLinkBtn').addEventListener('click', () => { navigator.clipboard.writeText(window.location.href.split('?')[0] + `?store=${currentStoreId}`); alert("Link copied!"); });
 
-            const convertFileToUriBase64 = (fileObj) => new Promise((res, rej) => {
-                const r = new FileReader(); r.onload = (e) => res(e.target.result); r.onerror = (e) => rej(e); r.readAsDataURL(fileObj);
+            // 🎯 FIXED LOGO FILE ATTACHMENT LISTENER
+            const convertFileToUri = (file) => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (err) => reject(err);
+                reader.readAsDataURL(file);
             });
 
-            document.getElementById('storeLogoFileInput').addEventListener('change', async () => {
-                const files = document.getElementById('storeLogoFileInput').files;
-                if(files.length > 0) { storeLogoBase64String = await convertFileToUriBase64(files[0]); document.getElementById('logoFileStatusText').innerText = "✓ Logo Active Attached"; }
+            document.getElementById('storeLogoFileInput').addEventListener('change', async (e) => {
+                const files = e.target.files;
+                if(files.length > 0) { 
+                    storeLogoBase64String = await convertFileToUriBase64(files[0]); 
+                    document.getElementById('logoFileStatusText').innerText = "✓ Logo Active Attached"; 
+                }
             });
 
             document.getElementById('productImagesFileInput').addEventListener('change', () => {
                 const files = document.getElementById('productImagesFileInput').files;
-                if(files.length > 0) { document.getElementById('productImgStatusText').innerText = `✓ ${files.length} Photos Attached Block`; document.getElementById('productImgStatusText').classList.remove('hidden'); }
+                if(files.length > 0) { document.getElementById('productImgStatusText').innerText = `✓ ${files.length} Photos Selected`; document.getElementById('productImgStatusText').classList.remove('hidden'); }
             });
 
+            // 🎯 FIXED SAVE BRAND CONFIGURATION FLOW TRIGGER
             document.getElementById('saveStoreProfileDataBtn').addEventListener('click', async () => {
                 const name = document.getElementById('mName').value.trim();
                 const phone = document.getElementById('mPhone').value.trim();
+                
                 if(!name || !phone) return alert("Store meta mandatory titles required!");
 
-                await db.collection("stores").doc(currentStoreId).set({
-                    dukanName: name, whatsappNumber: phone, gstNumber: document.getElementById('mGst').value.trim(), upiId: document.getElementById('mUpi').value.trim(), mapsLink: document.getElementById('mMaps').value.trim(), address: document.getElementById('mAddr').value.trim(), logo: storeLogoBase64String || ""
-                });
-                alert("Store central profile identity updated successfully!");
-                loadMerchantCentralProfileMetadata();
+                try {
+                    await db.collection("stores").doc(currentStoreId).set({
+                        dukanName: name, 
+                        whatsappNumber: phone, 
+                        gstNumber: document.getElementById('mGst').value.trim(), 
+                        upiId: document.getElementById('mUpi').value.trim(), 
+                        mapsLink: document.getElementById('mMaps').value.trim(), 
+                        address: document.getElementById('mAddr').value.trim(), 
+                        logo: storeLogoBase64String || ""
+                    });
+                    alert("Store Brand configurations successfully updated!");
+                    loadMerchantCentralProfileMetadata();
+                } catch(err) {
+                    alert("Data save karne me issue aaya bhai.");
+                }
             });
 
             document.getElementById('publishProductLiveBtn').addEventListener('click', async () => {
@@ -584,7 +588,7 @@
 
                         const row = document.createElement('div');
                         row.className = "bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs font-bold text-slate-700 space-y-2.5";
-                        row.innerHTML = `<div class="flex justify-between items-center font-mono text-[9px]"><span>ID: ${id.substring(0,6).toUpperCase()}...</span><span class="uppercase text-amber-600">${o.status}</span></div><p class="font-medium text-slate-600">Client: ${o.customerName} (${o.customerPhone})<br>Addr: ${o.customerAddress}</p><div class="bg-white border rounded-xl p-2 font-bold text-slate-400">${o.items.map(i => `<div>• ${i.name} x${i.qty}</div>`).join('')}</div><div class="flex justify-between items-center text-sm font-black"><span>₹${o.totalAmount}</span><div>${flowButtons}</div></div>`;
+                        row.innerHTML = `<div class="flex justify-between items-center font-mono text-[9px]"><span>ID: ${id.substring(0,6).toUpperCase()}...</span><span class="uppercase text-amber-600">${o.status}</span></div><p class="font-medium text-slate-600">Client: ${o.customerName} (${o.customerPhone})<br>Addr: ${o.customerAddress}</p><div class="bg-white border rounded-xl p-2 font-bold text-slate-400">${o.items.map(i => `<div>• ${i.name} x${i.qty}</div>`).join('')}</div><div class="flex justify-between items-center text-xs pt-1"><span>₹${o.totalAmount}</span><div>${flowButtons}</div></div>`;
                         box.appendChild(row);
                     });
 
@@ -634,7 +638,6 @@
                 });
             }
 
-            // BIND LOCAL TOP CONTROLLERS ROUTING HOOKS
             document.getElementById('marketSearchBar').addEventListener('input', () => {
                 const queryStr = document.getElementById('marketSearchBar').value.trim().toLowerCase();
                 if(!queryStr) renderCustomerCatalogGrid(allProducts);
@@ -653,7 +656,6 @@
                 });
             });
 
-            // OCR PARCHI LIST UPLOAD AUTOMATION BINDINGS HOOK
             document.getElementById('ocrSlipsFileInput').addEventListener('change', async () => {
                 const label = document.getElementById('ocrStatusText');
                 const fileInp = document.getElementById('ocrSlipsFileInput');
@@ -680,13 +682,17 @@
                 finally { label.innerHTML = `<i class="fa-solid fa-camera mr-1"></i> Scan List`; fileInp.value = ""; }
             });
 
+            const fileToDataUri = (fileObj) => new Promise((resolve, reject) => {
+                const reader = new FileReader(); reader.onload = (event) => resolve(event.target.result); reader.onerror = (error) => reject(error); reader.readAsDataURL(fileObj);
+            });
+            window.convertFileToUriBase64 = fileToDataUri;
+
             loadMerchantCentralProfileMetadata();
             listenToLiveStorefrontCatalogDatasetStream();
             listenToMerchantIncomingOrdersEngine();
             checkCustomerSessionPersistence();
         }
 
-        // TRIGGER NAVIGATION DIALOG FRAMES LAYER
         function showDialogWindow(id) { document.getElementById(id).classList.remove('hidden'); }
         function hideDialogWindow(id) { document.getElementById(id).classList.add('hidden'); }
 
